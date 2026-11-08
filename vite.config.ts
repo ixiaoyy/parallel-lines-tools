@@ -12,7 +12,10 @@ import { readMediaCoreInfo } from './scripts/media-core-info';
 const commitHash = `${upstream.commit.slice(0, 7)}-${upstream.candidate}`;
 const releaseModules = new Set<string>();
 const mediaCore = readMediaCoreInfo(process.env.TOOLBOX_MEDIA_CORE_DIR);
-if (process.env.TOOLBOX_REQUIRE_MEDIA_CORE === '1' && !mediaCore)
+if (
+  process.env.TOOLBOX_REQUIRE_MEDIA_CORE === '1' &&
+  (!mediaCore || !mediaCore.validated)
+)
   throw new Error(
     'Public deployment requires the prepared media core and corresponding source receipt'
   );

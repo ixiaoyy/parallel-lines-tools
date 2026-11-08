@@ -9,6 +9,7 @@ export interface MediaCoreInfo {
   source: { file: string; sha256: string; bytes: number; url: string };
   notices: string;
   receipt: string;
+  validated: boolean;
 }
 
 /** 读取自建媒体核心回执并核对实际二进制；未指定目录时保留原版本的本地开发入口。 */
@@ -63,6 +64,7 @@ export function readMediaCoreInfo(directory?: string): MediaCoreInfo | null {
     license: data.license,
     source: data.source,
     notices,
-    receipt
+    receipt,
+    validated: data.validation?.status === 'passed'
   };
 }

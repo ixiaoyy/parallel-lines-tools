@@ -112,6 +112,11 @@ def recipe(lock, source):
         if path.name == 'fribidi.sh':
             changed = changed.replace('emmake make install -j2 || true', 'emmake make install -j2')
             changed = changed.replace('# A hacky to fix "Too many symbolic links" error', '# 安装错误必须明确失败，不能用上游旧 workaround 掩盖缺失的库或头文件。')
+            # 实际 CI 仅在 c2man 文档安装失败；安装生成表与完整静态库/头文件，不运行无关的手册生成。
+            if changed.count('emmake make install -j2') != 1:
+                raise RuntimeError('Pinned FriBidi install recipe changed')
+            changed = changed.replace('emmake make install -j2', "emmake make install -j2 SUBDIRS='gen.tab lib'")
+            changed += '\ntest -s "$INSTALL_DIR/lib/libfribidi.a"\ntest -s "$INSTALL_DIR/include/fribidi/fribidi.h"\ntest -s "$INSTALL_DIR/lib/pkgconfig/fribidi.pc"\n'
         if changed != original:
             path.write_text(changed, encoding='utf-8', newline='\n')
             modifications.append(str(path.relative_to(source)))
@@ -153,7 +158,7 @@ def recipe(lock, source):
     assert result.count('--enable-lib') == (upstream / 'Dockerfile').read_text().count('--enable-lib')
     (source / 'Dockerfile').write_text(result, encoding='utf-8', newline='\n')
     (source / '.dockerignore').write_text('archives/\ntoolchain/\n*.tar.gz\n', encoding='utf-8')
-    (source / 'MODIFICATIONS.json').write_text(json.dumps({'build_jobs': 2, 'library_jobs': {'zlib': 1}, 'zlib': {'reason': 'Both zlib and zlibstatic map to libz.a under the Emscripten CMake configuration; parallel install produced an llvm-ranlib missing archive failure. Only this library is serialized; no target or codec is removed.', 'failure_evidence': 'https://github.com/ixiaoyy/parallel-lines-tools/actions/runs/42508247233'}, 'patched_scripts': modifications, 'fribidi': 'Removed blind install || true; actual installation failures stop the build and require diagnosis.', 'dockerfile': 'pinned tools; COPY vendored commits and verified SDL port; network disabled for compile; source/export records; no codec removed'}, indent=2) + '\n', encoding='utf-8')
+    (source / 'MODIFICATIONS.json').write_text(json.dumps({'build_jobs': 2, 'library_jobs': {'zlib': 1}, 'zlib': {'reason': 'Both zlib and zlibstatic map to libz.a under the Emscripten CMake configuration; parallel install produced an llvm-ranlib missing archive failure. Only this library is serialized; no target or codec is removed.', 'failure_evidence': 'https://github.com/ixiaoyy/parallel-lines-tools/actions/runs/42508247233'}, 'patched_scripts': modifications, 'fribidi': {'change': 'Removed blind install || true. Install gen.tab and the complete lib subdirectory plus root pkg-config data; omit only c2man manuals/CLI/tests not linked into FFmpeg. Assert static library, headers and pkg-config are non-empty.', 'failure_evidence': 'https://github.com/ixiaoyy/parallel-lines-tools/actions/runs/42509219935'}, 'dockerfile': 'pinned tools; COPY vendored commits and verified SDL port; network disabled for compile; source/export records; no codec removed'}, indent=2) + '\n', encoding='utf-8')
 
 
 def main():

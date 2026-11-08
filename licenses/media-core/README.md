@@ -10,3 +10,5 @@
 - 上游 `testdata` 仅是未用于核心编译的媒体测试素材；其 gitlink 已锁定但不放入核心源码包，不影响任何编解码器。
 
 生产发布须确认 Release 的 `media-core-source.tar.gz`、`media-core-NOTICES.txt` 和 `core-receipt.json` 实际可访问且与二进制一致。准备脚本存在或 CI 已启动都不等于已经完成此项验收。
+
+CI `42509219935` 进一步确认 FriBidi 失败发生在缺少 c2man 的手册生成/安装，锁定版本 configure 没有 disable-docs 开关。配方改为显式安装 gen.tab 与完整 lib 子目录、根 pkg-config，并断言静态库/头文件/pkg-config 存在；只省略不链接进 FFmpeg 的手册、CLI 和测试安装，源码归档仍保留全部目录，编解码/文字整形能力不删减。
