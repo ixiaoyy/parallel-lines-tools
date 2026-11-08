@@ -1,5 +1,17 @@
+.git
+.github
 node_modules
 playwright-report
 coverage
 dist
 test-results
+docs/evidence
+scripts/docs
+**/fixtures
+*.log
+*.tmp
+.env
+.env.*
+!.env.example
+.idea
+.vscode

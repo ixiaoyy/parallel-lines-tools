@@ -11,6 +11,8 @@ const rootFiles = [
   'package.json',
   'package-lock.json',
   'upstream-base.json',
+  'core-build.lock.json',
+  'media-core.lock.json',
   'index.html',
   'vite.config.ts',
   'tsconfig.json',
@@ -32,11 +34,14 @@ const rootFiles = [
 const buildScripts = new Set([
   'scripts/package-source.mjs',
   'scripts/release-policy.ts',
+  'scripts/media-core-info.ts',
+  'scripts/install-media-core.mjs',
   'scripts/vendor-icons.py',
   'scripts/create-tool.mjs'
 ]);
 const deliveryDocs = new Set([
   'docs/SOURCE-DELIVERY.md',
+  'docs/DEPLOYMENT.md',
   'docs/ffmpeg-source-obligations.md'
 ]);
 const required = [
@@ -50,7 +55,9 @@ const required = [
   '@types/i18n.d.ts',
   '.vitest/setup.ts',
   'scripts/release-policy.ts',
+  'scripts/media-core-info.ts',
   'scripts/package-source.mjs',
+  'deploy/nginx/default.conf',
   'licenses/icons/manifest.json',
   'LICENSE',
   'NOTICE.md',
@@ -143,7 +150,7 @@ async function collect(excluded) {
       else if (entry.isFile()) {
         if (
           /\.(log|tmp|zip|pdf|docx)$/i.test(entry.name) ||
-          entry.name.startsWith('.env')
+          (entry.name.startsWith('.env') && entry.name !== '.env.example')
         )
           continue;
         if (name.startsWith('scripts/') && !buildScripts.has(name)) continue;
@@ -167,6 +174,7 @@ async function collect(excluded) {
     '.vitest',
     'public',
     'licenses',
+    'deploy',
     'scripts',
     'docs'
   ])

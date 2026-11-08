@@ -27,6 +27,11 @@ export default function SiteFooter() {
         <Link href="/toolbox-source-local-20261109.zip">
           {t('footer.modifiedSource')}
         </Link>
+        {__MEDIA_CORE_SOURCE_URL__ && (
+          <Link href={__MEDIA_CORE_SOURCE_URL__}>
+            {t('footer.mediaSource')}
+          </Link>
+        )}
         <Link href="https://pingxingxian.space/tools">平行线</Link>
       </Stack>
     </Box>

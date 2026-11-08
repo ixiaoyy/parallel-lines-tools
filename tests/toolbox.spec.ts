@@ -11,6 +11,7 @@ let errors: string[];
 let sent: string[];
 
 test.beforeEach(async ({ page }) => {
+  await fs.mkdir('docs/evidence', { recursive: true });
   external = []; errors = []; sent = [];
   page.on('request', (request) => {
     if (/^https?:/.test(request.url()) && new URL(request.url()).origin !== 'http://127.0.0.1:5180') external.push(new URL(request.url()).origin);

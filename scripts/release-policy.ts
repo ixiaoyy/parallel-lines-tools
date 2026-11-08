@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import type { Plugin } from 'vite';
+import type { MediaCoreInfo } from './media-core-info';
 
 const forbidden =
   /\/node_modules\/(?:@imgly\/|@embedpdf\/|heic2any\/|onnxruntime-web\/|tesseract\.js\/|react-pdf\/|react-filerobot-image-editor\/)/;
@@ -8,7 +9,8 @@ const forbidden =
 /** 约束实际发布模块与静态资产；以打包模块图生成归属，不把审计副本当成发行清单。 */
 export function releasePolicy(
   collectedModules: Set<string>,
-  emitManifest = true
+  emitManifest = true,
+  mediaCore: MediaCoreInfo | null = null
 ): Plugin {
   return {
     name: 'toolbox-release-policy',
@@ -91,9 +93,19 @@ export function releasePolicy(
           directory = path.dirname(directory);
         }
       }
-      const inventory = [...packages.values()].sort((a, b) =>
-        a.name.localeCompare(b.name)
-      );
+      const inventory = [
+        ...packages.values(),
+        ...(mediaCore
+          ? [
+              {
+                name: '@parallellines/media-core',
+                version: mediaCore.version,
+                license: mediaCore.license,
+                text: mediaCore.notices
+              }
+            ]
+          : [])
+      ].sort((a, b) => a.name.localeCompare(b.name));
       // GPL/AGPL 属于可采用的开源许可；仅来源/许可文件缺失才阻断，不能把非 MIT 当作禁用理由。
       const unresolved = inventory.filter(
         (pkg) => !pkg.text || pkg.license === 'UNRESOLVED'
@@ -147,6 +159,12 @@ export function releasePolicy(
           2
         )
       });
+      if (mediaCore)
+        this.emitFile({
+          type: 'asset',
+          fileName: 'media-core-receipt.json',
+          source: mediaCore.receipt
+        });
       // public 仅发布允许的语言包、背景与自有 SVG，排除 gs.js、未核实字体和旧站点品牌资产。
       const copy = (directory: string) => {
         for (const entry of fs.readdirSync(directory, {

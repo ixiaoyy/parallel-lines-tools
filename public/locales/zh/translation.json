@@ -317,7 +317,8 @@
     "attribution": "基于 OmniTools 开发，保留原作者版权及开源许可。",
     "privacy": "文件与输入内容仅用于当前工具处理；不会保存到收藏记录。",
     "licenses": "开源许可",
-    "modifiedSource": "定制源码（ZIP）"
+    "modifiedSource": "定制源码（ZIP）",
+    "mediaSource": "媒体引擎对应源码"
   },
   "release": {
     "title": "暂未开放",

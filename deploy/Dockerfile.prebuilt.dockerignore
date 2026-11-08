@@ -1,0 +1,9 @@
+# 此文件只作用于预构建入口；根 .dockerignore 仍排除 dist，保留原源码构建方式。
+**
+!dist/
+!dist/**
+!deploy/
+!deploy/nginx/
+!deploy/nginx/**
+!deploy/Dockerfile.prebuilt
+!deploy/Dockerfile.prebuilt.dockerignore

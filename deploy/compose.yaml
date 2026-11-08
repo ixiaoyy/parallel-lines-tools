@@ -1,0 +1,31 @@
+name: parallellines-tools
+
+services:
+  tools-static:
+    image: ${TOOLS_IMAGE:?Set the verified immutable tools image reference}
+    container_name: parallellines-tools-static
+    restart: unless-stopped
+    init: true
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /var/cache/nginx:rw,nosuid,noexec,size=32m
+      - /var/run:rw,nosuid,noexec,size=1m
+    expose:
+      - "80"
+    networks:
+      gateway:
+        aliases:
+          - parallellines-tools-static
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1/healthz"]
+      interval: 10s
+      timeout: 3s
+      start_period: 5s
+      retries: 3
+
+networks:
+  gateway:
+    external: true
+    name: ${TOOLS_PROXY_NETWORK:?Set the existing gateway network after inspection}

@@ -311,7 +311,8 @@
     "attribution": "Built on OmniTools. Original copyright and open-source licenses are retained.",
     "privacy": "Files and input are used only for the current operation and are not saved in bookmarks.",
     "licenses": "Open-source licenses",
-    "modifiedSource": "Modified source (ZIP)"
+    "modifiedSource": "Modified source (ZIP)",
+    "mediaSource": "Media engine corresponding source"
   },
   "toolsByCategory": {
     "back": "Back to all tools",

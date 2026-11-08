@@ -8,6 +8,7 @@ import converters from '../public/locales/zh/converters.json';
 let outside: string[];
 let failures: string[];
 test.beforeEach(async ({ page }) => {
+  await fs.mkdir('docs/evidence', { recursive: true });
   outside = []; failures = [];
   page.on('request', (request) => {
     if (/^https?:/.test(request.url()) && new URL(request.url()).origin !== 'http://127.0.0.1:5180') outside.push(new URL(request.url()).origin);

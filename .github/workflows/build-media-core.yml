@@ -1,0 +1,89 @@
+name: Build pinned media core
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: media-core-release
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.repository == 'ixiaoyy/parallel-lines-tools'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      NO_PROXY: localhost,127.0.0.1,::1
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Check approved public target and immutable release
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(gh api repos/$GH_REPO --jq '.private')" = false
+          python3 scripts/media-core/prepare.py --validate-lock
+          TAG=$(python3 -c 'import json; print(json.load(open("core-build.lock.json"))["release_tag"])')
+          echo "CORE_TAG=$TAG" >> "$GITHUB_ENV"
+          mkdir -p .media-core
+          if gh api "repos/$GH_REPO/releases/tags/$TAG" --silent 2>.media-core/release-preflight.log; then
+            echo 'Refusing to overwrite existing core release.' >&2
+            exit 1
+          elif ! grep -q 'HTTP 404' .media-core/release-preflight.log; then
+            cat .media-core/release-preflight.log >&2
+            exit 1
+          fi
+      - name: Prepare pinned preferred source and offline build context
+        shell: bash
+        run: timeout 30m python3 scripts/media-core/prepare.py --output .media-core
+      - name: Build single-thread core with two-job bounds
+        shell: bash
+        run: |
+          set -euo pipefail
+          BUILDER=$(python3 -c 'import json; print(json.load(open("core-build.lock.json"))["builder"])')
+          docker buildx version
+          docker buildx create --name pl-media-core --use --driver docker-container \
+            --driver-opt "image=$BUILDER" --driver-opt memory=6g \
+            --driver-opt cpu-period=100000 --driver-opt cpu-quota=200000 \
+            --buildkitd-config scripts/media-core/buildkitd.toml
+          timeout 130m docker buildx build --platform linux/amd64 --progress plain \
+            --build-arg FFMPEG_ST=yes --build-arg FFMPEG_MT= \
+            --build-arg 'EXTRA_CFLAGS=-O3 -msimd128' \
+            --output type=local,dest=.media-core/output \
+            --file .media-core/source/Dockerfile .media-core/source \
+            2>&1 | tee .media-core/build.log
+          python3 scripts/media-core/finalize.py --output .media-core
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build toolbox with this core and verify real media output
+        shell: bash
+        env:
+          TOOLBOX_MEDIA_CORE_DIR: .media-core/runtime
+        run: |
+          set -euo pipefail
+          npm ci --ignore-scripts --no-audit --no-fund
+          npx playwright install --with-deps chromium
+          npm run build
+          npx playwright test --config scripts/media-core/playwright.config.ts --grep 'FFmpeg本地核心实际处理音频'
+          python3 scripts/media-core/finalize.py --output .media-core --record-browser
+      - name: Publish binary and corresponding source together
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh release create "$CORE_TAG" --draft --target "$GITHUB_SHA" \
+            --title "ParallelLines media core $CORE_TAG" \
+            --notes 'Single-thread core, complete corresponding source, input lock and actual-media verification receipt. This is a new self-built core, not the original npm binary.'
+          gh release upload "$CORE_TAG" .media-core/release/*
+          gh release edit "$CORE_TAG" --draft=false
+      - name: Close this job-owned builder
+        if: always()
+        shell: bash
+        # 准备阶段失败时构建器可能尚未建立；清理失败不改变前面真实的构建/测试状态。
+        run: docker buildx rm pl-media-core || true
