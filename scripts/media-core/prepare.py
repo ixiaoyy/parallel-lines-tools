@@ -105,6 +105,10 @@ def recipe(lock, source):
     for path in (upstream / 'build').glob('*.sh'):
         original = path.read_text(encoding='utf-8')
         changed = re.sub(r'(?<!\S)-j(?:\d+|\$\(nproc\))?(?=\s|$)', '-j2', original)
+        if path.name == 'zlib.sh':
+            # 锁定 zlib 的 CMake 同时生成同名 zlib/zlibstatic；CI 已出现并行归档/ranlib 竞态，仅该库串行。
+            changed, count = re.subn(r'(?m)^(emmake make (?:clean|install))(?: -j[12])?$', r'\1 -j1', changed)
+            if count != 2: raise RuntimeError('Pinned zlib clean/install recipe changed; refusing an unverified patch')
         if path.name == 'fribidi.sh':
             changed = changed.replace('emmake make install -j2 || true', 'emmake make install -j2')
             changed = changed.replace('# A hacky to fix "Too many symbolic links" error', '# 安装错误必须明确失败，不能用上游旧 workaround 掩盖缺失的库或头文件。')
@@ -149,7 +153,7 @@ def recipe(lock, source):
     assert result.count('--enable-lib') == (upstream / 'Dockerfile').read_text().count('--enable-lib')
     (source / 'Dockerfile').write_text(result, encoding='utf-8', newline='\n')
     (source / '.dockerignore').write_text('archives/\ntoolchain/\n*.tar.gz\n', encoding='utf-8')
-    (source / 'MODIFICATIONS.json').write_text(json.dumps({'build_jobs': 2, 'patched_scripts': modifications, 'fribidi': 'Removed blind install || true; actual installation failures stop the build and require diagnosis.', 'dockerfile': 'pinned tools; COPY vendored commits and verified SDL port; network disabled for compile; source/export records; no codec removed'}, indent=2) + '\n', encoding='utf-8')
+    (source / 'MODIFICATIONS.json').write_text(json.dumps({'build_jobs': 2, 'library_jobs': {'zlib': 1}, 'zlib': {'reason': 'Both zlib and zlibstatic map to libz.a under the Emscripten CMake configuration; parallel install produced an llvm-ranlib missing archive failure. Only this library is serialized; no target or codec is removed.', 'failure_evidence': 'https://github.com/ixiaoyy/parallel-lines-tools/actions/runs/42508247233'}, 'patched_scripts': modifications, 'fribidi': 'Removed blind install || true; actual installation failures stop the build and require diagnosis.', 'dockerfile': 'pinned tools; COPY vendored commits and verified SDL port; network disabled for compile; source/export records; no codec removed'}, indent=2) + '\n', encoding='utf-8')
 
 
 def main():
