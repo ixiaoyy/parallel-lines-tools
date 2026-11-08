@@ -1,3 +1,4 @@
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import React, { useState } from 'react';
 import * as Yup from 'yup';
@@ -25,30 +26,34 @@ const initialValues: InitialValuesType = {
   maintainAspectRatio: true
 };
 
-const validationSchema = Yup.object({
-  width: Yup.number().when('resizeMethod', {
-    is: 'pixels',
-    then: (schema) =>
-      schema.min(1, 'Width must be at least 1px').required('Width is required')
-  }),
-  height: Yup.number().when('resizeMethod', {
-    is: 'pixels',
-    then: (schema) =>
-      schema
-        .min(1, 'Height must be at least 1px')
-        .required('Height is required')
-  }),
-  percentage: Yup.number().when('resizeMethod', {
-    is: 'percentage',
-    then: (schema) =>
-      schema
-        .min(1, 'Percentage must be at least 1%')
-        .max(1000, 'Percentage must be at most 1000%')
-        .required('Percentage is required')
-  })
-});
-
 export default function ResizeImage({ title }: ToolComponentProps) {
+  // 仅本地化界面展示与校验提示；格式参数和处理流程保持原样。
+  const { t: inlineText } = useInlineTranslation('image');
+  const validationSchema = Yup.object({
+    width: Yup.number().when('resizeMethod', {
+      is: 'pixels',
+      then: (schema) =>
+        schema
+          .min(1, inlineText('inline.widthMustBeAtLeast1px'))
+          .required(inlineText('inline.widthIsRequired'))
+    }),
+    height: Yup.number().when('resizeMethod', {
+      is: 'pixels',
+      then: (schema) =>
+        schema
+          .min(1, inlineText('inline.heightMustBeAtLeast1px'))
+          .required(inlineText('inline.heightIsRequired'))
+    }),
+    percentage: Yup.number().when('resizeMethod', {
+      is: 'percentage',
+      then: (schema) =>
+        schema
+          .min(1, inlineText('inline.percentageMustBeAtLeast1'))
+          .max(1000, inlineText('inline.percentageMustBeAtMost1000'))
+          .required(inlineText('inline.percentageIsRequired'))
+    })
+  });
+
   const { t } = useTranslation('image');
   const [input, setInput] = useState<MultiImageInput[]>([]);
   const [results, setResults] = useState<File[]>([]);

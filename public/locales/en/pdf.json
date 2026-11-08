@@ -155,5 +155,43 @@
       "description": "This tool allows you to extract specific pages from a PDF document. You can specify individual pages or ranges of pages to extract.",
       "title": "Split PDF"
     }
+  },
+  "inline": {
+    "remove": "Remove",
+    "epubOutput": "EPUB Output",
+    "convertingPdfToEpub": "Converting PDF to EPUB...",
+    "howToUsePdfToEpub": "How to Use PDF to EPUB?",
+    "uploadAPdf": "Upload a PDF",
+    "convertedPngPages": "Converted PNG Pages",
+    "convertingPdfPages": "Converting PDF pages",
+    "convertPdfPagesIntoPngImages": "Convert PDF pages into PNG images",
+    "uploadYourPdfAndGetEachPage": "Upload your PDF and get each page rendered as a high-quality PNG. You can preview, download individually, or get all images in a ZIP.",
+    "protectedPdf": "Protected PDF",
+    "protectingPdf": "Protecting PDF",
+    "passwordSettings": "Password Settings",
+    "password": "Password",
+    "enterAPasswordToProtectYourPdf": "Enter a password to protect your PDF",
+    "enterPassword": "Enter password",
+    "confirmPassword": "Confirm Password",
+    "reEnterYourPasswordToConfirm": "Re-enter your password to confirm",
+    "confirmPassword2": "Confirm password",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "passwordCannotBeEmpty": "Password cannot be empty",
+    "loadingPdf": "Loading PDF..."
+  },
+  "exampleUi": {
+    "minimalQualityLossWithSlightFileSizeReduction": "Minimal quality loss with slight file size reduction",
+    "rotateAllPages90": "Rotate All Pages 90°",
+    "rotateAllPagesInThePdfBy90": "Rotate all pages in the PDF by 90 degrees clockwise",
+    "rotateSpecificPages180": "Rotate Specific Pages 180°",
+    "rotatePages1And3By180Degrees": "Rotate pages 1 and 3 by 180 degrees",
+    "rotatePageRange270": "Rotate Page Range 270°",
+    "rotatePages2Through5By270Degrees": "Rotate pages 2 through 5 by 270 degrees",
+    "extractSpecificPages": "Extract Specific Pages",
+    "extractPages1567And8": "Extract pages 1, 5, 6, 7, and 8 from a PDF document.",
+    "extractFirstAndLastPages": "Extract First and Last Pages",
+    "extractOnlyTheFirstAndLastPagesFrom": "Extract only the first and last pages from a PDF document.",
+    "extractARangeOfPages": "Extract a Range of Pages",
+    "extractAContinuousRangeOfPagesFromA": "Extract a continuous range of pages from a PDF document."
   }
 }

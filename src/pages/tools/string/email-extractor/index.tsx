@@ -1,3 +1,5 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import ToolTextInput from '@components/input/ToolTextInput';
 import ToolTextResult from '@components/result/ToolTextResult';
@@ -13,27 +15,35 @@ const initialValues = {
   unique: true
 };
 
-const exampleCards: CardExampleType<typeof initialValues>[] = [
-  {
-    title: 'Extract Emails from Text',
-    description: 'Extract all email addresses from a block of text.',
-    sampleText:
-      'Contact us at support@example.com or sales@example.org for more info. You can also reach john.doe@company.co.uk.',
-    sampleResult:
-      'support@example.com\nsales@example.org\njohn.doe@company.co.uk',
-    sampleOptions: { ...initialValues }
-  },
-  {
-    title: 'Duplicate Removal',
-    description:
-      'When "Unique results only" is enabled, duplicate emails are removed.',
-    sampleText: 'admin@test.com, admin@test.com, user@test.com',
-    sampleResult: 'admin@test.com\nuser@test.com',
-    sampleOptions: { ...initialValues }
-  }
-];
-
 export default function EmailExtractor({ title }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('string');
+  const exampleCards: CardExampleType<typeof initialValues>[] = [
+    {
+      title: exampleText('exampleUi.extractEmailsFromText'),
+      description: exampleText(
+        'exampleUi.extractAllEmailAddressesFromABlockOf'
+      ),
+      sampleText:
+        'Contact us at support@example.com or sales@example.org for more info. You can also reach john.doe@company.co.uk.',
+      sampleResult:
+        'support@example.com\nsales@example.org\njohn.doe@company.co.uk',
+      sampleOptions: { ...initialValues }
+    },
+    {
+      title: exampleText('exampleUi.duplicateRemoval'),
+      description: exampleText(
+        'exampleUi.whenUniqueResultsOnlyIsEnabledDuplicateEmails'
+      ),
+      sampleText: 'admin@test.com, admin@test.com, user@test.com',
+      sampleResult: 'admin@test.com\nuser@test.com',
+      sampleOptions: { ...initialValues }
+    }
+  ];
+
+  // 本工具的展示文案随语言切换更新；示例原始数据与计算参数保持不变。
+  const { t: inlineText } = useInlineTranslation('string');
+
   const { t } = useTranslation('string');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');
@@ -73,10 +83,17 @@ export default function EmailExtractor({ title }: ToolComponentProps) {
       input={input}
       setInput={setInput}
       inputComponent={
-        <ToolTextInput title={'Input text'} value={input} onChange={setInput} />
+        <ToolTextInput
+          title={inlineText('quote.inputTitle')}
+          value={input}
+          onChange={setInput}
+        />
       }
       resultComponent={
-        <ToolTextResult title={'Extracted emails'} value={result} />
+        <ToolTextResult
+          title={inlineText('inline.extractedEmails')}
+          value={result}
+        />
       }
       exampleCards={exampleCards}
     />

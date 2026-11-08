@@ -6,6 +6,14 @@ a:hover {
   color: #030362;
 }
 
-* {
-  font-family: Quicksand,sans-serif!important;
+/* 下载使用原生链接按钮；全局链接悬停色不能覆盖实心按钮的白色文字。 */
+a.MuiButton-contained,
+a.MuiButton-contained:hover {
+  color: #fff;
 }
+
+* {
+  font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+}
+
+:focus-visible { outline: 2px solid #1976d2; outline-offset: 3px; }

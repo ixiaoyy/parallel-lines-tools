@@ -14,7 +14,7 @@ import React, { useContext } from 'react';
 import { CustomSnackBarContext } from '../../contexts/CustomSnackBarContext';
 
 export default function ToolMultiFileResult({
-  title = 'Result',
+  title,
   value,
   zipFile,
   loading,
@@ -126,7 +126,7 @@ export default function ToolMultiFileResult({
                 {fileType === 'image' && (
                   <img
                     src={preview}
-                    alt={`Preview ${idx}`}
+                    alt={t('toolMultiFileResult.preview', { number: idx + 1 })}
                     style={{ maxWidth: '100%', maxHeight: 300 }}
                   />
                 )}
@@ -140,7 +140,7 @@ export default function ToolMultiFileResult({
                   <iframe src={preview} width="100%" height="400px" />
                 )}
                 {fileType === 'unknown' && (
-                  <Typography>File ready. Click below to download.</Typography>
+                  <Typography>{t('toolMultiFileResult.ready')}</Typography>
                 )}
                 <Button
                   onClick={() => handleDownload(file)}
@@ -148,7 +148,7 @@ export default function ToolMultiFileResult({
                   sx={{ mt: 1 }}
                   variant="contained"
                 >
-                  Download {file.name}
+                  {t('toolMultiFileResult.downloadFile', { name: file.name })}
                 </Button>
               </Box>
             );
@@ -156,7 +156,7 @@ export default function ToolMultiFileResult({
         )}
       </Box>
       <ResultFooter
-        downloadLabel={'Download All as ZIP'}
+        downloadLabel={t('toolMultiFileResult.downloadZip')}
         hideCopy
         disabled={!zipFile}
         handleDownload={() => zipFile && handleDownload(zipFile)}

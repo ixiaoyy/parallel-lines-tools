@@ -1,0 +1,51 @@
+[
+  {
+    "path": "image-generic/image-to-text",
+    "name": "Image to Text (OCR)",
+    "zhName": "图像转文本 (OCR)",
+    "reason": "resources",
+    "meta": "src/pages/tools/image/generic/image-to-text/meta.ts"
+  },
+  {
+    "path": "image-generic/remove-background",
+    "name": "Remove Background from Image",
+    "zhName": "从图像中删除背景",
+    "reason": "resources",
+    "meta": "src/pages/tools/image/generic/remove-background/meta.ts"
+  },
+  {
+    "path": "pdf/compress-pdf",
+    "name": "Compress PDF",
+    "zhName": "压缩PDF",
+    "reason": "binary",
+    "meta": "src/pages/tools/pdf/compress-pdf/meta.ts"
+  },
+  {
+    "path": "pdf/editor",
+    "name": "PDF Editor",
+    "zhName": "PDF编辑器",
+    "reason": "resources",
+    "meta": "src/pages/tools/pdf/editor/meta.ts"
+  },
+  {
+    "path": "pdf/form-pdf",
+    "name": "PDF Form Builder",
+    "zhName": "PDF 表单设计器",
+    "reason": "resources",
+    "meta": "src/pages/tools/pdf/form-pdf/meta.ts"
+  },
+  {
+    "path": "pdf/protect-pdf",
+    "name": "Protect PDF",
+    "zhName": "保护 PDF",
+    "reason": "binary",
+    "meta": "src/pages/tools/pdf/protect-pdf/meta.ts"
+  },
+  {
+    "path": "image-generic/editor",
+    "name": "Image Editor",
+    "zhName": "图像编辑器",
+    "reason": "resources",
+    "meta": "src/pages/tools/image/generic/editor/meta.ts"
+  }
+]

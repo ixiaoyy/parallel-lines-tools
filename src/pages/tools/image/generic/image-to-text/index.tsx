@@ -1,3 +1,4 @@
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import React, { useContext, useState } from 'react';
 import * as Yup from 'yup';
@@ -18,11 +19,13 @@ const initialValues: InitialValuesType = {
   detectParagraphs: true
 };
 
-const validationSchema = Yup.object({
-  language: Yup.string().required('Language is required')
-});
-
 export default function ImageToText({ title }: ToolComponentProps) {
+  // 仅本地化界面展示与校验提示；格式参数和处理流程保持原样。
+  const { t: inlineText } = useInlineTranslation('image');
+  const validationSchema = Yup.object({
+    language: Yup.string().required(inlineText('inline.languageIsRequired'))
+  });
+
   const [input, setInput] = useState<File | null>(null);
   const [result, setResult] = useState<string>('');
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
@@ -37,7 +40,7 @@ export default function ImageToText({ title }: ToolComponentProps) {
       setResult(extractedText);
     } catch (err: any) {
       showSnackBar(
-        err.message || 'An error occurred while processing the image',
+        err.message || inlineText('inline.imageProcessingError'),
         'error'
       );
       setResult('');
@@ -51,24 +54,24 @@ export default function ImageToText({ title }: ToolComponentProps) {
     updateField
   }) => [
     {
-      title: 'OCR Options',
+      title: inlineText('inline.ocrOptions'),
       component: (
         <Box>
           <SelectWithDesc
             selected={values.language}
             onChange={(val) => updateField('language', val)}
-            description={
-              'Select the primary language in the image for better accuracy'
-            }
+            description={inlineText(
+              'inline.selectThePrimaryLanguageInTheImage'
+            )}
             options={getAvailableLanguages()}
           />
           <CheckboxWithDesc
             checked={values.detectParagraphs}
             onChange={(value) => updateField('detectParagraphs', value)}
-            description={
-              'Attempt to preserve paragraph structure in the extracted text'
-            }
-            title={'Detect Paragraphs'}
+            description={inlineText(
+              'inline.attemptToPreserveParagraphStructureInThe'
+            )}
+            title={inlineText('inline.detectParagraphs')}
           />
         </Box>
       )
@@ -88,20 +91,19 @@ export default function ImageToText({ title }: ToolComponentProps) {
           value={input}
           onChange={setInput}
           accept={['image/jpeg', 'image/png']}
-          title={'Input Image'}
+          title={inlineText('changeColors.inputTitle')}
         />
       }
       resultComponent={
         <ToolTextResult
-          title={'Extracted Text'}
+          title={inlineText('inline.extractedText')}
           value={result}
           loading={isProcessing}
         />
       }
       toolInfo={{
-        title: 'Image to Text (OCR)',
-        description:
-          'This tool extracts text from images using Optical Character Recognition (OCR). Upload an image containing text, select the primary language, and get the extracted text. For best results, use clear images with good contrast.'
+        title: inlineText('imageToText.title'),
+        description: inlineText('inline.thisToolExtractsTextFromImagesUsing')
       }}
     />
   );

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import ReactCrop, { Crop, PixelCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
@@ -25,6 +26,7 @@ export default function ToolImageInput({
   onCropChange,
   ...props
 }: ImageFileInputProps) {
+  const { t } = useTranslation();
   const imageRef = useRef<HTMLImageElement>(null);
   const [imgWidth, setImgWidth] = useState(0);
   const [imgHeight, setImgHeight] = useState(0);
@@ -112,6 +114,17 @@ export default function ToolImageInput({
         >
           {showCropOverlay ? (
             <ReactCrop
+              ariaLabels={{
+                cropArea: t('baseFileInput.cropArea'),
+                nwDragHandle: t('baseFileInput.nwDragHandle'),
+                nDragHandle: t('baseFileInput.nDragHandle'),
+                neDragHandle: t('baseFileInput.neDragHandle'),
+                eDragHandle: t('baseFileInput.eDragHandle'),
+                seDragHandle: t('baseFileInput.seDragHandle'),
+                sDragHandle: t('baseFileInput.sDragHandle'),
+                swDragHandle: t('baseFileInput.swDragHandle'),
+                wDragHandle: t('baseFileInput.wDragHandle')
+              }}
               crop={crop}
               onChange={handleCropChange}
               onComplete={handleCropComplete}
@@ -121,7 +134,7 @@ export default function ToolImageInput({
               <img
                 ref={imageRef}
                 src={preview}
-                alt="Preview"
+                alt={t('baseFileInput.preview')}
                 style={{ maxWidth: '100%', maxHeight: globalInputHeight }}
                 onLoad={onImageLoad}
               />
@@ -130,7 +143,7 @@ export default function ToolImageInput({
             <img
               ref={imageRef}
               src={preview}
-              alt="Preview"
+              alt={t('baseFileInput.preview')}
               style={{ maxWidth: '100%', maxHeight: globalInputHeight }}
               onLoad={onImageLoad}
             />

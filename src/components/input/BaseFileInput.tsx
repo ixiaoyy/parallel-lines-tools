@@ -28,6 +28,14 @@ export default function BaseFileInput({
   type
 }: BaseFileInputComponentProps) {
   const { t } = useTranslation();
+  // 文件类型只在界面上翻译，不改变 MIME 校验和处理参数。
+  const typeLabels = {
+    image: t('baseFileInput.fileTypes.image'),
+    audio: t('baseFileInput.fileTypes.audio'),
+    video: t('baseFileInput.fileTypes.video'),
+    pdf: t('baseFileInput.fileTypes.pdf')
+  };
+  const typeLabel = typeLabels[type];
   const [preview, setPreview] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const theme = useTheme();
@@ -91,7 +99,7 @@ export default function BaseFileInput({
         onChange(file);
       } else {
         showSnackBar(
-          `Invalid file type. Please use ${accept.join(', ')}`,
+          t('baseFileInput.invalidFileType', { formats: accept.join(', ') }),
           'error'
         );
       }
@@ -145,7 +153,7 @@ export default function BaseFileInput({
   return (
     <Box>
       <InputHeader
-        title={title || 'Input ' + type.charAt(0).toUpperCase() + type.slice(1)}
+        title={title || t('baseFileInput.inputTitle', { type: typeLabel })}
       />
       <Box
         sx={{
@@ -200,7 +208,7 @@ export default function BaseFileInput({
                 variant="h6"
                 align="center"
               >
-                {t('baseFileInput.dropFileHere', { type })}
+                {t('baseFileInput.dropFileHere', { type: typeLabel })}
               </Typography>
             ) : (
               <Typography
@@ -210,7 +218,7 @@ export default function BaseFileInput({
                     : theme.palette.grey['600']
                 }
               >
-                {t('baseFileInput.selectFileDescription', { type })}
+                {t('baseFileInput.selectFileDescription', { type: typeLabel })}
               </Typography>
             )}
           </Box>

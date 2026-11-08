@@ -1,0 +1,877 @@
+{
+  "checkedAt": "2026-11-09",
+  "scope": "Selected icon geometry and aliases in src/assets/local-icons.json; original author names are retained without invented copyright years.",
+  "collections": [
+    {
+      "prefix": "arcticons",
+      "name": "Arcticons",
+      "author": {
+        "name": "Donnnno",
+        "url": "https://github.com/Arcticons-Team/Arcticons"
+      },
+      "iconifyCommit": "3eb33380c7dbc256d098ada3f5a5863ec4b145dc",
+      "iconSource": "https://raw.githubusercontent.com/iconify/icon-sets/3eb33380c7dbc256d098ada3f5a5863ec4b145dc/json/arcticons.json",
+      "icons": [
+        "encrypt-text",
+        "morse"
+      ],
+      "license": {
+        "title": "CC BY-SA 4.0",
+        "spdx": "CC-BY-SA-4.0",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/"
+      },
+      "standard": {
+        "file": "standard-CC-BY-SA-4.0.txt",
+        "source": "https://raw.githubusercontent.com/spdx/license-list-data/31846481de7ea17d92f2f46fad76abe58b2e9bb0/text/CC-BY-SA-4.0.txt",
+        "commit": "31846481de7ea17d92f2f46fad76abe58b2e9bb0"
+      },
+      "original": {
+        "file": "arcticons-ICON-LICENSE-NOTICE.txt",
+        "source": "https://raw.githubusercontent.com/Arcticons-Team/Arcticons/4352d0e53c991111c5bca22d116aba227196ad7c/README.md",
+        "commit": "4352d0e53c991111c5bca22d116aba227196ad7c",
+        "kind": "author-readme-icon-license-notice"
+      },
+      "scopeNote": "Author README explicitly separates the app GPL-3.0 license from all icons CC-BY-SA-4.0. The app GPL LICENSE is not used as the icon permission notice."
+    },
+    {
+      "prefix": "carbon",
+      "name": "Carbon",
+      "author": {
+        "name": "IBM",
+        "url": "https://github.com/carbon-design-system/carbon/tree/main/packages/icons"
+      },
+      "iconifyCommit": "3eb33380c7dbc256d098ada3f5a5863ec4b145dc",
+      "iconSource": "https://raw.githubusercontent.com/iconify/icon-sets/3eb33380c7dbc256d098ada3f5a5863ec4b145dc/json/carbon.json",
+      "icons": [
+        "rotate",
+        "transpose"
+      ],
+      "license": {
+        "title": "Apache 2.0",
+        "spdx": "Apache-2.0"
+      },
+      "standard": {
+        "file": "standard-Apache-2.0.txt",
+        "source": "https://raw.githubusercontent.com/spdx/license-list-data/31846481de7ea17d92f2f46fad76abe58b2e9bb0/text/Apache-2.0.txt",
+        "commit": "31846481de7ea17d92f2f46fad76abe58b2e9bb0"
+      },
+      "original": {
+        "file": "carbon-LICENSE.txt",
+        "source": "https://raw.githubusercontent.com/carbon-design-system/carbon/f5bdc21a0933baca91875e618f07141ff708cbe7/LICENSE",
+        "commit": "f5bdc21a0933baca91875e618f07141ff708cbe7"
+      }
+    },
+    {
+      "prefix": "cil",
+      "name": "CoreUI Free",
+      "author": {
+        "name": "creativeLabs Łukasz Holeczek",
+        "url": "https://github.com/coreui/coreui-icons"
+      },
+      "iconifyCommit": "3eb33380c7dbc256d098ada3f5a5863ec4b145dc",
+      "iconSource": "https://raw.githubusercontent.com/iconify/icon-sets/3eb33380c7dbc256d098ada3f5a5863ec4b145dc/json/cil.json",
+      "icons": [
+        "color-fill"
+      ],
+      "license": {
+        "title": "CC BY 4.0",
+        "spdx": "CC-BY-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "standard": {
+        "file": "standard-CC-BY-4.0.txt",
+        "source": "https://raw.githubusercontent.com/spdx/license-list-data/31846481de7ea17d92f2f46fad76abe58b2e9bb0/text/CC-BY-4.0.txt",
+        "commit": "31846481de7ea17d92f2f46fad76abe58b2e9bb0"
+      },
+      "original": {
+        "file": "cil-LICENSE.txt",
+        "source": "https://raw.githubusercontent.com/coreui/coreui-icons/88d1cfc47fc3cc84114de2a01b04db11a941bdf9/LICENSE",
+        "commit": "88d1cfc47fc3cc84114de2a01b04db11a941bdf9"
+      }
+    },
+    {
+      "prefix": "codicon",
+      "name": "Codicons",
+      "author": {
+        "name": "Microsoft Corporation",
+        "url": "https://github.com/microsoft/vscode-codicons"
+      },
+      "iconifyCommit": "3eb33380c7dbc256d098ada3f5a5863ec4b145dc",
+      "iconSource": "https://raw.githubusercontent.com/iconify/icon-sets/3eb33380c7dbc256d098ada3f5a5863ec4b145dc/json/codicon.json",
+      "icons": [
+        "keyboard-tab",
+        "symbol-string"
+      ],
+      "license": {
+        "title": "CC BY 4.0",
+        "spdx": "CC-BY-4.0",
+        "url": "https://github.com/microsoft/vscode-codicons/blob/main/LICENSE"
+      },
+      "standard": {
+        "file": "standard-CC-BY-4.0.txt",
+        "source": "https://raw.githubusercontent.com/spdx/license-list-data/31846481de7ea17d92f2f46fad76abe58b2e9bb0/text/CC-BY-4.0.txt",
+        "commit": "31846481de7ea17d92f2f46fad76abe58b2e9bb0"
+      },
+      "original": {
+        "file": "codicon-LICENSE.txt",
+        "source": "https://raw.githubusercontent.com/microsoft/vscode-codicons/6200d186bea39354a18737cfff73fe19dbc5fcff/LICENSE",
+        "commit": "6200d186bea39354a18737cfff73fe19dbc5fcff"
+      }
+    },
+    {
+      "prefix": "eva",
+      "name": "Eva Icons",
+      "author": {
+        "name": "Akveo",
+        "url": "https://github.com/akveo/eva-icons/"
+      },
+      "iconifyCommit": "3eb33380c7dbc256d098ada3f5a5863ec4b145dc",
+      "iconSource": "https://raw.githubusercontent.com/iconify/icon-sets/3eb33380c7dbc256d098ada3f5a5863ec4b145dc/json/eva.json",
+      "icons": [
+        "swap-outline"
+      ],
+      "license": {
+        "title": "MIT",
+        "spdx": "MIT",
+        "url": "https://github.com/akveo/eva-icons/blob/master/LICENSE.txt"
+      },
+      "standard": {
+        "file": "standard-MIT.txt",
+        "source": "https://raw.githubusercontent.com/spdx/license-list-data/31846481de7ea17d92f2f46fad76abe58b2e9bb0/text/MIT.txt",
+        "commit": "31846481de7ea17d92f2f46fad76abe58b2e9bb0"
+      },
+      "original": {
+        "file": "eva-LICENSE.txt",
+        "source": "https://raw.githubusercontent.com/akveo/eva-icons/70d2471ff88ab1385d3310b93a406243377b53d5/LICENSE.txt",
+        "commit": "70d2471ff88ab1385d3310b93a406243377b53d5"
+      }
+    },
+    {
+      "prefix": "fluent",
+      "name": "Fluent UI System Icons",
+      "author": {
+        "name": "Microsoft Corporation",
+        "url": "https://github.com/microsoft/fluentui-system-icons"
+      },
+      "iconifyCommit": "3eb33380c7dbc256d098ada3f5a5863ec4b145dc",
+      "iconSource": "https://raw.githubusercontent.com/iconify/icon-sets/3eb33380c7dbc256d098ada3f5a5863ec4b145dc/json/fluent.json",
+      "icons": [
+        "branch-compare-24-regular",
+        "calculator-arrow-clockwise-24-regular",
+        "document-landscape-data-24-filled",
+        "merge-20-regular",
+        "table-cell-center-arrow-repeat-all-20-regular",
+        "text-arrow-down-right-column-24-filled",
+        "text-number-format-24-regular"
+      ],
+      "license": {
+        "title": "MIT",
+        "spdx": "MIT",
+        "url": "https://github.com/microsoft/fluentui-system-icons/blob/main/LICENSE"
+      },
+      "standard": {
+        "file": "standard-MIT.txt",
+        "source": "https://raw.githubusercontent.com/spdx/license-list-data/31846481de7ea17d92f2f46fad76abe58b2e9bb0/text/MIT.txt",
+        "commit": "31846481de7ea17d92f2f46fad76abe58b2e9bb0"
+      },
+      "original": {
+        "file": "fluent-LICENSE.txt",
+        "source": "https://raw.githubusercontent.com/microsoft/fluentui-system-icons/e15fc0de25fab983e3e42bac8798be69a85c23bf/LICENSE",
+        "commit": "e15fc0de25fab983e3e42bac8798be69a85c23bf"
+      }
+    },
+    {
+      "prefix": "fluent-mdl2",
+      "name": "Fluent UI MDL2",
+      "author": {
+        "name": "Microsoft Corporation",
+        "url": "https://github.com/microsoft/fluentui/tree/master/packages/react-icons-mdl2"
+      },
+      "iconifyCommit": "3eb33380c7dbc256d098ada3f5a5863ec4b145dc",
+      "iconSource": "https://raw.githubusercontent.com/iconify/icon-sets/3eb33380c7dbc256d098ada3f5a5863ec4b145dc/json/fluent-mdl2.json",
+      "icons": [
+        "date-time"
+      ],
+      "license": {
+        "title": "MIT",
+        "spdx": "MIT",
+        "url": "https://github.com/microsoft/fluentui/blob/master/packages/react-icons-mdl2/LICENSE"
+      },
+      "standard": {
+        "file": "standard-MIT.txt",
+        "source": "https://raw.githubusercontent.com/spdx/license-list-data/31846481de7ea17d92f2f46fad76abe58b2e9bb0/text/MIT.txt",
+        "commit": "31846481de7ea17d92f2f46fad76abe58b2e9bb0"
+      },
+      "original": {
+        "file": "fluent-mdl2-LICENSE.txt",
+        "source": "https://raw.githubusercontent.com/microsoft/fluentui/19e2d5cd2bf81a2406327709b8856242ec38a966/packages/react-icons-mdl2/LICENSE",
+        "commit": "19e2d5cd2bf81a2406327709b8856242ec38a966"
+      }
+    },
+    {
+      "prefix": "gravity-ui",
+      "name": "Gravity UI Icons",
+      "author": {
+        "name": "YANDEX LLC",
+        "url": "https://github.com/gravity-ui/icons/"
+      },
+      "iconifyCommit": "3eb33380c7dbc256d098ada3f5a5863ec4b145dc",
+      "iconSource": "https://raw.githubusercontent.com/iconify/icon-sets/3eb33380c7dbc256d098ada3f5a5863ec4b145dc/json/gravity-ui.json",
+      "icons": [
+        "sphere"
+      ],
+      "license": {
+        "title": "MIT",
+        "spdx": "MIT",
+        "url": "https://github.com/gravity-ui/icons/blob/main/LICENSE"
+      },
+      "standard": {
+        "file": "standard-MIT.txt",
+        "source": "https://raw.githubusercontent.com/spdx/license-list-data/31846481de7ea17d92f2f46fad76abe58b2e9bb0/text/MIT.txt",
+        "commit": "31846481de7ea17d92f2f46fad76abe58b2e9bb0"
+      },
+      "original": {
+        "file": "gravity-ui-LICENSE.txt",
+        "source": "https://raw.githubusercontent.com/gravity-ui/icons/d200295fad1d0cacca7ab0ac5d85e3a3a7f4f4a7/LICENSE",
+        "commit": "d200295fad1d0cacca7ab0ac5d85e3a3a7f4f4a7"
+      }
+    },
+    {
+      "prefix": "hugeicons",
+      "name": "Huge Icons",
+      "author": {
+        "name": "Hugeicons",
+        "url": "https://icon-sets.iconify.design/icon-sets/hugeicons/"
+      },
+      "iconifyCommit": "3eb33380c7dbc256d098ada3f5a5863ec4b145dc",
+      "iconSource": "https://raw.githubusercontent.com/iconify/icon-sets/3eb33380c7dbc256d098ada3f5a5863ec4b145dc/json/hugeicons.json",
+      "icons": [
+        "column-insert",
+        "encrypt",
+        "sorting-05",
+        "text-footnote"
+      ],
+      "license": {
+        "title": "MIT",
+        "spdx": "MIT"
+      },
+      "standard": {
+        "file": "standard-MIT.txt",
+        "source": "https://raw.githubusercontent.com/spdx/license-list-data/31846481de7ea17d92f2f46fad76abe58b2e9bb0/text/MIT.txt",
+        "commit": "31846481de7ea17d92f2f46fad76abe58b2e9bb0"
+      }
+    },
+    {
+      "prefix": "ic",
+      "name": "Google Material Icons",
+      "author": {
+        "name": "Material Design Authors",
+        "url": "https://github.com/material-icons/material-icons"
+      },
+      "iconifyCommit": "3eb33380c7dbc256d098ada3f5a5863ec4b145dc",
+      "iconSource": "https://raw.githubusercontent.com/iconify/icon-sets/3eb33380c7dbc256d098ada3f5a5863ec4b145dc/json/ic.json",
+      "icons": [
+        "baseline-discord",
+        "baseline-percentage",
+        "outline-loop",
+        "twotone-audiotrack",
+        "twotone-difference",
+        "twotone-picture-as-pdf"
+      ],
+      "license": {
+        "title": "Apache 2.0",
+        "spdx": "Apache-2.0",
+        "url": "https://github.com/material-icons/material-icons/blob/master/LICENSE"
+      },
+      "standard": {
+        "file": "standard-Apache-2.0.txt",
+        "source": "https://raw.githubusercontent.com/spdx/license-list-data/31846481de7ea17d92f2f46fad76abe58b2e9bb0/text/Apache-2.0.txt",
+        "commit": "31846481de7ea17d92f2f46fad76abe58b2e9bb0"
+      },
+      "original": {
+        "file": "ic-LICENSE.txt",
+        "source": "https://raw.githubusercontent.com/material-icons/material-icons/af0ed9c0e1276bad43c4d6ca8e8aaa283e425195/LICENSE",
+        "commit": "af0ed9c0e1276bad43c4d6ca8e8aaa283e425195"
+      }
+    },
+    {
+      "prefix": "icon-park-outline",
+      "name": "IconPark Outline",
+      "author": {
+        "name": "ByteDance",
+        "url": "https://github.com/bytedance/IconPark"
+      },
+      "iconifyCommit": "3eb33380c7dbc256d098ada3f5a5863ec4b145dc",
+      "iconSource": "https://raw.githubusercontent.com/iconify/icon-sets/3eb33380c7dbc256d098ada3f5a5863ec4b145dc/json/icon-park-outline.json",
+      "icons": [
+        "compression"
+      ],
+      "license": {
+        "title": "Apache 2.0",
+        "spdx": "Apache-2.0",
+        "url": "https://github.com/bytedance/IconPark/blob/master/LICENSE"
+      },
+      "standard": {
+        "file": "standard-Apache-2.0.txt",
+        "source": "https://raw.githubusercontent.com/spdx/license-list-data/31846481de7ea17d92f2f46fad76abe58b2e9bb0/text/Apache-2.0.txt",
+        "commit": "31846481de7ea17d92f2f46fad76abe58b2e9bb0"
+      },
+      "original": {
+        "file": "icon-park-outline-LICENSE.txt",
+        "source": "https://raw.githubusercontent.com/bytedance/IconPark/8dc132da4c85671ba6a5962c87aa2bdafbf158e9/LICENSE",
+        "commit": "8dc132da4c85671ba6a5962c87aa2bdafbf158e9"
+      }
+    },
+    {
+      "prefix": "icon-park-solid",
+      "name": "IconPark Solid",
+      "author": {
+        "name": "ByteDance",
+        "url": "https://github.com/bytedance/IconPark"
+      },
+      "iconifyCommit": "3eb33380c7dbc256d098ada3f5a5863ec4b145dc",
+      "iconSource": "https://raw.githubusercontent.com/iconify/icon-sets/3eb33380c7dbc256d098ada3f5a5863ec4b145dc/json/icon-park-solid.json",
+      "icons": [
+        "replay-music"
+      ],
+      "license": {
+        "title": "Apache 2.0",
+        "spdx": "Apache-2.0",
+        "url": "https://github.com/bytedance/IconPark/blob/master/LICENSE"
+      },
+      "standard": {
+        "file": "standard-Apache-2.0.txt",
+        "source": "https://raw.githubusercontent.com/spdx/license-list-data/31846481de7ea17d92f2f46fad76abe58b2e9bb0/text/Apache-2.0.txt",
+        "commit": "31846481de7ea17d92f2f46fad76abe58b2e9bb0"
+      },
+      "original": {
+        "file": "icon-park-solid-LICENSE.txt",
+        "source": "https://raw.githubusercontent.com/bytedance/IconPark/8dc132da4c85671ba6a5962c87aa2bdafbf158e9/LICENSE",
+        "commit": "8dc132da4c85671ba6a5962c87aa2bdafbf158e9"
+      }
+    },
+    {
+      "prefix": "iconoir",
+      "name": "Iconoir",
+      "author": {
+        "name": "Luca Burgio",
+        "url": "https://github.com/iconoir-icons/iconoir"
+      },
+      "iconifyCommit": "3eb33380c7dbc256d098ada3f5a5863ec4b145dc",
+      "iconSource": "https://raw.githubusercontent.com/iconify/icon-sets/3eb33380c7dbc256d098ada3f5a5863ec4b145dc/json/iconoir.json",
+      "icons": [
+        "webp-format"
+      ],
+      "license": {
+        "title": "MIT",
+        "spdx": "MIT",
+        "url": "https://github.com/iconoir-icons/iconoir/blob/main/LICENSE"
+      },
+      "standard": {
+        "file": "standard-MIT.txt",
+        "source": "https://raw.githubusercontent.com/spdx/license-list-data/31846481de7ea17d92f2f46fad76abe58b2e9bb0/text/MIT.txt",
+        "commit": "31846481de7ea17d92f2f46fad76abe58b2e9bb0"
+      },
+      "original": {
+        "file": "iconoir-LICENSE.txt",
+        "source": "https://raw.githubusercontent.com/iconoir-icons/iconoir/39834e3f193bc0cca2c36bebb6a650471977433d/LICENSE",
+        "commit": "39834e3f193bc0cca2c36bebb6a650471977433d"
+      }
+    },
+    {
+      "prefix": "lets-icons",
+      "name": "Lets Icons",
+      "author": {
+        "name": "Leonid Tsvetkov",
+        "url": "https://www.figma.com/community/file/886554014393250663"
+      },
+      "iconifyCommit": "3eb33380c7dbc256d098ada3f5a5863ec4b145dc",
+      "iconSource": "https://raw.githubusercontent.com/iconify/icon-sets/3eb33380c7dbc256d098ada3f5a5863ec4b145dc/json/lets-icons.json",
+      "icons": [
+        "json-light",
+        "video-light"
+      ],
+      "license": {
+        "title": "CC BY 4.0",
+        "spdx": "CC-BY-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "standard": {
+        "file": "standard-CC-BY-4.0.txt",
+        "source": "https://raw.githubusercontent.com/spdx/license-list-data/31846481de7ea17d92f2f46fad76abe58b2e9bb0/text/CC-BY-4.0.txt",
+        "commit": "31846481de7ea17d92f2f46fad76abe58b2e9bb0"
+      }
+    },
+    {
+      "prefix": "lsicon",
+      "name": "Lsicon",
+      "author": {
+        "name": "Wis Design",
+        "url": "https://www.lsicon.com/"
+      },
+      "iconifyCommit": "3eb33380c7dbc256d098ada3f5a5863ec4b145dc",
+      "iconSource": "https://raw.githubusercontent.com/iconify/icon-sets/3eb33380c7dbc256d098ada3f5a5863ec4b145dc/json/lsicon.json",
+      "icons": [
+        "number-filled"
+      ],
+      "license": {
+        "title": "MIT",
+        "spdx": "MIT",
+        "url": "https://github.com/wisdesignsystem/lsicon/blob/main/LICENSE"
+      },
+      "standard": {
+        "file": "standard-MIT.txt",
+        "source": "https://raw.githubusercontent.com/spdx/license-list-data/31846481de7ea17d92f2f46fad76abe58b2e9bb0/text/MIT.txt",
+        "commit": "31846481de7ea17d92f2f46fad76abe58b2e9bb0"
+      },
+      "original": {
+        "file": "lsicon-LICENSE.txt",
+        "source": "https://raw.githubusercontent.com/wisdesignsystem/lsicon/c74a3e88f146559b8810970e9e2f95e48e5900a8/LICENSE",
+        "commit": "c74a3e88f146559b8810970e9e2f95e48e5900a8"
+      }
+    },
+    {
+      "prefix": "material-symbols",
+      "name": "Material Symbols",
+      "author": {
+        "name": "Google",
+        "url": "https://github.com/google/material-design-icons"
+      },
+      "iconifyCommit": "3eb33380c7dbc256d098ada3f5a5863ec4b145dc",
+      "iconSource": "https://raw.githubusercontent.com/iconify/icon-sets/3eb33380c7dbc256d098ada3f5a5863ec4b145dc/json/material-symbols.json",
+      "icons": [
+        "add",
+        "add-circle",
+        "calendar-month",
+        "check-circle",
+        "code",
+        "compress",
+        "content-cut",
+        "crop",
+        "flip",
+        "functions",
+        "gif",
+        "import-contacts",
+        "key",
+        "lock",
+        "opacity",
+        "resize",
+        "rotate-right",
+        "schedule",
+        "speed",
+        "visibility-off"
+      ],
+      "license": {
+        "title": "Apache 2.0",
+        "spdx": "Apache-2.0",
+        "url": "https://github.com/google/material-design-icons/blob/master/LICENSE"
+      },
+      "standard": {
+        "file": "standard-Apache-2.0.txt",
+        "source": "https://raw.githubusercontent.com/spdx/license-list-data/31846481de7ea17d92f2f46fad76abe58b2e9bb0/text/Apache-2.0.txt",
+        "commit": "31846481de7ea17d92f2f46fad76abe58b2e9bb0"
+      },
+      "original": {
+        "file": "material-symbols-LICENSE.txt",
+        "source": "https://raw.githubusercontent.com/google/material-design-icons/10ecc14790612ca8fd164e3f4ffe9c16fc50d5b7/LICENSE",
+        "commit": "10ecc14790612ca8fd164e3f4ffe9c16fc50d5b7"
+      }
+    },
+    {
+      "prefix": "material-symbols-light",
+      "name": "Material Symbols Light",
+      "author": {
+        "name": "Google",
+        "url": "https://github.com/google/material-design-icons"
+      },
+      "iconifyCommit": "3eb33380c7dbc256d098ada3f5a5863ec4b145dc",
+      "iconSource": "https://raw.githubusercontent.com/iconify/icon-sets/3eb33380c7dbc256d098ada3f5a5863ec4b145dc/json/material-symbols-light.json",
+      "icons": [
+        "alternate-email",
+        "call-split",
+        "call-split-rounded",
+        "checklist",
+        "compress",
+        "compress-rounded",
+        "content-copy",
+        "content-cut",
+        "csv-outline",
+        "decimal-increase-rounded",
+        "find-replace",
+        "format-quote",
+        "format-textdirection-l-to-r",
+        "gif-rounded",
+        "image-outline-rounded",
+        "join",
+        "merge",
+        "repeat",
+        "replay",
+        "rotate-right",
+        "search",
+        "shuffle",
+        "sort",
+        "swap-horiz",
+        "trending-up",
+        "unfold-more",
+        "wrap-text"
+      ],
+      "license": {
+        "title": "Apache 2.0",
+        "spdx": "Apache-2.0",
+        "url": "https://github.com/google/material-design-icons/blob/master/LICENSE"
+      },
+      "standard": {
+        "file": "standard-Apache-2.0.txt",
+        "source": "https://raw.githubusercontent.com/spdx/license-list-data/31846481de7ea17d92f2f46fad76abe58b2e9bb0/text/Apache-2.0.txt",
+        "commit": "31846481de7ea17d92f2f46fad76abe58b2e9bb0"
+      },
+      "original": {
+        "file": "material-symbols-light-LICENSE.txt",
+        "source": "https://raw.githubusercontent.com/google/material-design-icons/10ecc14790612ca8fd164e3f4ffe9c16fc50d5b7/LICENSE",
+        "commit": "10ecc14790612ca8fd164e3f4ffe9c16fc50d5b7"
+      }
+    },
+    {
+      "prefix": "mdi",
+      "name": "Material Design Icons",
+      "author": {
+        "name": "Pictogrammers",
+        "url": "https://github.com/Templarian/MaterialDesign"
+      },
+      "iconifyCommit": "3eb33380c7dbc256d098ada3f5a5863ec4b145dc",
+      "iconSource": "https://raw.githubusercontent.com/iconify/icon-sets/3eb33380c7dbc256d098ada3f5a5863ec4b145dc/json/mdi.json",
+      "icons": [
+        "arrow-up",
+        "bookmark",
+        "bookmark-plus-outline",
+        "bridge",
+        "circle-opacity",
+        "circle-transparent",
+        "close",
+        "content-cut",
+        "crop",
+        "dice-multiple",
+        "file-document-edit",
+        "file-word-outline",
+        "image-edit",
+        "image-multiple",
+        "image-remove",
+        "link-edit",
+        "music-note",
+        "music-note-outline",
+        "network",
+        "ohm",
+        "omega",
+        "qrcode",
+        "reload",
+        "resize",
+        "rhombus-split",
+        "rotate-clockwise",
+        "scissors",
+        "scissors-cutting",
+        "text-recognition",
+        "unicode",
+        "watermark"
+      ],
+      "license": {
+        "title": "Apache 2.0",
+        "spdx": "Apache-2.0",
+        "url": "https://github.com/Templarian/MaterialDesign/blob/master/LICENSE"
+      },
+      "standard": {
+        "file": "standard-Apache-2.0.txt",
+        "source": "https://raw.githubusercontent.com/spdx/license-list-data/31846481de7ea17d92f2f46fad76abe58b2e9bb0/text/Apache-2.0.txt",
+        "commit": "31846481de7ea17d92f2f46fad76abe58b2e9bb0"
+      },
+      "original": {
+        "file": "mdi-LICENSE.txt",
+        "source": "https://raw.githubusercontent.com/Templarian/MaterialDesign/2424e748e0cc63ab7b9c095a099b9fe239b737c0/LICENSE",
+        "commit": "2424e748e0cc63ab7b9c095a099b9fe239b737c0"
+      }
+    },
+    {
+      "prefix": "mdi-light",
+      "name": "Material Design Light",
+      "author": {
+        "name": "Pictogrammers",
+        "url": "https://github.com/Templarian/MaterialDesignLight"
+      },
+      "iconifyCommit": "3eb33380c7dbc256d098ada3f5a5863ec4b145dc",
+      "iconSource": "https://raw.githubusercontent.com/iconify/icon-sets/3eb33380c7dbc256d098ada3f5a5863ec4b145dc/json/mdi-light.json",
+      "icons": [
+        "xml"
+      ],
+      "license": {
+        "title": "Open Font License",
+        "spdx": "OFL-1.1",
+        "url": "https://github.com/Templarian/MaterialDesignLight/blob/master/LICENSE.md"
+      },
+      "standard": {
+        "file": "standard-OFL-1.1.txt",
+        "source": "https://raw.githubusercontent.com/spdx/license-list-data/31846481de7ea17d92f2f46fad76abe58b2e9bb0/text/OFL-1.1.txt",
+        "commit": "31846481de7ea17d92f2f46fad76abe58b2e9bb0"
+      },
+      "original": {
+        "file": "mdi-light-LICENSE.txt",
+        "source": "https://raw.githubusercontent.com/Templarian/MaterialDesignLight/425d0549efb458d1a7efb0bb2a844703e84ae884/LICENSE.md",
+        "commit": "425d0549efb458d1a7efb0bb2a844703e84ae884"
+      },
+      "scopeNote": "Fixed Iconify metadata declares OFL-1.1; the separately pinned current author LICENSE explicitly lists icons under Apache-2.0. Both notices are retained; no font binary is included. This discrepancy is disclosed rather than silently relabelled.",
+      "authorDeclaredIconLicense": {
+        "spdx": "Apache-2.0",
+        "standardFile": "standard-Apache-2.0.txt",
+        "source": "https://raw.githubusercontent.com/Templarian/MaterialDesignLight/425d0549efb458d1a7efb0bb2a844703e84ae884/LICENSE.md"
+      }
+    },
+    {
+      "prefix": "nonicons",
+      "name": "Nonicons",
+      "author": {
+        "name": "yamatsum",
+        "url": "https://github.com/yamatsum/nonicons"
+      },
+      "iconifyCommit": "3eb33380c7dbc256d098ada3f5a5863ec4b145dc",
+      "iconSource": "https://raw.githubusercontent.com/iconify/icon-sets/3eb33380c7dbc256d098ada3f5a5863ec4b145dc/json/nonicons.json",
+      "icons": [
+        "yaml-16"
+      ],
+      "license": {
+        "title": "MIT",
+        "spdx": "MIT",
+        "url": "https://github.com/yamatsum/nonicons/blob/master/LICENSE"
+      },
+      "standard": {
+        "file": "standard-MIT.txt",
+        "source": "https://raw.githubusercontent.com/spdx/license-list-data/31846481de7ea17d92f2f46fad76abe58b2e9bb0/text/MIT.txt",
+        "commit": "31846481de7ea17d92f2f46fad76abe58b2e9bb0"
+      },
+      "original": {
+        "file": "nonicons-LICENSE.txt",
+        "source": "https://raw.githubusercontent.com/yamatsum/nonicons/42b614932a503f1bd4818bc72a2440c3b77a5c8e/LICENSE",
+        "commit": "42b614932a503f1bd4818bc72a2440c3b77a5c8e"
+      }
+    },
+    {
+      "prefix": "pepicons-print",
+      "name": "Pepicons Print",
+      "author": {
+        "name": "CyCraft",
+        "url": "https://github.com/CyCraft/pepicons"
+      },
+      "iconifyCommit": "3eb33380c7dbc256d098ada3f5a5863ec4b145dc",
+      "iconSource": "https://raw.githubusercontent.com/iconify/icon-sets/3eb33380c7dbc256d098ada3f5a5863ec4b145dc/json/pepicons-print.json",
+      "icons": [
+        "duplicate-off"
+      ],
+      "license": {
+        "title": "CC BY 4.0",
+        "spdx": "CC-BY-4.0",
+        "url": "https://github.com/CyCraft/pepicons/blob/dev/LICENSE"
+      },
+      "standard": {
+        "file": "standard-CC-BY-4.0.txt",
+        "source": "https://raw.githubusercontent.com/spdx/license-list-data/31846481de7ea17d92f2f46fad76abe58b2e9bb0/text/CC-BY-4.0.txt",
+        "commit": "31846481de7ea17d92f2f46fad76abe58b2e9bb0"
+      },
+      "original": {
+        "file": "pepicons-print-LICENSE.txt",
+        "source": "https://raw.githubusercontent.com/CyCraft/pepicons/338c1b799787b6a7e2789bc15ebb3a8431b4c8ee/LICENSE",
+        "commit": "338c1b799787b6a7e2789bc15ebb3a8431b4c8ee"
+      }
+    },
+    {
+      "prefix": "ph",
+      "name": "Phosphor",
+      "author": {
+        "name": "Phosphor Icons",
+        "url": "https://github.com/phosphor-icons/core"
+      },
+      "iconifyCommit": "3eb33380c7dbc256d098ada3f5a5863ec4b145dc",
+      "iconSource": "https://raw.githubusercontent.com/iconify/icon-sets/3eb33380c7dbc256d098ada3f5a5863ec4b145dc/json/ph.json",
+      "icons": [
+        "compass-tool-thin",
+        "file-jpg-thin",
+        "file-pdf-thin",
+        "file-png-thin",
+        "sphere-duotone"
+      ],
+      "license": {
+        "title": "MIT",
+        "spdx": "MIT",
+        "url": "https://github.com/phosphor-icons/core/blob/main/LICENSE"
+      },
+      "standard": {
+        "file": "standard-MIT.txt",
+        "source": "https://raw.githubusercontent.com/spdx/license-list-data/31846481de7ea17d92f2f46fad76abe58b2e9bb0/text/MIT.txt",
+        "commit": "31846481de7ea17d92f2f46fad76abe58b2e9bb0"
+      },
+      "original": {
+        "file": "ph-LICENSE.txt",
+        "source": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/LICENSE",
+        "commit": "2b75f3ad12b420c9504ef05df8d2564a28f8500e"
+      }
+    },
+    {
+      "prefix": "proicons",
+      "name": "ProIcons",
+      "author": {
+        "name": "ProCode",
+        "url": "https://github.com/ProCode-Software/proicons"
+      },
+      "iconifyCommit": "3eb33380c7dbc256d098ada3f5a5863ec4b145dc",
+      "iconSource": "https://raw.githubusercontent.com/iconify/icon-sets/3eb33380c7dbc256d098ada3f5a5863ec4b145dc/json/proicons.json",
+      "icons": [
+        "reverse"
+      ],
+      "license": {
+        "title": "MIT",
+        "spdx": "MIT",
+        "url": "https://github.com/ProCode-Software/proicons/blob/main/LICENSE"
+      },
+      "standard": {
+        "file": "standard-MIT.txt",
+        "source": "https://raw.githubusercontent.com/spdx/license-list-data/31846481de7ea17d92f2f46fad76abe58b2e9bb0/text/MIT.txt",
+        "commit": "31846481de7ea17d92f2f46fad76abe58b2e9bb0"
+      },
+      "original": {
+        "file": "proicons-LICENSE.txt",
+        "source": "https://raw.githubusercontent.com/ProCode-Software/proicons/c7bf877563532e0e21ad76866c3306adfb03e499/LICENSE",
+        "commit": "c7bf877563532e0e21ad76866c3306adfb03e499"
+      }
+    },
+    {
+      "prefix": "simple-icons",
+      "name": "Simple Icons",
+      "author": {
+        "name": "Simple Icons Collaborators",
+        "url": "https://github.com/simple-icons/simple-icons"
+      },
+      "iconifyCommit": "3eb33380c7dbc256d098ada3f5a5863ec4b145dc",
+      "iconSource": "https://raw.githubusercontent.com/iconify/icon-sets/3eb33380c7dbc256d098ada3f5a5863ec4b145dc/json/simple-icons.json",
+      "icons": [
+        "wire"
+      ],
+      "license": {
+        "title": "CC0 1.0",
+        "spdx": "CC0-1.0",
+        "url": "https://github.com/simple-icons/simple-icons/blob/develop/LICENSE.md"
+      },
+      "standard": {
+        "file": "standard-CC0-1.0.txt",
+        "source": "https://raw.githubusercontent.com/spdx/license-list-data/31846481de7ea17d92f2f46fad76abe58b2e9bb0/text/CC0-1.0.txt",
+        "commit": "31846481de7ea17d92f2f46fad76abe58b2e9bb0"
+      },
+      "original": {
+        "file": "simple-icons-LICENSE.txt",
+        "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/1bb2f6e6ea50f920de8d2f3d273ae48564a5eaee/LICENSE.md",
+        "commit": "1bb2f6e6ea50f920de8d2f3d273ae48564a5eaee"
+      }
+    },
+    {
+      "prefix": "solar",
+      "name": "Solar",
+      "author": {
+        "name": "480 Design",
+        "url": "https://www.figma.com/community/file/1166831539721848736"
+      },
+      "iconifyCommit": "3eb33380c7dbc256d098ada3f5a5863ec4b145dc",
+      "iconSource": "https://raw.githubusercontent.com/iconify/icon-sets/3eb33380c7dbc256d098ada3f5a5863ec4b145dc/json/solar.json",
+      "icons": [
+        "link-bold-duotone",
+        "list-bold-duotone",
+        "text-bold-duotone"
+      ],
+      "license": {
+        "title": "CC BY 4.0",
+        "spdx": "CC-BY-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "standard": {
+        "file": "standard-CC-BY-4.0.txt",
+        "source": "https://raw.githubusercontent.com/spdx/license-list-data/31846481de7ea17d92f2f46fad76abe58b2e9bb0/text/CC-BY-4.0.txt",
+        "commit": "31846481de7ea17d92f2f46fad76abe58b2e9bb0"
+      }
+    },
+    {
+      "prefix": "streamline-plump",
+      "name": "Plump free icons",
+      "author": {
+        "name": "Streamline",
+        "url": "https://github.com/webalys-hq/streamline-vectors"
+      },
+      "iconifyCommit": "3eb33380c7dbc256d098ada3f5a5863ec4b145dc",
+      "iconSource": "https://raw.githubusercontent.com/iconify/icon-sets/3eb33380c7dbc256d098ada3f5a5863ec4b145dc/json/streamline-plump.json",
+      "icons": [
+        "convert-pdf-1"
+      ],
+      "license": {
+        "title": "CC BY 4.0",
+        "spdx": "CC-BY-4.0",
+        "url": "https://creativecommons.org/licenses/by/4.0/"
+      },
+      "standard": {
+        "file": "standard-CC-BY-4.0.txt",
+        "source": "https://raw.githubusercontent.com/spdx/license-list-data/31846481de7ea17d92f2f46fad76abe58b2e9bb0/text/CC-BY-4.0.txt",
+        "commit": "31846481de7ea17d92f2f46fad76abe58b2e9bb0"
+      }
+    },
+    {
+      "prefix": "tabler",
+      "name": "Tabler Icons",
+      "author": {
+        "name": "Paweł Kuna",
+        "url": "https://github.com/tabler/tabler-icons"
+      },
+      "iconifyCommit": "3eb33380c7dbc256d098ada3f5a5863ec4b145dc",
+      "iconSource": "https://raw.githubusercontent.com/iconify/icon-sets/3eb33380c7dbc256d098ada3f5a5863ec4b145dc/json/tabler.json",
+      "icons": [
+        "music-plus",
+        "number-64-small",
+        "pdf"
+      ],
+      "license": {
+        "title": "MIT",
+        "spdx": "MIT",
+        "url": "https://github.com/tabler/tabler-icons/blob/master/LICENSE"
+      },
+      "standard": {
+        "file": "standard-MIT.txt",
+        "source": "https://raw.githubusercontent.com/spdx/license-list-data/31846481de7ea17d92f2f46fad76abe58b2e9bb0/text/MIT.txt",
+        "commit": "31846481de7ea17d92f2f46fad76abe58b2e9bb0"
+      },
+      "original": {
+        "file": "tabler-LICENSE.txt",
+        "source": "https://raw.githubusercontent.com/tabler/tabler-icons/58f60538fe2fab2e1459a09198f9bd3b033bf90e/LICENSE",
+        "commit": "58f60538fe2fab2e1459a09198f9bd3b033bf90e"
+      }
+    },
+    {
+      "prefix": "tdesign",
+      "name": "TDesign Icons",
+      "author": {
+        "name": "TDesign",
+        "url": "https://github.com/Tencent/tdesign-icons"
+      },
+      "iconifyCommit": "3eb33380c7dbc256d098ada3f5a5863ec4b145dc",
+      "iconSource": "https://raw.githubusercontent.com/iconify/icon-sets/3eb33380c7dbc256d098ada3f5a5863ec4b145dc/json/tdesign.json",
+      "icons": [
+        "search-error"
+      ],
+      "license": {
+        "title": "MIT",
+        "spdx": "MIT",
+        "url": "https://github.com/Tencent/tdesign-icons/blob/main/LICENSE"
+      },
+      "standard": {
+        "file": "standard-MIT.txt",
+        "source": "https://raw.githubusercontent.com/spdx/license-list-data/31846481de7ea17d92f2f46fad76abe58b2e9bb0/text/MIT.txt",
+        "commit": "31846481de7ea17d92f2f46fad76abe58b2e9bb0"
+      },
+      "original": {
+        "file": "tdesign-LICENSE.txt",
+        "source": "https://raw.githubusercontent.com/Tencent/tdesign-icons/01bb2a58b56423db773304323a93863d14626875/LICENSE",
+        "commit": "01bb2a58b56423db773304323a93863d14626875"
+      }
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import * as Yup from 'yup';
 import ToolFileResult from '@components/result/ToolFileResult';
@@ -14,6 +15,9 @@ const validationSchema = Yup.object({});
 export default function RemoveBackgroundFromImage({
   title
 }: ToolComponentProps) {
+  // 仅本地化界面展示与校验提示；格式参数和处理流程保持原样。
+  const { t: inlineText } = useInlineTranslation('image');
+
   const [input, setInput] = useState<File | null>(null);
   const [result, setResult] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
@@ -71,9 +75,7 @@ export default function RemoveBackgroundFromImage({
       setResult(newFile);
     } catch (err) {
       console.error('Error removing background:', err);
-      throw new Error(
-        'Failed to remove background. Please try a different image or try again later.'
-      );
+      throw new Error(inlineText('inline.backgroundRemovalError'));
     } finally {
       setIsProcessing(false);
     }
@@ -92,22 +94,21 @@ export default function RemoveBackgroundFromImage({
           value={input}
           onChange={setInput}
           accept={['image/*']}
-          title={'Input Image'}
+          title={inlineText('changeColors.inputTitle')}
         />
       }
       resultComponent={
         <ToolFileResult
-          title={'Transparent PNG'}
+          title={inlineText('inline.transparentPng')}
           value={result}
           extension={'png'}
           loading={isProcessing}
-          loadingText={'Removing background'}
+          loadingText={inlineText('inline.removingBackground')}
         />
       }
       toolInfo={{
-        title: 'Remove Background from Image',
-        description:
-          'This tool uses AI to automatically remove the background from your images, creating a transparent PNG. Perfect for product photos, profile pictures, and design assets.'
+        title: inlineText('removeBackground.title'),
+        description: inlineText('inline.thisToolUsesAiToAutomaticallyRemove')
       }}
     />
   );

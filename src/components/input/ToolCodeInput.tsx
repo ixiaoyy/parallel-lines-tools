@@ -1,10 +1,11 @@
-import { Box, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import React, { useContext, useRef } from 'react';
 import { CustomSnackBarContext } from '../../contexts/CustomSnackBarContext';
 import InputHeader from '../InputHeader';
 import InputFooter from './InputFooter';
 import { useTranslation } from 'react-i18next';
 import Editor from '@monaco-editor/react';
+import { initialMonacoLanguage } from '../../lib/local-monaco';
 import {
   globalInputHeight,
   codeInputHeightOffset
@@ -13,7 +14,7 @@ import {
 export default function ToolCodeInput({
   value,
   onChange,
-  title = 'Input text',
+  title,
   language
 }: {
   title?: string;
@@ -21,7 +22,7 @@ export default function ToolCodeInput({
   language: string;
   onChange: (value: string) => void;
 }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { showSnackBar } = useContext(CustomSnackBarContext);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const theme = useTheme();
@@ -100,12 +101,14 @@ export default function ToolCodeInput({
           })}
         >
           <Editor
+            loading={t('loading.label')}
             height="100%"
             language={language}
             theme={theme.palette.mode === 'dark' ? 'vs-dark' : 'light'}
             value={value}
             onChange={(value) => onChange(value ?? '')}
             options={{
+              ariaLabel: title || t('toolTextInput.input'),
               automaticLayout: true,
               folding: true,
               showFoldingControls: 'always',
@@ -119,6 +122,18 @@ export default function ToolCodeInput({
             }}
           />
         </Box>
+        {/* 仅提醒，不自动刷新，避免切换语言时丢失尚未保存的输入。 */}
+        {(i18n.resolvedLanguage === 'zh' ? 'zh' : 'en') !==
+          initialMonacoLanguage && (
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            role="status"
+            sx={{ mt: 1 }}
+          >
+            {t('toolCodeInput.languageHint')}
+          </Typography>
+        )}
         <InputFooter handleCopy={handleCopy} handleImport={handleImportClick} />
         <input
           type="file"

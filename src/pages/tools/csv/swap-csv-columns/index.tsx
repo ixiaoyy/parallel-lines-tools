@@ -1,3 +1,5 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import ToolContent from '@components/ToolContent';
@@ -28,42 +30,46 @@ const initialValues: InitialValuesType = {
   emptyLines: true
 };
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Move the Key Column to the First Position',
-    description:
-      'In this example, we use our CSV column swapping tool to bring the most important information to the first column. As we are planning to go on vacation soon, in the input of the tool, we load data about national parks that include their names and locations. To decide, which is the closest park to us, we need to see the parks location first, therefore, we swap the first and second data columns so that the "location" column is at the beginning of the CSV data.',
-    sampleText: `park_name,location
+export default function CsvToTsv({
+  title,
+  longDescription
+}: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('csv');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.moveTheKeyColumnToTheFirstPosition'),
+      description: exampleText('exampleUi.inThisExampleWeUseOurCsvColumn'),
+      sampleText: `park_name,location
 Yellowstone,Wyoming
 Yosemite,California
 Grand Canyon,Arizona
 Rocky Mountain,Colorado
 Zion Park,Utah`,
-    sampleResult: `location,park_name
+      sampleResult: `location,park_name
 Wyoming,Yellowstone
 California,Yosemite
 Arizona,Grand Canyon
 Colorado,Rocky Mountain
 Utah,Zion Park`,
-    sampleOptions: {
-      fromPositionStatus: true,
-      toPositionStatus: true,
-      fromPosition: '1',
-      toPosition: '2',
-      fromHeader: 'park_name',
-      toHeader: 'location',
-      emptyValuesFilling: false,
-      customFiller: '*',
-      deleteComment: false,
-      commentCharacter: '',
-      emptyLines: false
-    }
-  },
-  {
-    title: 'Reorganize Columns in Vitamins CSV',
-    description:
-      'In this example, a lab intern made a mistake and created a corrupted CSV file with mixed-up columns and missing data. To fix the file, we swap the columns based on the headers "Vitamin" and "Function" so that the "Vitamin" column becomes the first in the output data. We also fill the incomplete CSV data by adding a custom asterisk "*" symbol in place of missing values.',
-    sampleText: `Function,Fat-Soluble,Vitamin,Sources
+      sampleOptions: {
+        fromPositionStatus: true,
+        toPositionStatus: true,
+        fromPosition: '1',
+        toPosition: '2',
+        fromHeader: 'park_name',
+        toHeader: 'location',
+        emptyValuesFilling: false,
+        customFiller: '*',
+        deleteComment: false,
+        commentCharacter: '',
+        emptyLines: false
+      }
+    },
+    {
+      title: exampleText('exampleUi.reorganizeColumnsInVitaminsCsv'),
+      description: exampleText('exampleUi.inThisExampleALabInternMadeA'),
+      sampleText: `Function,Fat-Soluble,Vitamin,Sources
 Supports vision,Fat-Soluble,A,Carrots
 Immune function,Water-Soluble,C,Citrus fruits
 Bone health,Fat-Soluble,D,Fatty fish
@@ -74,7 +80,7 @@ Energy production,Water-Soluble,B2
 Energy production,Water-Soluble,B3,Meat
 Protein metabolism,Water-Soluble,B6,Poultry
 Nervous system,Water-Soluble,B12,Meat`,
-    sampleResult: `Vitamin,Fat-Soluble,Function,Sources
+      sampleResult: `Vitamin,Fat-Soluble,Function,Sources
 A,Fat-Soluble,Supports vision,Carrots
 C,Water-Soluble,Immune function,Citrus fruits
 D,Fat-Soluble,Bone health,Fatty fish
@@ -85,25 +91,24 @@ B2,Water-Soluble,Energy production,*
 B3,Water-Soluble,Energy production,Meat
 B6,Water-Soluble,Protein metabolism,Poultry
 B12,Water-Soluble,Nervous system,Meat`,
-    sampleOptions: {
-      fromPositionStatus: false,
-      toPositionStatus: false,
-      fromPosition: '1',
-      toPosition: '2',
-      fromHeader: 'Vitamin',
-      toHeader: 'Function',
-      emptyValuesFilling: false,
-      customFiller: '*',
-      deleteComment: false,
-      commentCharacter: '',
-      emptyLines: false
-    }
-  },
-  {
-    title: 'Place Columns Side by Side for Analysis',
-    description:
-      'In this example, we change the order of columns in a CSV dataset to have the columns essential for analysis adjacent to each other. We match the "ScreenSize" column by its name and place it in the second-to-last position "-2". This groups the "ScreenSize" and "Price" columns together, allowing us to easily compare and choose the phone we want to buy. We also remove empty lines and specify that lines starting with the "#" symbol are comments and should be left as is.',
-    sampleText: `Brand,Model,ScreenSize,OS,Price
+      sampleOptions: {
+        fromPositionStatus: false,
+        toPositionStatus: false,
+        fromPosition: '1',
+        toPosition: '2',
+        fromHeader: 'Vitamin',
+        toHeader: 'Function',
+        emptyValuesFilling: false,
+        customFiller: '*',
+        deleteComment: false,
+        commentCharacter: '',
+        emptyLines: false
+      }
+    },
+    {
+      title: exampleText('exampleUi.placeColumnsSideBySideForAnalysis'),
+      description: exampleText('exampleUi.inThisExampleWeChangeTheOrderOf'),
+      sampleText: `Brand,Model,ScreenSize,OS,Price
 
 Apple,iPhone 15 Pro Max,6.7″,iOS,$1299
 Samsung,Galaxy S23 Ultra,6.8″,Android,$1199
@@ -111,31 +116,30 @@ Google,Pixel 7 Pro,6.4″,Android,$899
 
 #OnePlus,11 Pro,6.7″,Android,$949
 Xiaomi,13 Ultra,6.6″,Android,$849`,
-    sampleResult: `Brand,Model,OS,ScreenSize,Price
+      sampleResult: `Brand,Model,OS,ScreenSize,Price
 Apple,iPhone 15 Pro Max,iOS,6.7″,$1299
 Samsung,Galaxy S23 Ultra,Android,6.8″,$1199
 Google,Pixel 7 Pro,Android,6.4″,$899
 Xiaomi,13 Ultra,Android,6.6″,$849`,
-    sampleOptions: {
-      fromPositionStatus: false,
-      toPositionStatus: true,
-      fromPosition: '1',
-      toPosition: '4',
-      fromHeader: 'ScreenSize',
-      toHeader: 'OS',
-      emptyValuesFilling: true,
-      customFiller: 'x',
-      deleteComment: true,
-      commentCharacter: '#',
-      emptyLines: true
+      sampleOptions: {
+        fromPositionStatus: false,
+        toPositionStatus: true,
+        fromPosition: '1',
+        toPosition: '4',
+        fromHeader: 'ScreenSize',
+        toHeader: 'OS',
+        emptyValuesFilling: true,
+        customFiller: 'x',
+        deleteComment: true,
+        commentCharacter: '#',
+        emptyLines: true
+      }
     }
-  }
-];
+  ];
 
-export default function CsvToTsv({
-  title,
-  longDescription
-}: ToolComponentProps) {
+  // 本工具的展示文案随语言切换更新；示例原始数据与计算参数保持不变。
+  const { t: inlineText } = useInlineTranslation('csv');
+
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');
 
@@ -154,17 +158,17 @@ export default function CsvToTsv({
     updateField
   }) => [
     {
-      title: 'Swap-From Column',
+      title: inlineText('inline.swapFromColumn'),
       component: (
         <Box>
           <SimpleRadio
             onClick={() => updateField('fromPositionStatus', true)}
-            title="Set Column-From position"
+            title={inlineText('inline.setColumnFromPosition')}
             checked={values.fromPositionStatus}
           />
           {values.fromPositionStatus && (
             <TextFieldWithDesc
-              description={'Position of the first column you want to swap'}
+              description={inlineText('inline.positionOfTheFirstColumnYouWant')}
               value={values.fromPosition}
               onOwnChange={(val) => updateField('fromPosition', val)}
               type="number"
@@ -174,7 +178,7 @@ export default function CsvToTsv({
 
           <SimpleRadio
             onClick={() => updateField('fromPositionStatus', false)}
-            title="Set Column-From Header"
+            title={inlineText('inline.setColumnFromHeader')}
             checked={!values.fromPositionStatus}
           />
           {!values.fromPositionStatus && (
@@ -182,24 +186,26 @@ export default function CsvToTsv({
               selected={values.fromHeader}
               options={headerOptions}
               onChange={(value) => updateField('fromHeader', value)}
-              description={'Header of the first column you want to swap.'}
+              description={inlineText('inline.headerOfTheFirstColumnYouWant')}
             />
           )}
         </Box>
       )
     },
     {
-      title: 'Swap-to Column',
+      title: inlineText('inline.swapToColumn'),
       component: (
         <Box>
           <SimpleRadio
             onClick={() => updateField('toPositionStatus', true)}
-            title="Set Column-To position"
+            title={inlineText('inline.setColumnToPosition')}
             checked={values.toPositionStatus}
           />
           {values.toPositionStatus && (
             <TextFieldWithDesc
-              description={'Position of the second column you want to swap'}
+              description={inlineText(
+                'inline.positionOfTheSecondColumnYouWant'
+              )}
               value={values.toPosition}
               onOwnChange={(val) => updateField('toPosition', val)}
               type="number"
@@ -208,7 +214,7 @@ export default function CsvToTsv({
           )}
           <SimpleRadio
             onClick={() => updateField('toPositionStatus', false)}
-            title="Set Column-To Header"
+            title={inlineText('inline.setColumnToHeader')}
             checked={!values.toPositionStatus}
           />
           {!values.toPositionStatus && (
@@ -216,32 +222,35 @@ export default function CsvToTsv({
               selected={values.toHeader}
               options={headerOptions}
               onChange={(value) => updateField('toHeader', value)}
-              description={'Header of the second column you want to swap..'}
+              description={inlineText('inline.headerOfTheSecondColumnYouWant')}
             />
           )}
         </Box>
       )
     },
     {
-      title: 'Incomplete Data',
+      title: inlineText('inline.incompleteData'),
       component: (
         <Box>
           <SelectWithDesc
             selected={values.emptyValuesFilling}
             options={[
-              { label: 'Fill With Empty Values', value: true },
-              { label: 'Fill with Custom Values', value: false }
+              {
+                label: inlineText('insertCsvColumns.fillWithEmptyValues'),
+                value: true
+              },
+              { label: inlineText('inline.fillWithCustomValues'), value: false }
             ]}
             onChange={(value) => updateField('emptyValuesFilling', value)}
-            description={
-              'Fill incomplete CSV data with empty symbols or a custom symbol.'
-            }
+            description={inlineText(
+              'inline.fillIncompleteCsvDataWithEmptySymbols'
+            )}
           />
           {!values.emptyValuesFilling && (
             <TextFieldWithDesc
-              description={
-                'Specify a custom symbol to fill incomplete CSV data with'
-              }
+              description={inlineText(
+                'inline.specifyACustomSymbolToFillIncomplete'
+              )}
               value={values.customFiller}
               onOwnChange={(val) => updateField('customFiller', val)}
             />
@@ -250,20 +259,22 @@ export default function CsvToTsv({
       )
     },
     {
-      title: 'Comments and Empty Lines',
+      title: inlineText('inline.commentsAndEmptyLines'),
       component: (
         <Box>
           <CheckboxWithDesc
             checked={values.deleteComment}
             onChange={(value) => updateField('deleteComment', value)}
-            title="Delete Comments"
-            description="if checked, comments given by the following character will be deleted"
+            title={inlineText('inline.deleteComments')}
+            description={inlineText(
+              'inline.ifCheckedCommentsGivenByTheFollowing'
+            )}
           />
           {values.deleteComment && (
             <TextFieldWithDesc
-              description={
-                'Specify the character used to start comments in the input CSV (and if needed remove them via checkbox above)'
-              }
+              description={inlineText(
+                'inline.specifyTheCharacterUsedToStartComments'
+              )}
               value={values.commentCharacter}
               onOwnChange={(val) => updateField('commentCharacter', val)}
             />
@@ -272,8 +283,8 @@ export default function CsvToTsv({
           <CheckboxWithDesc
             checked={values.emptyLines}
             onChange={(value) => updateField('emptyLines', value)}
-            title="Delete Empty Lines"
-            description="Do not include empty lines in the output data."
+            title={inlineText('inline.deleteEmptyLines')}
+            description={inlineText('inline.doNotIncludeEmptyLinesInThe')}
           />
         </Box>
       )

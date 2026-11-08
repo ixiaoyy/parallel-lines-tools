@@ -36,11 +36,8 @@ export default function ToolLayout({
     getI18nNamespaceFromToolCategory(type)
   ]);
 
-  // Use i18n keys if available, otherwise fall back to provided strings
-  //@ts-ignore
-  const toolTitle: string = t(i18n.name);
-  //@ts-ignore
-  const toolDescription: string = t(i18n.description);
+  const toolTitle = t(i18n!.name);
+  const toolDescription = t(i18n!.description);
 
   const otherCategoryTools =
     getToolsByCategory([], t)
@@ -62,9 +59,10 @@ export default function ToolLayout({
       sx={{ backgroundColor: 'background.default' }}
     >
       <Helmet>
-        <title>{`${toolTitle} - OmniTools`}</title>
+        <title>{`${toolTitle} · ${t('translation:hero.brand')}`}</title>
+        <meta name="description" content={toolDescription} />
       </Helmet>
-      <Box width={'85%'}>
+      <Box width={{ xs: '94%', md: '85%' }}>
         <ToolHeader
           title={toolTitle}
           description={toolDescription}

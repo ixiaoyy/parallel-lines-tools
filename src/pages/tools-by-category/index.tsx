@@ -11,10 +11,7 @@ import Typography from '@mui/material/Typography';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { filterTools, getToolsByCategory } from '../../tools';
 import Hero from 'components/Hero';
-import {
-  getI18nNamespaceFromToolCategory,
-  getToolCategoryTitle
-} from '@utils/string';
+import { getToolCategoryTitle } from '@utils/string';
 import { Icon } from '@iconify/react';
 import { categoriesColors } from 'config/uiConfig';
 import React, { useEffect } from 'react';
@@ -24,7 +21,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { Helmet } from 'react-helmet';
 import UserTypeFilter from '@components/UserTypeFilter';
 import { useTranslation } from 'react-i18next';
-import { I18nNamespaces, validNamespaces } from '../../i18n';
+import { validNamespaces } from '../../i18n';
 import { useUserTypeFilter } from '../../providers/UserTypeFilterProvider';
 
 const StyledLink = styled(Link)(({ theme }) => ({
@@ -64,7 +61,7 @@ export default function ToolsByCategory() {
   return (
     <Box sx={{ backgroundColor: 'background.default' }}>
       <Helmet>
-        <title>{rawTitle}</title>
+        <title>{`${rawTitle} · ${t('translation:hero.brand')}`}</title>
       </Helmet>
       <Box
         padding={{ xs: 1, md: 3, lg: 5 }}
@@ -78,9 +75,16 @@ export default function ToolsByCategory() {
       </Box>
       <Divider sx={{ borderColor: theme.palette.primary.main }} />
       <Box ref={mainContentRef} mt={3} ml={{ xs: 1, md: 2, lg: 3 }} padding={3}>
-        <Stack direction={'row'} justifyContent={'space-between'} spacing={2}>
+        <Stack
+          direction={{ xs: 'column', md: 'row' }}
+          justifyContent={'space-between'}
+          spacing={2}
+        >
           <Stack direction={'row'} alignItems={'center'} spacing={1}>
-            <IconButton onClick={() => navigate('/')}>
+            <IconButton
+              aria-label={t('translation:toolsByCategory.back')}
+              onClick={() => navigate('/')}
+            >
               <ArrowBackIcon color={'primary'} />
             </IconButton>
             <Typography fontSize={22} color={theme.palette.primary.main}>
@@ -114,6 +118,16 @@ export default function ToolsByCategory() {
             onUserTypesChange={setSelectedUserTypes}
           />
         </Box>
+        {categoryTools.length === 0 && (
+          <Box role="status" sx={{ py: 6, textAlign: 'center' }}>
+            <Typography variant="h6">
+              {t('translation:toolsByCategory.noResultsTitle')}
+            </Typography>
+            <Typography color="text.secondary">
+              {t('translation:toolsByCategory.noResultsDescription')}
+            </Typography>
+          </Box>
+        )}
         <Grid container spacing={2}>
           {categoryTools.map((tool, index) => (
             <Grid item xs={12} md={6} lg={4} key={tool.path}>

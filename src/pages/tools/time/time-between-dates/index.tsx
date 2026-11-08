@@ -1,3 +1,5 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import { Box, Paper, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import ToolContent from '@components/ToolContent';
@@ -40,87 +42,100 @@ const initialValues: InitialValuesType = {
   endTimezone: 'local'
 };
 
-const validationSchema = Yup.object({
-  startDate: Yup.string().required('Start date is required'),
-  startTime: Yup.string().required('Start time is required'),
-  endDate: Yup.string().required('End date is required'),
-  endTime: Yup.string().required('End time is required'),
-  startTimezone: Yup.string(),
-  endTimezone: Yup.string()
-});
-
-const timezoneOptions = [
-  { value: 'local', label: 'Local Time' },
-  ...Array.from(
-    new Map(
-      Intl.supportedValuesOf('timeZone').map((tz) => {
-        const formatter = new Intl.DateTimeFormat('en', {
-          timeZone: tz,
-          timeZoneName: 'shortOffset'
-        });
-
-        const offset =
-          formatter
-            .formatToParts(new Date())
-            .find((part) => part.type === 'timeZoneName')?.value || '';
-
-        const value = offset.replace('UTC', 'GMT');
-
-        return [
-          value, // key for Map to ensure uniqueness
-          {
-            value,
-            label: `${value} (${tz})`
-          }
-        ];
-      })
-    ).values()
-  ).sort((a, b) => a.value.localeCompare(b.value, undefined, { numeric: true }))
-];
-
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'One Year Difference',
-    description: 'Calculate the time between dates that are one year apart',
-    sampleOptions: {
-      startDate: '2023-01-01',
-      startTime: '12:00',
-      endDate: '2024-01-01',
-      endTime: '12:00',
-      startTimezone: 'local',
-      endTimezone: 'local'
-    },
-    sampleResult: '1 year'
-  },
-  {
-    title: 'Different Timezones',
-    description: 'Calculate the time difference between New York and London',
-    sampleOptions: {
-      startDate: '2023-01-01',
-      startTime: '12:00',
-      endDate: '2023-01-01',
-      endTime: '12:00',
-      startTimezone: 'GMT-5',
-      endTimezone: 'GMT'
-    },
-    sampleResult: '5 hours'
-  },
-  {
-    title: 'Detailed Time Breakdown',
-    description: 'Show a detailed breakdown of a time difference',
-    sampleOptions: {
-      startDate: '2023-01-01',
-      startTime: '09:30',
-      endDate: '2023-01-03',
-      endTime: '14:45',
-      startTimezone: 'local',
-      endTimezone: 'local'
-    },
-    sampleResult: '2 days, 5 hours, 15 minutes'
-  }
-];
-
 export default function TimeBetweenDates() {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('time');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.oneYearDifference'),
+      description: exampleText(
+        'exampleUi.calculateTheTimeBetweenDatesThatAreOne'
+      ),
+      sampleOptions: {
+        startDate: '2023-01-01',
+        startTime: '12:00',
+        endDate: '2024-01-01',
+        endTime: '12:00',
+        startTimezone: 'local',
+        endTimezone: 'local'
+      },
+      sampleResult: '1 year'
+    },
+    {
+      title: exampleText('exampleUi.differentTimezones'),
+      description: exampleText(
+        'exampleUi.calculateTheTimeDifferenceBetweenNewYorkAnd'
+      ),
+      sampleOptions: {
+        startDate: '2023-01-01',
+        startTime: '12:00',
+        endDate: '2023-01-01',
+        endTime: '12:00',
+        startTimezone: 'GMT-5',
+        endTimezone: 'GMT'
+      },
+      sampleResult: '5 hours'
+    },
+    {
+      title: exampleText('exampleUi.detailedTimeBreakdown'),
+      description: exampleText(
+        'exampleUi.showADetailedBreakdownOfATimeDifference'
+      ),
+      sampleOptions: {
+        startDate: '2023-01-01',
+        startTime: '09:30',
+        endDate: '2023-01-03',
+        endTime: '14:45',
+        startTimezone: 'local',
+        endTimezone: 'local'
+      },
+      sampleResult: '2 days, 5 hours, 15 minutes'
+    }
+  ];
+
+  // 本工具的展示文案随语言切换更新；示例原始数据与计算参数保持不变。
+  const { t: inlineText } = useInlineTranslation(['time', 'translation']);
+
+  const validationSchema = Yup.object({
+    startDate: Yup.string().required(inlineText('inline.startDateIsRequired')),
+    startTime: Yup.string().required(inlineText('inline.startTimeIsRequired')),
+    endDate: Yup.string().required(inlineText('inline.endDateIsRequired')),
+    endTime: Yup.string().required(inlineText('inline.endTimeIsRequired')),
+    startTimezone: Yup.string(),
+    endTimezone: Yup.string()
+  });
+
+  const timezoneOptions = [
+    { value: 'local', label: inlineText('inline.localTime') },
+    ...Array.from(
+      new Map(
+        Intl.supportedValuesOf('timeZone').map((tz) => {
+          const formatter = new Intl.DateTimeFormat('en', {
+            timeZone: tz,
+            timeZoneName: 'shortOffset'
+          });
+
+          const offset =
+            formatter
+              .formatToParts(new Date())
+              .find((part) => part.type === 'timeZoneName')?.value || '';
+
+          const value = offset.replace('UTC', 'GMT');
+
+          return [
+            value, // key for Map to ensure uniqueness
+            {
+              value,
+              label: `${value} (${tz})`
+            }
+          ];
+        })
+      ).values()
+    ).sort((a, b) =>
+      a.value.localeCompare(b.value, undefined, { numeric: true })
+    )
+  ];
+
   const { t } = useTranslation('time');
   const [result, setResult] = useState<string>('');
 
@@ -243,11 +258,13 @@ export default function TimeBetweenDates() {
           setResult(formattedDifference);
         } catch (error) {
           setResult(
-            `Error: ${
-              error instanceof Error
-                ? error.message
-                : 'Failed to calculate time difference'
-            }`
+            inlineText('translation:common.error', {
+              error: String(
+                error instanceof Error
+                  ? error.message
+                  : inlineText('inline.failedToCalculateTimeDifference')
+              )
+            })
           );
         }
       }}

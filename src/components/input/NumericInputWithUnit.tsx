@@ -150,7 +150,9 @@ export default function NumericInputWithUnit(props: {
         >
           {Object.keys(siPrefixes).map((key) => (
             <MenuItem key={key} value={key}>
-              {key}
+              {key === 'Default prefix'
+                ? t('numericInputWithUnit.defaultPrefix')
+                : key}
             </MenuItem>
           ))}
         </Select>

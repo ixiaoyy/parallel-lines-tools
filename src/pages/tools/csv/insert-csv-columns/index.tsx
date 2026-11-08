@@ -1,3 +1,4 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import React, { useState } from 'react';
 import ToolContent from '@components/ToolContent';
@@ -26,103 +27,105 @@ const initialValues: InitialValuesType = {
   rowNumber: 1
 };
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Insert a single column by position',
-    description:
-      'In this example, we insert a single column "city" at position 1 in the CSV data. The input CSV has data about cars, including the "Brand" and "Model" of the car. We now add a "city" column at position 1. To do this, we enter the city data in the comma-separated format in the "New Column" option, and to quickly add the new column at position 1, then we specify the position number.',
-    sampleText: `Brand,Model
-Toyota,Camry
-Ford,Mustang
-Honda,Accord
-Chevrolet,Malibu`,
-    sampleResult: `city,Brand,Model
-dallas,Toyota,Camry
-houston,Ford,Mustang
-dallas,Honda,Accord
-houston,Chevrolet,Malibu`,
-    sampleOptions: {
-      csvToInsert: `city
-dallas
-houston`,
-      commentCharacter: '#',
-      separator: ',',
-      quoteChar: '"',
-      insertingPosition: 'custom',
-      customFill: true,
-      customFillValue: 'k',
-      customPostionOptions: 'rowNumber',
-      headerName: '',
-      rowNumber: 1
-    }
-  },
-  {
-    title: 'Append Multiple columns by header Name',
-    description:
-      'In this example, we append two data columns to the end of CSV data. The input CSV has data about cars, including the "Brand" and "Model" of the car. We now add two more columns at the end: "Year" and "Price". To do this, we enter these two data columns in the comma-separated format in the "New Column" option, and to quickly add the new columns to the end of the CSV, then we specify the name of the header they should be put after.',
-    sampleText: `Brand,Model
-Toyota,Camry
-Ford,Mustang
-Honda,Accord
-Chevrolet,Malibu`,
-    sampleResult: `Brand,Model,Year,Price
-Toyota,Camry,2022,25000
-Ford,Mustang,2021,35000
-Honda,Accord,2022,27000
-Chevrolet,Malibu,2021,28000`,
-    sampleOptions: {
-      csvToInsert: `Year,Price
-2022,25000
-2021,35000
-2022,27000
-2021,28000`,
-      commentCharacter: '#',
-      separator: ',',
-      quoteChar: '"',
-      insertingPosition: 'custom',
-      customFill: false,
-      customFillValue: 'x',
-      customPostionOptions: 'headerName',
-      headerName: 'Model',
-      rowNumber: 1
-    }
-  },
-  {
-    title: 'Append Multiple columns',
-    description:
-      'In this example, we append two data columns to the end of CSV data. The input CSV has data about cars, including the "Brand" and "Model" of the car. We now add two more columns at the end: "Year" and "Price". To do this, we enter these two data columns in the comma-separated format in the "New Column" option, and to quickly add the new columns to the end of the CSV, then we select append.',
-    sampleText: `Brand,Model
-Toyota,Camry
-Ford,Mustang
-Honda,Accord
-Chevrolet,Malibu`,
-    sampleResult: `Brand,Model,Year,Price
-Toyota,Camry,2022,25000
-Ford,Mustang,2021,35000
-Honda,Accord,2022,27000
-Chevrolet,Malibu,2021,28000`,
-    sampleOptions: {
-      csvToInsert: `Year,Price
-2022,25000
-2021,35000
-2022,27000
-2021,28000`,
-      commentCharacter: '#',
-      separator: ',',
-      quoteChar: '"',
-      insertingPosition: 'append',
-      customFill: false,
-      customFillValue: 'x',
-      customPostionOptions: 'rowNumber',
-      headerName: '',
-      rowNumber: 1
-    }
-  }
-];
 export default function InsertCsvColumns({
   title,
   longDescription
 }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('csv');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.insertASingleColumnByPosition'),
+      description: exampleText('exampleUi.inThisExampleWeInsertASingleColumn'),
+      sampleText: `Brand,Model
+Toyota,Camry
+Ford,Mustang
+Honda,Accord
+Chevrolet,Malibu`,
+      sampleResult: `city,Brand,Model
+dallas,Toyota,Camry
+houston,Ford,Mustang
+dallas,Honda,Accord
+houston,Chevrolet,Malibu`,
+      sampleOptions: {
+        csvToInsert: `city
+dallas
+houston`,
+        commentCharacter: '#',
+        separator: ',',
+        quoteChar: '"',
+        insertingPosition: 'custom',
+        customFill: true,
+        customFillValue: 'k',
+        customPostionOptions: 'rowNumber',
+        headerName: '',
+        rowNumber: 1
+      }
+    },
+    {
+      title: exampleText('exampleUi.appendMultipleColumnsByHeaderName'),
+      description: exampleText('exampleUi.inThisExampleWeAppendTwoDataColumns'),
+      sampleText: `Brand,Model
+Toyota,Camry
+Ford,Mustang
+Honda,Accord
+Chevrolet,Malibu`,
+      sampleResult: `Brand,Model,Year,Price
+Toyota,Camry,2022,25000
+Ford,Mustang,2021,35000
+Honda,Accord,2022,27000
+Chevrolet,Malibu,2021,28000`,
+      sampleOptions: {
+        csvToInsert: `Year,Price
+2022,25000
+2021,35000
+2022,27000
+2021,28000`,
+        commentCharacter: '#',
+        separator: ',',
+        quoteChar: '"',
+        insertingPosition: 'custom',
+        customFill: false,
+        customFillValue: 'x',
+        customPostionOptions: 'headerName',
+        headerName: 'Model',
+        rowNumber: 1
+      }
+    },
+    {
+      title: exampleText('exampleUi.appendMultipleColumns'),
+      description: exampleText(
+        'exampleUi.inThisExampleWeAppendTwoDataColumns2'
+      ),
+      sampleText: `Brand,Model
+Toyota,Camry
+Ford,Mustang
+Honda,Accord
+Chevrolet,Malibu`,
+      sampleResult: `Brand,Model,Year,Price
+Toyota,Camry,2022,25000
+Ford,Mustang,2021,35000
+Honda,Accord,2022,27000
+Chevrolet,Malibu,2021,28000`,
+      sampleOptions: {
+        csvToInsert: `Year,Price
+2022,25000
+2021,35000
+2022,27000
+2021,28000`,
+        commentCharacter: '#',
+        separator: ',',
+        quoteChar: '"',
+        insertingPosition: 'append',
+        customFill: false,
+        customFillValue: 'x',
+        customPostionOptions: 'rowNumber',
+        headerName: '',
+        rowNumber: 1
+      }
+    }
+  ];
+
   const { t } = useTranslation('csv');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');

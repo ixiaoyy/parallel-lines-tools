@@ -1,3 +1,5 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import { useState } from 'react';
 import ToolContent from '@components/ToolContent';
 import ToolCodeInput from '@components/input/ToolCodeInput';
@@ -17,11 +19,14 @@ const initialValues: InitialValuesType = {
   addMetaTag: false
 };
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Basic JSON to XML',
-    description: 'Convert a simple JSON object into an XML format.',
-    sampleText: `
+export default function JsonToXml({ title }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('json');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.basicJsonToXml'),
+      description: exampleText('exampleUi.convertASimpleJsonObjectIntoAnXml'),
+      sampleText: `
 {
   "users": [
     {
@@ -36,7 +41,7 @@ const exampleCards: CardExampleType<InitialValuesType>[] = [
     }
   ]
 }`,
-    sampleResult: `<root>
+      sampleResult: `<root>
 \t<users>
 \t\t<name>John</name>
 \t\t<age>30</age>
@@ -48,13 +53,15 @@ const exampleCards: CardExampleType<InitialValuesType>[] = [
 \t\t<city>London</city>
 \t</users>
 </root>`,
-    sampleOptions: {
-      ...initialValues
+      sampleOptions: {
+        ...initialValues
+      }
     }
-  }
-];
+  ];
 
-export default function JsonToXml({ title }: ToolComponentProps) {
+  // 本工具的展示文案随语言切换更新；示例原始数据与计算参数保持不变。
+  const { t: inlineText } = useInlineTranslation('json');
+
   const { t } = useTranslation('json');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');
@@ -68,7 +75,11 @@ export default function JsonToXml({ title }: ToolComponentProps) {
         setInputFormat(inputFormat);
       } catch (error) {
         setResult(
-          `${error instanceof Error ? error.message : 'Invalid Json format'}`
+          `${
+            error instanceof Error
+              ? error.message
+              : inlineText('inline.invalidJsonFormat')
+          }`
         );
       }
     }
@@ -99,7 +110,7 @@ export default function JsonToXml({ title }: ToolComponentProps) {
       }
       getGroups={({ values, updateField }) => [
         {
-          title: 'Output XML Indentation',
+          title: inlineText('inline.outputXmlIndentation'),
           component: (
             <Box>
               <SimpleRadio

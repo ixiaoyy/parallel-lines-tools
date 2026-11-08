@@ -13,9 +13,27 @@
   },
   "baseFileInput": {
     "copyFailed": "复制失败： {{error}}",
-    "dropFileHere": "放下你的 {{type}} 这里",
+    "dropFileHere": "将{{type}}拖放到此处",
     "fileCopied": "文件已复制",
-    "selectFileDescription": "单击此处选择一个 {{type}} 在您的设备上，按 Ctrl+V 使用 {{type}} 从剪贴板中，或从桌面拖放文件"
+    "selectFileDescription": "点击选择设备上的{{type}}，按 Ctrl+V 粘贴{{type}}，或将文件拖放到此处。",
+    "inputTitle": "输入{{type}}",
+    "invalidFileType": "文件类型不支持，请使用 {{formats}}。",
+    "fileTypes": {
+      "image": "图片",
+      "audio": "音频",
+      "video": "视频",
+      "pdf": "PDF"
+    },
+    "preview": "图片预览",
+    "cropArea": "裁剪区域",
+    "nwDragHandle": "从左上角调整尺寸",
+    "nDragHandle": "从上边调整尺寸",
+    "neDragHandle": "从右上角调整尺寸",
+    "eDragHandle": "从右边调整尺寸",
+    "seDragHandle": "从右下角调整尺寸",
+    "sDragHandle": "从下边调整尺寸",
+    "swDragHandle": "从左下角调整尺寸",
+    "wDragHandle": "从左边调整尺寸"
   },
   "categories": {
     "audio": {
@@ -32,11 +50,11 @@
     },
     "gif": {
       "description": "处理 GIF 动画的工具 - 创建透明 GIF、提取 GIF 帧、向 GIF 添加文本、裁剪、旋转、反转 GIF 等等。",
-      "title": "GIF工具"
+      "title": "GIF 工具"
     },
     "image-generic": {
       "description": "处理图片的工具——压缩、调整大小、裁剪、转换为 JPG、旋转、删除背景等等。",
-      "title": "图像工具"
+      "title": "图片工具"
     },
     "json": {
       "description": "处理 JSON 数据结构的工具——美化和缩小 JSON 对象、展平 JSON 数组、字符串化 JSON 值、分析数据等等",
@@ -52,11 +70,11 @@
     },
     "pdf": {
       "description": "处理 PDF 文件的工具 - 从 PDF 中提取文本、将 PDF 转换为其他格式、操作 PDF 等等。",
-      "title": "PDF工具"
+      "title": "PDF 工具"
     },
     "png": {
       "description": "处理 PNG 图像的工具 - 将 PNG 转换为 JPG、创建透明 PNG、更改 PNG 颜色、裁剪、旋转、调整 PNG 大小等等。",
-      "title": "PNG工具"
+      "title": "PNG 工具"
     },
     "seeAll": "查看全部 {{title}}",
     "string": {
@@ -85,8 +103,8 @@
     }
   },
   "hero": {
-    "brand": "OmniTools",
-    "description": "使用 OmniTools 提升您的工作效率，这是一款快速完成任务的终极工具包！数千个用户友好的实用程序，可直接通过浏览器编辑图像、文本、列表和数据。",
+    "brand": "平行线工具箱",
+    "description": "按用途查找图片、文档、文本和数据工具。无需注册，打开即可使用；格式与大小限制请查看各工具说明。",
     "examples": {
       "calculateNumberSum": "计算数字和",
       "changeGifSpeed": "更改 GIF 速度",
@@ -96,13 +114,16 @@
       "sortList": "对列表进行排序",
       "splitPdf": "拆分 PDF",
       "splitText": "拆分文本",
-      "trimVideo": "修剪视频"
+      "trimVideo": "修剪视频",
+      "markdownToDocx": "Markdown 转 Word",
+      "compressImage": "图片压缩"
     },
     "search": {
-      "noResult": "未找到结果 请尝试调整搜索或筛选条件",
-      "placeholder": "搜索所有工具"
+      "noResult": "没有找到匹配工具，请换个关键词或调整筛选。",
+      "placeholder": "搜索工具名称或用途"
     },
-    "title": "快速完成工作"
+    "title": "日常小事，顺手完成",
+    "removeBookmark": "取消收藏：{{title}}"
   },
   "inputFooter": {
     "clear": "清除",
@@ -112,25 +133,34 @@
   "list": {
     "group": {
       "description": "世界上最简单的基于浏览器的列表项分组工具。输入您的列表并指定分组条件，即可将项目按逻辑分组。非常适合分类数据、组织信息或创建结构化列表。支持自定义分隔符和各种分组选项。",
-      "name": "团体",
+      "name": "列表分组",
       "shortDescription": "按共同属性对列表项进行分组"
     },
     "reverse": {
       "description": "这是一个基于浏览器的超级简单的应用程序，可以反向打印所有列表项。输入项可以用任意符号分隔，并且您还可以更改反向列表项的分隔符。",
-      "name": "撤销",
+      "name": "反转列表",
       "shortDescription": "快速反转列表"
     },
     "sort": {
       "description": "这是一款基于浏览器的超级简单应用程序，可以对列表中的项目进行排序，并按升序或降序排列。您可以按字母顺序、数字或长度对项目进行排序。您还可以删除重复和空白的项目，以及修剪周围有空格的单个项目。您可以使用任何分隔符分隔输入列表项，也可以使用正则表达式分隔它们。此外，您还可以为排序后的输出列表创建新的分隔符。",
-      "name": "种类",
+      "name": "列表排序",
       "shortDescription": "快速对列表进行排序"
     }
   },
   "navbar": {
     "buyMeACoffee": "请我喝杯咖啡",
     "hireMe": "雇用我",
-    "home": "家",
-    "tools": "工具"
+    "home": "首页",
+    "tools": "全部工具",
+    "helpTranslate": "协助翻译",
+    "language": "界面语言",
+    "menu": "打开菜单",
+    "theme": "切换显示模式：{{mode}}",
+    "themeLight": "浅色",
+    "themeDark": "深色",
+    "themeSystem": "跟随系统",
+    "mainTools": "工具收录页",
+    "source": "上游源码"
   },
   "number": {
     "generate": {
@@ -140,12 +170,13 @@
     },
     "sum": {
       "description": "这是一款基于浏览器的超级简单的求和应用程序。输入的数字可以用任意符号分隔，并且您还可以更改求和结果的分隔符。",
-      "name": "总和数",
+      "name": "数字求和",
       "shortDescription": "快速对数字列表求和"
     }
   },
   "numericInputWithUnit": {
-    "unit": "单元"
+    "unit": "单位",
+    "defaultPrefix": "无前缀"
   },
   "pdf": {
     "compressPdf": {
@@ -196,12 +227,12 @@
     },
     "reverse": {
       "description": "世界上最简单的基于浏览器的文本反转工具。输入任意文本即可立即逐字符反转。非常适合创建镜像文本、分析回文或玩转文本模式。反转时保留空格和特殊字符。",
-      "name": "撤销",
+      "name": "反转文本",
       "shortDescription": "逐个字符地反转任何文本"
     },
     "toMorse": {
       "description": "世界上最简单的基于浏览器的文本转摩尔斯电码工具。只需在左侧输入框中输入文本，即可立即在输出区域获得摩尔斯电码。功能强大、免费且快速。输入文本，即可获得摩尔斯电码。",
-      "name": "字符串到莫尔斯",
+      "name": "文本转摩尔斯电码",
       "shortDescription": "快速将文本编码为摩尔斯电码"
     },
     "uppercase": {
@@ -218,10 +249,16 @@
     "copied": "文件已复制",
     "copyFailed": "复制失败： {{error}}",
     "loading": "正在加载...这可能需要一点时间。",
-    "result": "结果"
+    "result": "结果",
+    "processed": "文件已处理完成，点击下载即可保存结果。",
+    "preview": "结果预览"
   },
   "toolHeader": {
-    "seeExamples": "查看示例"
+    "seeExamples": "查看示例",
+    "useTool": "使用工具",
+    "allTools": "全部工具",
+    "bookmark": "收藏工具",
+    "unbookmark": "取消收藏"
   },
   "toolLayout": {
     "allToolsTitle": "全部 {{type}}"
@@ -230,12 +267,19 @@
     "copied": "文件已复制",
     "copyFailed": "复制失败： {{error}}",
     "loading": "正在加载...这可能需要一点时间。",
-    "result": "结果"
+    "result": "结果",
+    "ready": "文件已生成，可在下方下载。",
+    "downloadFile": "下载 {{name}}",
+    "downloadZip": "全部下载为 ZIP",
+    "preview": "预览 {{number}}"
   },
   "toolMultipleInput": {
     "deleteFile": "删除文件",
     "inputTitle": "输入 {{type}}",
-    "noFilesSelected": "未选择任何文件"
+    "noFilesSelected": "未选择任何文件",
+    "dropFilesHere": "将文件拖放到此处",
+    "invalidFileType": "文件类型不支持，请选择允许的文件格式。",
+    "selectFilesDescription": "点击选择设备上的文件，或将文件拖放到此处。"
   },
   "toolOptions": {
     "title": "工具选项"
@@ -254,10 +298,72 @@
   },
   "toolsByCategory": {
     "noResultsDescription": "请尝试调整搜索条件或筛选条件",
-    "noResultsTitle": "未找到工具"
+    "noResultsTitle": "未找到工具",
+    "back": "返回全部工具"
   },
   "userTypes": {
     "developers": "开发人员",
     "generalUsers": "普通用户"
+  },
+  "converters": {
+    "audioconverter": {
+      "description": "在不同音频格式之间转换文件。",
+      "longDescription": "将音频文件从一种格式转换为另一种格式，支持多种常见音频格式。",
+      "shortDescription": "转换音频文件格式",
+      "title": "音频格式转换"
+    }
+  },
+  "footer": {
+    "attribution": "基于 OmniTools 开发，保留原作者版权及开源许可。",
+    "privacy": "文件与输入内容仅用于当前工具处理；不会保存到收藏记录。",
+    "licenses": "开源许可",
+    "modifiedSource": "定制源码（ZIP）"
+  },
+  "release": {
+    "title": "暂未开放",
+    "intro": "以下工具待本地运行资源与处理质量验证后再开放。",
+    "back": "全部工具",
+    "resources": "此功能仍依赖外部运行资源。",
+    "binary": "引擎二进制及对应源码尚未锁定。",
+    "link": "暂未开放的工具",
+    "notFound": "页面不存在"
+  },
+  "loading": {
+    "label": "正在加载…"
+  },
+  "navigation": {
+    "scrollTop": "返回顶部"
+  },
+  "validation": {
+    "invalid": "输入无效。",
+    "required": "此项不能为空。",
+    "defined": "请填写此项。",
+    "notNull": "此项不能为 null。",
+    "oneOf": "请选择以下允许值之一：{{values}}。",
+    "notOneOf": "此项不能使用以下值：{{values}}。",
+    "notType": "输入格式或数据类型不正确。",
+    "stringLength": "必须恰好包含 {{length}} 个字符。",
+    "stringMin": "至少需要 {{min}} 个字符。",
+    "stringMax": "最多允许 {{max}} 个字符。",
+    "email": "请输入有效的邮箱地址。",
+    "url": "请输入有效的 URL。",
+    "matches": "输入内容不符合要求的格式。",
+    "numberMin": "数值不能小于 {{min}}。",
+    "numberMax": "数值不能大于 {{max}}。",
+    "numberLess": "数值必须小于 {{less}}。",
+    "numberMore": "数值必须大于 {{more}}。",
+    "numberPositive": "请输入大于 0 的数值。",
+    "numberNegative": "请输入小于 0 的数值。",
+    "numberInteger": "请输入整数。",
+    "arrayMin": "至少选择 {{min}} 项。",
+    "arrayMax": "最多选择 {{max}} 项。",
+    "arrayLength": "请选择 {{length}} 项。"
+  },
+  "common": {
+    "error": "错误：{{error}}",
+    "pdfProtectionFailed": "PDF 加密失败：{{error}}"
+  },
+  "toolCodeInput": {
+    "languageHint": "编辑器内置菜单语言在首次加载时确定；切换语言后如需更新菜单，请先保存输入再刷新页面。"
   }
 }

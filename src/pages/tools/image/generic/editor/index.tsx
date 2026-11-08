@@ -1,3 +1,4 @@
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import React, { useCallback, useState } from 'react';
 import { Box } from '@mui/material';
 import ToolImageInput from '@components/input/ToolImageInput';
@@ -10,6 +11,9 @@ import FilerobotImageEditor, {
 } from 'react-filerobot-image-editor';
 
 export default function ImageEditor({ title }: ToolComponentProps) {
+  // 仅本地化界面展示与校验提示；格式参数和处理流程保持原样。
+  const { t: inlineText } = useInlineTranslation('image');
+
   const [input, setInput] = useState<File | null>(null);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -108,14 +112,13 @@ export default function ImageEditor({ title }: ToolComponentProps) {
             value={input}
             onChange={handleInputChange}
             accept={['image/*']}
-            title="Upload Image to Edit"
+            title={inlineText('inline.uploadImageToEdit')}
           />
         )
       }
       toolInfo={{
-        title: 'Image Editor',
-        description:
-          'A powerful image editing tool that provides professional-grade features including cropping, rotating, color adjustments, text annotations, drawing tools, and watermarking. Edit your images directly in your browser without the need for external software.'
+        title: inlineText('editor.title'),
+        description: inlineText('inline.aPowerfulImageEditingToolThatProvides')
       }}
       compute={() => {}}
     />

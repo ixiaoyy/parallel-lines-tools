@@ -1,3 +1,4 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import { Box, Checkbox, FormControlLabel, FormGroup } from '@mui/material';
 import { generatePassword } from './service';
@@ -10,54 +11,60 @@ import { GetGroupsType } from '@components/options/ToolOptions';
 import { CardExampleType } from '@components/examples/ToolExamples';
 import { useTranslation } from 'react-i18next';
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Strong Password (12 characters)',
-    description:
-      'Generate a secure password with all character types including symbols.',
-    sampleText: '',
-    sampleResult: 'A7#mK9$pL2@x',
-    sampleOptions: {
-      length: '12',
-      includeLowercase: true,
-      includeUppercase: true,
-      includeNumbers: true,
-      includeSymbols: true,
-      avoidAmbiguous: false
-    }
-  },
-  {
-    title: 'Simple Password (8 characters)',
-    description: 'Generate a basic password with letters and numbers only.',
-    sampleText: '',
-    sampleResult: 'Ab3mK9pL',
-    sampleOptions: {
-      length: '8',
-      includeLowercase: true,
-      includeUppercase: true,
-      includeNumbers: true,
-      includeSymbols: false,
-      avoidAmbiguous: false
-    }
-  },
-  {
-    title: 'Clear Password (No ambiguous)',
-    description:
-      'Generate a password without ambiguous characters (i, I, l, 0, O).',
-    sampleText: '',
-    sampleResult: 'A7#mK9$pL2@x',
-    sampleOptions: {
-      length: '12',
-      includeLowercase: true,
-      includeUppercase: true,
-      includeNumbers: true,
-      includeSymbols: true,
-      avoidAmbiguous: true
-    }
-  }
-];
-
 export default function PasswordGenerator({ title }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('string');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.strongPassword12Characters'),
+      description: exampleText(
+        'exampleUi.generateASecurePasswordWithAllCharacterTypes'
+      ),
+      sampleText: '',
+      sampleResult: 'A7#mK9$pL2@x',
+      sampleOptions: {
+        length: '12',
+        includeLowercase: true,
+        includeUppercase: true,
+        includeNumbers: true,
+        includeSymbols: true,
+        avoidAmbiguous: false
+      }
+    },
+    {
+      title: exampleText('exampleUi.simplePassword8Characters'),
+      description: exampleText(
+        'exampleUi.generateABasicPasswordWithLettersAndNumbers'
+      ),
+      sampleText: '',
+      sampleResult: 'Ab3mK9pL',
+      sampleOptions: {
+        length: '8',
+        includeLowercase: true,
+        includeUppercase: true,
+        includeNumbers: true,
+        includeSymbols: false,
+        avoidAmbiguous: false
+      }
+    },
+    {
+      title: exampleText('exampleUi.clearPasswordNoAmbiguous'),
+      description: exampleText(
+        'exampleUi.generateAPasswordWithoutAmbiguousCharactersII'
+      ),
+      sampleText: '',
+      sampleResult: 'A7#mK9$pL2@x',
+      sampleOptions: {
+        length: '12',
+        includeLowercase: true,
+        includeUppercase: true,
+        includeNumbers: true,
+        includeSymbols: true,
+        avoidAmbiguous: true
+      }
+    }
+  ];
+
   const { t } = useTranslation('string');
   const [result, setResult] = useState<string>('');
 

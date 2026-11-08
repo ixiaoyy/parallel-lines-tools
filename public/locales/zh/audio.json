@@ -50,7 +50,24 @@
     "timeSettings": "时间设置",
     "title": "修剪音频",
     "toolInfo": {
-      "title": "什么是 {{title}}？"
+      "title": "什么是 {{title}}？",
+      "longDescription": "指定开始和结束时间，精确到小数秒，截取音频片段、去除不需要的部分或制作短音频。支持 MP3、AAC、WAV 等音频格式，可用于播客、音乐及日常音频编辑。"
     }
+  },
+  "loop": {
+    "description": "将原始音频重复指定次数，生成循环音频。",
+    "inputTitle": "输入音频",
+    "loops": "循环",
+    "numberOfLoops": "重复次数",
+    "resultTitle": "循环后的音频",
+    "shortDescription": "重复音频并生成循环文件",
+    "title": "循环音频",
+    "toolInfo": {
+      "description": "指定重复次数，将原始音频连接为一个循环音频文件。",
+      "title": "什么是{{title}}？"
+    }
+  },
+  "inline": {
+    "numberOfLoopsMustBeGreaterThan": "循环次数必须大于 1。"
   }
 }

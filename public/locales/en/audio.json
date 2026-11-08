@@ -66,5 +66,8 @@
       "description": "This tool allows you to create a looping audio file by repeating the original audio multiple times. You can specify how many times the audio should loop.",
       "title": "What is {{title}}?"
     }
+  },
+  "inline": {
+    "numberOfLoopsMustBeGreaterThan": "Number of loops must be greater than 1"
   }
 }

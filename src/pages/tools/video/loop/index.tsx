@@ -1,3 +1,4 @@
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import { useState, useCallback } from 'react';
 import ToolContent from '@components/ToolContent';
@@ -17,11 +18,16 @@ const initialValues: InitialValuesType = {
   loops: 2
 };
 
-const validationSchema = Yup.object({
-  loops: Yup.number().min(1, 'Number of loops must be greater than 1')
-});
-
 export default function Loop({ title }: ToolComponentProps) {
+  // 仅本地化界面展示与校验提示；格式参数和处理流程保持原样。
+  const { t: inlineText } = useInlineTranslation('video');
+  const validationSchema = Yup.object({
+    loops: Yup.number().min(
+      1,
+      inlineText('inline.numberOfLoopsMustBeGreaterThan')
+    )
+  });
+
   const { t } = useTranslation('video');
   const [input, setInput] = useState<File | null>(null);
   const [result, setResult] = useState<File | null>(null);

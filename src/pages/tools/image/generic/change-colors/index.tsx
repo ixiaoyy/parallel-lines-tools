@@ -1,3 +1,4 @@
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import React, { useState } from 'react';
 import * as Yup from 'yup';
@@ -21,14 +22,16 @@ const initialValues: InitialValuesType = {
   similarity: 10
 };
 
-const validationSchema = Yup.object({
-  similarity: Yup.number()
-    .min(0, 'Similarity must be between 0 and 100')
-    .max(100, 'Similarity must be between 0 and 100')
-    .required()
-});
-
 export default function ChangeColorsInImage({ title }: ToolComponentProps) {
+  // 仅本地化界面展示与校验提示；格式参数和处理流程保持原样。
+  const { t: inlineText } = useInlineTranslation('image');
+  const validationSchema = Yup.object({
+    similarity: Yup.number()
+      .min(0, inlineText('inline.similarityMustBeBetween0And100'))
+      .max(100, inlineText('inline.similarityMustBeBetween0And100'))
+      .required()
+  });
+
   const { t } = useTranslation('image');
   const [input, setInput] = useState<File | null>(null);
   const [result, setResult] = useState<File | null>(null);

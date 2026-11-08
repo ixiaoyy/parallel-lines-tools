@@ -1,3 +1,4 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import { useState } from 'react';
 import ToolTextResult from '@components/result/ToolTextResult';
@@ -13,61 +14,64 @@ import SimpleRadio from '@components/options/SimpleRadio';
 import CheckboxWithDesc from '@components/options/CheckboxWithDesc';
 import { useTranslation } from 'react-i18next';
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Basic Truncation on the Right',
-    description: 'Truncate text from the right side based on max length.',
-    sampleText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    sampleResult: 'Lorem ipsum dolor...',
-    sampleOptions: {
-      ...initialValues,
-      textToTruncate:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      maxLength: '20',
-      truncationSide: 'right',
-      addIndicator: true,
-      indicator: '...'
-    }
-  },
-  {
-    title: 'Truncation on the Left with Indicator',
-    description: 'Truncate text from the left side and add an indicator.',
-    sampleText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    sampleResult: '...is dolor sit amet, consectetur adipiscing elit.',
-    sampleOptions: {
-      ...initialValues,
-      textToTruncate:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      maxLength: '40',
-      truncationSide: 'left',
-      addIndicator: true,
-      indicator: '...'
-    }
-  },
-  {
-    title: 'Multi-line Truncation with Indicator',
-    description:
-      'Truncate text line by line, adding an indicator to each line.',
-    sampleText: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+export default function Truncate({ title }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('string');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.basicTruncationOnTheRight'),
+      description: exampleText('exampleUi.truncateTextFromTheRightSideBasedOn'),
+      sampleText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      sampleResult: 'Lorem ipsum dolor...',
+      sampleOptions: {
+        ...initialValues,
+        textToTruncate:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+        maxLength: '20',
+        truncationSide: 'right',
+        addIndicator: true,
+        indicator: '...'
+      }
+    },
+    {
+      title: exampleText('exampleUi.truncationOnTheLeftWithIndicator'),
+      description: exampleText('exampleUi.truncateTextFromTheLeftSideAndAdd'),
+      sampleText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      sampleResult: '...is dolor sit amet, consectetur adipiscing elit.',
+      sampleOptions: {
+        ...initialValues,
+        textToTruncate:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+        maxLength: '40',
+        truncationSide: 'left',
+        addIndicator: true,
+        indicator: '...'
+      }
+    },
+    {
+      title: exampleText('exampleUi.multiLineTruncationWithIndicator'),
+      description: exampleText(
+        'exampleUi.truncateTextLineByLineAddingAnIndicator'
+      ),
+      sampleText: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.`,
-    sampleResult: `Lorem ipsum dolor sit amet, consectetur...
+      sampleResult: `Lorem ipsum dolor sit amet, consectetur...
 Ut enim ad minim veniam, quis nostrud...
 Duis aute irure dolor in reprehenderit...`,
-    sampleOptions: {
-      ...initialValues,
-      textToTruncate: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+      sampleOptions: {
+        ...initialValues,
+        textToTruncate: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.`,
-      maxLength: '50',
-      lineByLine: true,
-      addIndicator: true,
-      indicator: '...'
+        maxLength: '50',
+        lineByLine: true,
+        addIndicator: true,
+        indicator: '...'
+      }
     }
-  }
-];
+  ];
 
-export default function Truncate({ title }: ToolComponentProps) {
   const { t } = useTranslation('string');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');

@@ -1,3 +1,5 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import ToolContent from '@components/ToolContent';
@@ -31,61 +33,66 @@ const initialValues: InitialValuesType = {
   right: '"'
 };
 
-const validationSchema = Yup.object({
-  splitSeparator: Yup.string().required('The separator is required'),
-  joinSeparator: Yup.string().required('The join separator is required')
-});
-
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Wrap list items with quotes',
-    description:
-      'This example shows how to wrap each item in a list with quotes.',
-    sampleText: 'apple,banana,orange',
-    sampleResult: '"apple","banana","orange"',
-    sampleOptions: {
-      splitOperatorType: 'symbol',
-      splitSeparator: ',',
-      joinSeparator: ',',
-      deleteEmptyItems: true,
-      left: '"',
-      right: '"'
-    }
-  },
-  {
-    title: 'Wrap list items with brackets',
-    description:
-      'This example shows how to wrap each item in a list with brackets.',
-    sampleText: 'item1,item2,item3',
-    sampleResult: '[item1],[item2],[item3]',
-    sampleOptions: {
-      splitOperatorType: 'symbol',
-      splitSeparator: ',',
-      joinSeparator: ',',
-      deleteEmptyItems: true,
-      left: '[',
-      right: ']'
-    }
-  },
-  {
-    title: 'Wrap list items with custom text',
-    description:
-      'This example shows how to wrap each item with different text on each side.',
-    sampleText: 'apple,banana,orange',
-    sampleResult:
-      'prefix-apple-suffix,prefix-banana-suffix,prefix-orange-suffix',
-    sampleOptions: {
-      splitOperatorType: 'symbol',
-      splitSeparator: ',',
-      joinSeparator: ',',
-      deleteEmptyItems: true,
-      left: 'prefix-',
-      right: '-suffix'
-    }
-  }
-];
-
 export default function Wrap({ title }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('list');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.wrapListItemsWithQuotes'),
+      description: exampleText('exampleUi.thisExampleShowsHowToWrapEachItem'),
+      sampleText: 'apple,banana,orange',
+      sampleResult: '"apple","banana","orange"',
+      sampleOptions: {
+        splitOperatorType: 'symbol',
+        splitSeparator: ',',
+        joinSeparator: ',',
+        deleteEmptyItems: true,
+        left: '"',
+        right: '"'
+      }
+    },
+    {
+      title: exampleText('exampleUi.wrapListItemsWithBrackets'),
+      description: exampleText('exampleUi.thisExampleShowsHowToWrapEachItem2'),
+      sampleText: 'item1,item2,item3',
+      sampleResult: '[item1],[item2],[item3]',
+      sampleOptions: {
+        splitOperatorType: 'symbol',
+        splitSeparator: ',',
+        joinSeparator: ',',
+        deleteEmptyItems: true,
+        left: '[',
+        right: ']'
+      }
+    },
+    {
+      title: exampleText('exampleUi.wrapListItemsWithCustomText'),
+      description: exampleText('exampleUi.thisExampleShowsHowToWrapEachItem3'),
+      sampleText: 'apple,banana,orange',
+      sampleResult:
+        'prefix-apple-suffix,prefix-banana-suffix,prefix-orange-suffix',
+      sampleOptions: {
+        splitOperatorType: 'symbol',
+        splitSeparator: ',',
+        joinSeparator: ',',
+        deleteEmptyItems: true,
+        left: 'prefix-',
+        right: '-suffix'
+      }
+    }
+  ];
+
+  // 校验提示仅做语言接线，规则和数据处理保持不变。
+  const { t: inlineText } = useInlineTranslation(['list', 'translation']);
+  const validationSchema = Yup.object({
+    splitSeparator: Yup.string().required(
+      inlineText('inline.theSeparatorIsRequired')
+    ),
+    joinSeparator: Yup.string().required(
+      inlineText('inline.theJoinSeparatorIsRequired')
+    )
+  });
+
   const { t } = useTranslation('list');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');
@@ -106,9 +113,13 @@ export default function Wrap({ title }: ToolComponentProps) {
         );
       } catch (error) {
         if (error instanceof Error) {
-          setResult(`Error: ${error.message}`);
+          setResult(
+            inlineText('translation:common.error', {
+              error: String(error.message)
+            })
+          );
         } else {
-          setResult('An unknown error occurred');
+          setResult(inlineText('inline.anUnknownErrorOccurred'));
         }
       }
     }

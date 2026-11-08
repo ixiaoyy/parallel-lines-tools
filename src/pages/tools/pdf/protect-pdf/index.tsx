@@ -1,3 +1,4 @@
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import React, { useContext, useState } from 'react';
 import ToolContent from '@components/ToolContent';
@@ -18,6 +19,9 @@ export default function ProtectPdf({
   title,
   longDescription
 }: ToolComponentProps) {
+  // 本工具的展示文案随语言切换更新；示例原始数据与计算参数保持不变。
+  const { t: inlineText } = useInlineTranslation(['pdf', 'translation']);
+
   const [input, setInput] = useState<File | null>(null);
   const [result, setResult] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
@@ -29,13 +33,13 @@ export default function ProtectPdf({
     try {
       // Validate passwords match
       if (values.password !== values.confirmPassword) {
-        showSnackBar('Passwords do not match', 'error');
+        showSnackBar(inlineText('inline.passwordsDoNotMatch'), 'error');
         return;
       }
 
       // Validate password is not empty
       if (!values.password) {
-        showSnackBar('Password cannot be empty', 'error');
+        showSnackBar(inlineText('inline.passwordCannotBeEmpty'), 'error');
         return;
       }
 
@@ -45,9 +49,9 @@ export default function ProtectPdf({
     } catch (error) {
       console.error('Error protecting PDF:', error);
       showSnackBar(
-        `Failed to protect PDF: ${
-          error instanceof Error ? error.message : String(error)
-        }`,
+        inlineText('translation:common.pdfProtectionFailed', {
+          error: String(error instanceof Error ? error.message : String(error))
+        }),
         'error'
       );
       setResult(null);
@@ -68,35 +72,37 @@ export default function ProtectPdf({
           value={input}
           onChange={setInput}
           accept={['application/pdf']}
-          title={'Input PDF'}
+          title={inlineText('compressPdf.inputTitle')}
         />
       }
       resultComponent={
         <ToolFileResult
-          title={'Protected PDF'}
+          title={inlineText('inline.protectedPdf')}
           value={result}
           extension={'pdf'}
           loading={isProcessing}
-          loadingText={'Protecting PDF'}
+          loadingText={inlineText('inline.protectingPdf')}
         />
       }
       getGroups={({ values, updateField }) => [
         {
-          title: 'Password Settings',
+          title: inlineText('inline.passwordSettings'),
           component: (
             <Box>
               <TextFieldWithDesc
-                title="Password"
-                description="Enter a password to protect your PDF"
-                placeholder="Enter password"
+                title={inlineText('inline.password')}
+                description={inlineText(
+                  'inline.enterAPasswordToProtectYourPdf'
+                )}
+                placeholder={inlineText('inline.enterPassword')}
                 type="password"
                 value={values.password}
                 onOwnChange={(value) => updateField('password', value)}
               />
               <TextFieldWithDesc
-                title="Confirm Password"
-                description="Re-enter your password to confirm"
-                placeholder="Confirm password"
+                title={inlineText('inline.confirmPassword')}
+                description={inlineText('inline.reEnterYourPasswordToConfirm')}
+                placeholder={inlineText('inline.confirmPassword2')}
                 type="password"
                 value={values.confirmPassword}
                 onOwnChange={(value) => updateField('confirmPassword', value)}

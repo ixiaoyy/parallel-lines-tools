@@ -1,3 +1,4 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import React, { useState } from 'react';
 import ToolContent from '@components/ToolContent';
@@ -11,27 +12,29 @@ import { useTranslation } from 'react-i18next';
 
 const initialValues: InitialValuesType = {};
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Validate XML',
-    description: 'Check if an XML string is well-formed.',
-    sampleText: '<root><item>1</item><item>2</item></root>',
-    sampleResult: 'Valid XML',
-    sampleOptions: {}
-  },
-  {
-    title: 'Invalid XML',
-    description: 'Example of malformed XML.',
-    sampleText: '<root><item>1</item><item>2</root>',
-    sampleResult: 'Invalid XML: ...',
-    sampleOptions: {}
-  }
-];
-
 export default function XmlValidator({
   title,
   longDescription
 }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('xml');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.validateXml'),
+      description: exampleText('exampleUi.checkIfAnXmlStringIsWellFormed'),
+      sampleText: '<root><item>1</item><item>2</item></root>',
+      sampleResult: 'Valid XML',
+      sampleOptions: {}
+    },
+    {
+      title: exampleText('exampleUi.invalidXml'),
+      description: exampleText('exampleUi.exampleOfMalformedXml'),
+      sampleText: '<root><item>1</item><item>2</root>',
+      sampleResult: 'Invalid XML: ...',
+      sampleOptions: {}
+    }
+  ];
+
   const { t } = useTranslation('xml');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');

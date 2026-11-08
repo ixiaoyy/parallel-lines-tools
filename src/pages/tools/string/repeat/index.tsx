@@ -1,3 +1,4 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import { useState } from 'react';
 import ToolTextResult from '@components/result/ToolTextResult';
@@ -11,44 +12,51 @@ import { CardExampleType } from '@components/examples/ToolExamples';
 import { ToolComponentProps } from '@tools/defineTool';
 import { useTranslation } from 'react-i18next';
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Repeat word five times',
-    description: 'Repeats "Hello!" five times without any delimiter.',
-    sampleText: 'Hello! ',
-    sampleResult: 'Hello! Hello! Hello! Hello! Hello! ',
-    sampleOptions: {
-      textToRepeat: 'Hello! ',
-      repeatAmount: '5',
-      delimiter: ''
-    }
-  },
-  {
-    title: 'Repeat phrase with comma',
-    description:
-      'Repeats "Good job" three times, separated by commas and spaces.',
-    sampleText: 'Good job',
-    sampleResult: 'Good job, Good job, Good job',
-    sampleOptions: {
-      textToRepeat: 'Good job',
-      repeatAmount: '3',
-      delimiter: ', '
-    }
-  },
-  {
-    title: 'Repeat number with space',
-    description: 'Repeats the number "42" four times, separated by spaces.',
-    sampleText: '42',
-    sampleResult: '42 42 42 42',
-    sampleOptions: {
-      textToRepeat: '42',
-      repeatAmount: '4',
-      delimiter: ' '
-    }
-  }
-];
-
 export default function Replacer({ title }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('string');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.repeatWordFiveTimes'),
+      description: exampleText(
+        'exampleUi.repeatsHelloFiveTimesWithoutAnyDelimiter'
+      ),
+      sampleText: 'Hello! ',
+      sampleResult: 'Hello! Hello! Hello! Hello! Hello! ',
+      sampleOptions: {
+        textToRepeat: 'Hello! ',
+        repeatAmount: '5',
+        delimiter: ''
+      }
+    },
+    {
+      title: exampleText('exampleUi.repeatPhraseWithComma'),
+      description: exampleText(
+        'exampleUi.repeatsGoodJobThreeTimesSeparatedByCommas'
+      ),
+      sampleText: 'Good job',
+      sampleResult: 'Good job, Good job, Good job',
+      sampleOptions: {
+        textToRepeat: 'Good job',
+        repeatAmount: '3',
+        delimiter: ', '
+      }
+    },
+    {
+      title: exampleText('exampleUi.repeatNumberWithSpace'),
+      description: exampleText(
+        'exampleUi.repeatsTheNumber42FourTimesSeparatedBy'
+      ),
+      sampleText: '42',
+      sampleResult: '42 42 42 42',
+      sampleOptions: {
+        textToRepeat: '42',
+        repeatAmount: '4',
+        delimiter: ' '
+      }
+    }
+  ];
+
   const { t } = useTranslation('string');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');

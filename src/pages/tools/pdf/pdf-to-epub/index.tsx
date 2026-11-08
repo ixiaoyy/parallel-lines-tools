@@ -1,3 +1,4 @@
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import ToolFileResult from '@components/result/ToolFileResult';
 import ToolContent from '@components/ToolContent';
@@ -6,6 +7,9 @@ import ToolPdfInput from '@components/input/ToolPdfInput';
 import { convertPdfToEpub } from './service';
 
 export default function PdfToEpub({ title }: ToolComponentProps) {
+  // 本工具的展示文案随语言切换更新；示例原始数据与计算参数保持不变。
+  const { t: inlineText } = useInlineTranslation('pdf');
+
   const [input, setInput] = useState<File | null>(null);
   const [result, setResult] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
@@ -36,21 +40,21 @@ export default function PdfToEpub({ title }: ToolComponentProps) {
           value={input}
           onChange={(file) => setInput(file)}
           accept={['application/pdf']}
-          title={'Input PDF'}
+          title={inlineText('compressPdf.inputTitle')}
         />
       }
       getGroups={null}
       resultComponent={
         <ToolFileResult
-          title={'EPUB Output'}
+          title={inlineText('inline.epubOutput')}
           value={result}
           extension={'epub'}
           loading={isProcessing}
-          loadingText={'Converting PDF to EPUB...'}
+          loadingText={inlineText('inline.convertingPdfToEpub')}
         />
       }
       toolInfo={{
-        title: 'How to Use PDF to EPUB?',
+        title: inlineText('inline.howToUsePdfToEpub'),
         description: `Upload a PDF file and this tool will convert it into an EPUB format, suitable for most e-reader devices.`
       }}
     />

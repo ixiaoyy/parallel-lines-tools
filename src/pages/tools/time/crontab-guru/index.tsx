@@ -1,3 +1,4 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import ToolContent from '@components/ToolContent';
 import { ToolComponentProps } from '@tools/defineTool';
@@ -10,41 +11,43 @@ const initialValues = {};
 
 type InitialValuesType = typeof initialValues;
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Every day at 16:35, Sunday to Friday (English)',
-    description: 'At 16:35 on every day-of-week from Sunday through Friday.',
-    sampleText: '35 16 * * 0-5',
-    sampleResult: 'At 04:35 PM, Sunday through Friday',
-    sampleOptions: {}
-  },
-  {
-    title: 'Every minute (English)',
-    description: 'Runs every minute.',
-    sampleText: '* * * * *',
-    sampleResult: 'Every minute',
-    sampleOptions: {}
-  },
-  {
-    title: 'Every 5 minutes (English)',
-    description: 'Runs every 5 minutes.',
-    sampleText: '*/5 * * * *',
-    sampleResult: 'Every 5 minutes',
-    sampleOptions: {}
-  },
-  {
-    title: 'At 12:00 PM on the 1st of every month (English)',
-    description: 'Runs at noon on the first day of each month.',
-    sampleText: '0 12 1 * *',
-    sampleResult: 'At 12:00 PM, on day 1 of the month',
-    sampleOptions: {}
-  }
-];
-
 export default function CrontabGuru({
   title,
   longDescription
 }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('time');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.everyDayAt1635SundayToFriday'),
+      description: exampleText('exampleUi.at1635OnEveryDayOfWeek'),
+      sampleText: '35 16 * * 0-5',
+      sampleResult: 'At 04:35 PM, Sunday through Friday',
+      sampleOptions: {}
+    },
+    {
+      title: exampleText('exampleUi.everyMinuteEnglish'),
+      description: exampleText('exampleUi.runsEveryMinute'),
+      sampleText: '* * * * *',
+      sampleResult: 'Every minute',
+      sampleOptions: {}
+    },
+    {
+      title: exampleText('exampleUi.every5MinutesEnglish'),
+      description: exampleText('exampleUi.runsEvery5Minutes'),
+      sampleText: '*/5 * * * *',
+      sampleResult: 'Every 5 minutes',
+      sampleOptions: {}
+    },
+    {
+      title: exampleText('exampleUi.at1200PmOnThe1stOf'),
+      description: exampleText('exampleUi.runsAtNoonOnTheFirstDayOf'),
+      sampleText: '0 12 1 * *',
+      sampleResult: 'At 12:00 PM, on day 1 of the month',
+      sampleOptions: {}
+    }
+  ];
+
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');
 

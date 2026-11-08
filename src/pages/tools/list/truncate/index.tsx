@@ -1,3 +1,5 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import ToolContent from '@components/ToolContent';
@@ -27,61 +29,67 @@ const initialValues: InitialValuesType = {
   length: '3'
 };
 
-const validationSchema = Yup.object({
-  splitSeparator: Yup.string().required('The separator is required'),
-  joinSeparator: Yup.string().required('The join separator is required'),
-  length: Yup.number()
-    .typeError('Length must be a number')
-    .min(0, 'Length must be a positive number')
-    .required('Length is required')
-});
-
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Keep first 3 items in a list',
-    description:
-      'This example shows how to keep only the first 3 items in a comma-separated list.',
-    sampleText: 'apple, pineapple, lemon, orange, mango',
-    sampleResult: 'apple,pineapple,lemon',
-    sampleOptions: {
-      splitOperatorType: 'symbol',
-      splitSeparator: ', ',
-      joinSeparator: ',',
-      end: true,
-      length: '3'
-    }
-  },
-  {
-    title: 'Keep last 2 items in a list',
-    description:
-      'This example shows how to keep only the last 2 items in a comma-separated list.',
-    sampleText: 'apple, pineapple, lemon, orange, mango',
-    sampleResult: 'orange,mango',
-    sampleOptions: {
-      splitOperatorType: 'symbol',
-      splitSeparator: ', ',
-      joinSeparator: ',',
-      end: false,
-      length: '2'
-    }
-  },
-  {
-    title: 'Truncate a list with custom separators',
-    description:
-      'This example shows how to truncate a list with custom separators.',
-    sampleText: 'apple | pineapple | lemon | orange | mango',
-    sampleResult: 'apple - pineapple - lemon',
-    sampleOptions: {
-      splitOperatorType: 'symbol',
-      splitSeparator: ' | ',
-      joinSeparator: ' - ',
-      end: true,
-      length: '3'
-    }
-  }
-];
-
 export default function Truncate({ title }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('list');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.keepFirst3ItemsInAList'),
+      description: exampleText('exampleUi.thisExampleShowsHowToKeepOnlyThe'),
+      sampleText: 'apple, pineapple, lemon, orange, mango',
+      sampleResult: 'apple,pineapple,lemon',
+      sampleOptions: {
+        splitOperatorType: 'symbol',
+        splitSeparator: ', ',
+        joinSeparator: ',',
+        end: true,
+        length: '3'
+      }
+    },
+    {
+      title: exampleText('exampleUi.keepLast2ItemsInAList'),
+      description: exampleText('exampleUi.thisExampleShowsHowToKeepOnlyThe2'),
+      sampleText: 'apple, pineapple, lemon, orange, mango',
+      sampleResult: 'orange,mango',
+      sampleOptions: {
+        splitOperatorType: 'symbol',
+        splitSeparator: ', ',
+        joinSeparator: ',',
+        end: false,
+        length: '2'
+      }
+    },
+    {
+      title: exampleText('exampleUi.truncateAListWithCustomSeparators'),
+      description: exampleText('exampleUi.thisExampleShowsHowToTruncateAList'),
+      sampleText: 'apple | pineapple | lemon | orange | mango',
+      sampleResult: 'apple - pineapple - lemon',
+      sampleOptions: {
+        splitOperatorType: 'symbol',
+        splitSeparator: ' | ',
+        joinSeparator: ' - ',
+        end: true,
+        length: '3'
+      }
+    }
+  ];
+
+  // 本工具的展示文案随语言切换更新；示例原始数据与计算参数保持不变。
+  const { t: inlineText } = useInlineTranslation(['list', 'translation']);
+
+  const validationSchema = Yup.object({
+    splitSeparator: Yup.string().required(
+      inlineText('inline.theSeparatorIsRequired')
+    ),
+    joinSeparator: Yup.string().required(
+      inlineText('inline.theJoinSeparatorIsRequired')
+    ),
+    length: Yup.number()
+      .typeError(inlineText('inline.lengthMustBeANumber'))
+      .min(0, inlineText('inline.lengthMustBeAPositiveNumber'))
+      .required(inlineText('inline.lengthIsRequired'))
+  });
+
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');
 
@@ -101,9 +109,13 @@ export default function Truncate({ title }: ToolComponentProps) {
         );
       } catch (error) {
         if (error instanceof Error) {
-          setResult(`Error: ${error.message}`);
+          setResult(
+            inlineText('translation:common.error', {
+              error: String(error.message)
+            })
+          );
         } else {
-          setResult('An unknown error occurred');
+          setResult(inlineText('inline.anUnknownErrorOccurred'));
         }
       }
     }
@@ -114,51 +126,51 @@ export default function Truncate({ title }: ToolComponentProps) {
     updateField
   }) => [
     {
-      title: 'Split Options',
+      title: inlineText('duplicate.splitOptions'),
       component: (
         <Box>
           <SimpleRadio
             onClick={() => updateField('splitOperatorType', 'symbol')}
             checked={values.splitOperatorType === 'symbol'}
-            title={'Split by Symbol'}
+            title={inlineText('duplicate.splitBySymbol')}
           />
           <SimpleRadio
             onClick={() => updateField('splitOperatorType', 'regex')}
             checked={values.splitOperatorType === 'regex'}
-            title={'Split by Regular Expression'}
+            title={inlineText('duplicate.splitByRegex')}
           />
           <TextFieldWithDesc
             value={values.splitSeparator}
             onOwnChange={(val) => updateField('splitSeparator', val)}
-            description={'Separator to split the list'}
+            description={inlineText('duplicate.splitSeparatorDescription')}
           />
           <TextFieldWithDesc
             value={values.joinSeparator}
             onOwnChange={(val) => updateField('joinSeparator', val)}
-            description={'Separator to join the truncated list'}
+            description={inlineText('inline.separatorToJoinTheTruncatedList')}
           />
         </Box>
       )
     },
     {
-      title: 'Truncation Options',
+      title: inlineText('inline.truncationOptions'),
       component: (
         <Box>
           <TextFieldWithDesc
             value={values.length}
             onOwnChange={(val) => updateField('length', val)}
-            description={'Number of items to keep'}
+            description={inlineText('inline.numberOfItemsToKeep')}
             type="number"
           />
           <SimpleRadio
             onClick={() => updateField('end', true)}
             checked={values.end}
-            title={'Keep items from the beginning'}
+            title={inlineText('inline.keepItemsFromTheBeginning')}
           />
           <SimpleRadio
             onClick={() => updateField('end', false)}
             checked={!values.end}
-            title={'Keep items from the end'}
+            title={inlineText('inline.keepItemsFromTheEnd')}
           />
         </Box>
       )
@@ -169,16 +181,24 @@ export default function Truncate({ title }: ToolComponentProps) {
     <ToolContent
       title={title}
       inputComponent={
-        <ToolTextInput title="Input List" value={input} onChange={setInput} />
+        <ToolTextInput
+          title={inlineText('chunk.inputTitle')}
+          value={input}
+          onChange={setInput}
+        />
       }
-      resultComponent={<ToolTextResult title="Truncated List" value={result} />}
+      resultComponent={
+        <ToolTextResult
+          title={inlineText('inline.truncatedList')}
+          value={result}
+        />
+      }
       initialValues={initialValues}
       getGroups={getGroups}
       validationSchema={validationSchema}
       toolInfo={{
-        title: 'List Truncation',
-        description:
-          "This tool allows you to truncate a list to a specific number of items. You can choose to keep items from the beginning or the end of the list, and specify custom separators for splitting and joining. It's useful for limiting the size of lists, creating previews, or extracting specific portions of data."
+        title: inlineText('inline.listTruncation'),
+        description: inlineText('inline.thisToolAllowsYouToTruncateA')
       }}
       exampleCards={exampleCards}
       input={input}

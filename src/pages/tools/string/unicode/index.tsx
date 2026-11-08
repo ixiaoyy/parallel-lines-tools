@@ -1,3 +1,4 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import { useState } from 'react';
 import ToolContent from '@components/ToolContent';
@@ -17,42 +18,51 @@ const initialValues: InitialValuesType = {
   uppercase: false
 };
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Encode to Unicode Escape',
-    description: 'Encode plain text to Unicode escape sequences.',
-    sampleText: 'Hello, World!',
-    sampleResult:
-      '\\u0048\\u0065\\u006c\\u006c\\u006f\\u002c\\u0020\\u0057\\u006f\\u0072\\u006c\\u0064\\u0021',
-    sampleOptions: {
-      mode: 'encode',
-      uppercase: false
-    }
-  },
-  {
-    title: 'Encode to Unicode Escape (Uppercase)',
-    description: 'Encode plain text to uppercase Unicode escape sequences.',
-    sampleText: 'Hello, World!',
-    sampleResult:
-      '\\u0048\\u0065\\u006c\\u006c\\u006f\\u002c\\u0020\\u0057\\u006f\\u0072\\u006c\\u0064\\u0021'.toUpperCase(),
-    sampleOptions: {
-      mode: 'encode',
-      uppercase: true
-    }
-  },
-  {
-    title: 'Decode Unicode Escape',
-    description: 'Decode Unicode escape sequences back to plain text.',
-    sampleText:
-      '\\u0048\\u0065\\u006c\\u006c\\u006f\\u002c\\u0020\\u0057\\u006f\\u0072\\u006c\\u0064\\u0021',
-    sampleResult: 'Hello, World!',
-    sampleOptions: {
-      mode: 'decode',
-      uppercase: false
-    }
-  }
-];
 export default function Unicode({ title }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('string');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.encodeToUnicodeEscape'),
+      description: exampleText(
+        'exampleUi.encodePlainTextToUnicodeEscapeSequences'
+      ),
+      sampleText: 'Hello, World!',
+      sampleResult:
+        '\\u0048\\u0065\\u006c\\u006c\\u006f\\u002c\\u0020\\u0057\\u006f\\u0072\\u006c\\u0064\\u0021',
+      sampleOptions: {
+        mode: 'encode',
+        uppercase: false
+      }
+    },
+    {
+      title: exampleText('exampleUi.encodeToUnicodeEscapeUppercase'),
+      description: exampleText(
+        'exampleUi.encodePlainTextToUppercaseUnicodeEscapeSequences'
+      ),
+      sampleText: 'Hello, World!',
+      sampleResult:
+        '\\u0048\\u0065\\u006c\\u006c\\u006f\\u002c\\u0020\\u0057\\u006f\\u0072\\u006c\\u0064\\u0021'.toUpperCase(),
+      sampleOptions: {
+        mode: 'encode',
+        uppercase: true
+      }
+    },
+    {
+      title: exampleText('exampleUi.decodeUnicodeEscape'),
+      description: exampleText(
+        'exampleUi.decodeUnicodeEscapeSequencesBackToPlainText'
+      ),
+      sampleText:
+        '\\u0048\\u0065\\u006c\\u006c\\u006f\\u002c\\u0020\\u0057\\u006f\\u0072\\u006c\\u0064\\u0021',
+      sampleResult: 'Hello, World!',
+      sampleOptions: {
+        mode: 'decode',
+        uppercase: false
+      }
+    }
+  ];
+
   const { t } = useTranslation('string');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');

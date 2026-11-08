@@ -1,3 +1,5 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import React, { useState } from 'react';
 import ToolContent from '@components/ToolContent';
@@ -19,27 +21,33 @@ const initialValues: InitialValuesType = {
   escapeHtml: false
 };
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Simple Object to JSON',
-    description: 'Convert a basic JavaScript object into a JSON string.',
-    sampleText: `{ name: "John", age: 30 }`,
-    sampleResult: `{
+export default function StringifyJson({ title }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('json');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.simpleObjectToJson'),
+      description: exampleText(
+        'exampleUi.convertABasicJavascriptObjectIntoAJson'
+      ),
+      sampleText: `{ name: "John", age: 30 }`,
+      sampleResult: `{
   "name": "John",
   "age": 30
 }`,
-    sampleOptions: {
-      indentationType: 'space',
-      spacesCount: 2,
-      escapeHtml: false
-    }
-  },
-  {
-    title: 'Array with Mixed Types',
-    description:
-      'Convert an array containing different types of values into JSON.',
-    sampleText: `[1, "hello", true, null, { x: 10 }]`,
-    sampleResult: `[
+      sampleOptions: {
+        indentationType: 'space',
+        spacesCount: 2,
+        escapeHtml: false
+      }
+    },
+    {
+      title: exampleText('exampleUi.arrayWithMixedTypes'),
+      description: exampleText(
+        'exampleUi.convertAnArrayContainingDifferentTypesOfValues'
+      ),
+      sampleText: `[1, "hello", true, null, { x: 10 }]`,
+      sampleResult: `[
     1,
     "hello",
     true,
@@ -48,32 +56,36 @@ const exampleCards: CardExampleType<InitialValuesType>[] = [
         "x": 10
     }
 ]`,
-    sampleOptions: {
-      indentationType: 'space',
-      spacesCount: 4,
-      escapeHtml: false
-    }
-  },
-  {
-    title: 'HTML-Escaped JSON',
-    description: 'Convert an object to JSON with HTML characters escaped.',
-    sampleText: `{
+      sampleOptions: {
+        indentationType: 'space',
+        spacesCount: 4,
+        escapeHtml: false
+      }
+    },
+    {
+      title: exampleText('exampleUi.htmlEscapedJson'),
+      description: exampleText(
+        'exampleUi.convertAnObjectToJsonWithHtmlCharacters'
+      ),
+      sampleText: `{
   html: "<div>Hello & Welcome</div>",
   message: "Special chars: < > & ' \\""
 }`,
-    sampleResult: `{
+      sampleResult: `{
   &quot;html&quot;: &quot;&lt;div&gt;Hello &amp; Welcome&lt;/div&gt;&quot;,
   &quot;message&quot;: &quot;Special chars: &lt; &gt; &amp; &#039; &quot;&quot;
 }`,
-    sampleOptions: {
-      indentationType: 'space',
-      spacesCount: 2,
-      escapeHtml: true
+      sampleOptions: {
+        indentationType: 'space',
+        spacesCount: 2,
+        escapeHtml: true
+      }
     }
-  }
-];
+  ];
 
-export default function StringifyJson({ title }: ToolComponentProps) {
+  // 本工具的展示文案随语言切换更新；示例原始数据与计算参数保持不变。
+  const { t: inlineText } = useInlineTranslation('json');
+
   const { t } = useTranslation('json');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');
@@ -84,7 +96,11 @@ export default function StringifyJson({ title }: ToolComponentProps) {
         setResult(stringifyJson(input, values));
       } catch (error) {
         setResult(
-          `${error instanceof Error ? error.message : 'Invalid Json format'}`
+          `${
+            error instanceof Error
+              ? error.message
+              : inlineText('inline.invalidJsonFormat')
+          }`
         );
       }
     }
@@ -132,7 +148,7 @@ export default function StringifyJson({ title }: ToolComponentProps) {
               <SimpleRadio
                 onClick={() => updateField('indentationType', 'tab')}
                 checked={values.indentationType === 'tab'}
-                description="Indent output with tabs"
+                description={inlineText('stringify.options.useTabDesc')}
                 title={t('stringify.options.useTabTitle')}
               />
             </Box>

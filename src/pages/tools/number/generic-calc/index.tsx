@@ -66,6 +66,30 @@ export default async function makeTool(
   return function GenericCalc({ title }: ToolComponentProps) {
     const { showSnackBar } = useContext(CustomSnackBarContext);
     const { t } = useTranslation(validNamespaces);
+    // 仅翻译数据项的显示名称，变量名、预设键、单位和公式继续使用原始值。
+    const displayLabels: Record<string, string> = {
+      Voltage: t('number:genericCalc.labels.voltage'),
+      Current: t('number:genericCalc.labels.current'),
+      Resistance: t('number:genericCalc.labels.resistance'),
+      Length: t('number:genericCalc.labels.length'),
+      Weight: t('number:genericCalc.labels.weight'),
+      'Sag/Deflection': t('number:genericCalc.labels.sagDeflection'),
+      Tension: t('number:genericCalc.labels.tension'),
+      Area: t('number:genericCalc.labels.area'),
+      Radius: t('number:genericCalc.labels.radius'),
+      Diameter: t('number:genericCalc.labels.diameter'),
+      Volume: t('number:genericCalc.labels.volume'),
+      Material: t('number:genericCalc.labels.material'),
+      'Wire Gauge': t('number:genericCalc.labels.wireGauge'),
+      'Total Resistance': t('number:genericCalc.labels.totalResistance'),
+      'Total Power Dissipated': t(
+        'number:genericCalc.labels.totalPowerDissipated'
+      ),
+      'Wire Area': t('number:genericCalc.labels.wireArea'),
+      Resistivity: t('number:genericCalc.labels.resistivity'),
+      'Voltage Drop': t('number:genericCalc.labels.voltageDrop')
+    };
+
     const theme = useTheme();
     const lessThanSmall = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -252,7 +276,7 @@ export default async function makeTool(
           ...(calcData.presets?.length
             ? [
                 {
-                  title: 'Presets',
+                  title: t('number:genericCalc.presets'),
                   component: (
                     <Grid container spacing={2} maxWidth={500}>
                       {calcData.presets?.map((preset) => (
@@ -263,7 +287,9 @@ export default async function makeTool(
                             alignItems={'center'}
                             justifyContent={'space-between'}
                           >
-                            <Typography>{preset.title}</Typography>
+                            <Typography>
+                              {displayLabels[preset.title] ?? preset.title}
+                            </Typography>
                             <Autocomplete
                               disablePortal
                               id="combo-box-demo"
@@ -282,7 +308,10 @@ export default async function makeTool(
                                 );
                               }}
                               renderInput={(params) => (
-                                <TextField {...params} label="Preset" />
+                                <TextField
+                                  {...params}
+                                  label={t('number:genericCalc.preset')}
+                                />
                               )}
                             />
                           </Stack>
@@ -294,7 +323,7 @@ export default async function makeTool(
               ]
             : []),
           {
-            title: 'Variables',
+            title: t('number:genericCalc.variables'),
             component: (
               <Box>
                 {lessThanSmall ? (
@@ -304,7 +333,7 @@ export default async function makeTool(
                     alignItems={'center'}
                     justifyContent={'space-between'}
                   >
-                    <Typography>Solve for</Typography>
+                    <Typography>{t('number:genericCalc.solveFor')}</Typography>
                     <Select
                       sx={{ width: '80%' }}
                       fullWidth
@@ -325,7 +354,7 @@ export default async function makeTool(
                           key={variable.name}
                           value={variable.name}
                         >
-                          {variable.title}
+                          {displayLabels[variable.title] ?? variable.title}
                         </MenuItem>
                       ))}
                     </Select>
@@ -335,7 +364,7 @@ export default async function makeTool(
                     <Grid item xs={10}></Grid>
                     <Grid item xs={2}>
                       <Typography fontWeight="bold" align="center">
-                        Solve For
+                        {t('number:genericCalc.solveFor')}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -359,7 +388,8 @@ export default async function makeTool(
                               alignItems="center"
                             >
                               <Typography sx={{ minWidth: '8%' }}>
-                                {variable.title}
+                                {displayLabels[variable.title] ??
+                                  variable.title}
                               </Typography>
                               <NumericInputWithUnit
                                 defaultPrefix={variable.defaultPrefix}
@@ -391,7 +421,7 @@ export default async function makeTool(
                                   alignItems="center"
                                 >
                                   <Typography sx={{ minWidth: '8%' }}>
-                                    {alt.title}
+                                    {displayLabels[alt.title] ?? alt.title}
                                   </Typography>
                                   <Box sx={{ flexGrow: 1 }}>
                                     <NumericInputWithUnit
@@ -469,14 +499,17 @@ export default async function makeTool(
           ...(calcData.extraOutputs
             ? [
                 {
-                  title: 'Extra outputs',
+                  title: t('number:genericCalc.extraOutputs'),
                   component: (
                     <Box>
                       <Grid container spacing={2}>
                         {calcData.extraOutputs?.map((extraOutput) => (
                           <Grid item xs={12} key={extraOutput.title}>
                             <Stack spacing={1}>
-                              <Typography>{extraOutput.title}</Typography>
+                              <Typography>
+                                {displayLabels[extraOutput.title] ??
+                                  extraOutput.title}
+                              </Typography>
                               <NumericInputWithUnit
                                 disabled={true}
                                 defaultPrefix={extraOutput.defaultPrefix}
@@ -497,7 +530,7 @@ export default async function makeTool(
         ]}
         compute={(values) => {
           if (values.outputVariable === '') {
-            showSnackBar('Please select a solve for variable', 'error');
+            showSnackBar(t('number:genericCalc.selectVariable'), 'error');
             return;
           }
           let expr: nerdamer.NerdamerExpression | null = null;
@@ -514,13 +547,13 @@ export default async function makeTool(
             expr = nerdamer(calcData.formula);
           }
           if (expr == null) {
-            throw new Error('No formula found');
+            throw new Error(t('number:genericCalc.noFormula'));
           }
 
           Object.keys(values.vars).forEach((key) => {
             if (key === values.outputVariable) return;
             if (expr === null) {
-              throw new Error('Math fail');
+              throw new Error(t('number:genericCalc.mathFail'));
             }
             expr = expr.sub(key, values.vars[key].value.toString());
           });
@@ -551,7 +584,7 @@ export default async function makeTool(
                   return newState;
                 });
               }
-              throw new Error('No solution found for this input');
+              throw new Error(t('number:genericCalc.noSolution'));
             }
             result = (result as unknown as nerdamer.NerdamerExpression[])[0];
           }

@@ -19,7 +19,7 @@ export default function HiddenCharacterDetector({
   title,
   longDescription
 }: ToolComponentProps) {
-  const { t } = useTranslation('string');
+  const { t } = useTranslation(['string', 'translation']);
   const [input, setInput] = useState('');
   const [result, setResult] = useState<string>('');
   const [analysis, setAnalysis] = useState<any>(null);
@@ -66,7 +66,7 @@ export default function HiddenCharacterDetector({
         setResult(output);
       }
     } catch (error) {
-      setResult(`Error: ${error}`);
+      setResult(t('translation:common.error', { error: String(error) }));
     }
   };
 
@@ -115,10 +115,9 @@ export default function HiddenCharacterDetector({
       input={input}
       setInput={setInput}
       toolInfo={{
-        title: `What is ${title}?`,
+        title: t('hiddenCharacterDetector.aboutTitle', { title }),
         description:
-          longDescription ||
-          'A tool to detect hidden Unicode characters, especially RTL Override characters that could be used in attacks.'
+          longDescription || t('hiddenCharacterDetector.aboutDescription')
       }}
     />
   );

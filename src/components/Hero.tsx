@@ -6,15 +6,15 @@ import {
   Stack,
   styled,
   TextField,
+  Button,
   useTheme
 } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import SearchIcon from '@mui/icons-material/Search';
 import Grid from '@mui/material/Grid';
-import { useState } from 'react';
-import { DefinedTool } from '@tools/defineTool';
+import { useMemo, useState } from 'react';
 import { filterTools, tools } from '@tools/index';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { getToolCategoryTitle } from '@utils/string';
 import { useTranslation } from 'react-i18next';
@@ -52,13 +52,25 @@ export default function Hero() {
   const [inputValue, setInputValue] = useState<string>('');
   const theme = useTheme();
   const { selectedUserTypes } = useUserTypeFilter();
-  const [filteredTools, setFilteredTools] = useState<DefinedTool[]>(tools);
+  // 搜索结果随语言和用户类型同步计算，切换语言后不沿用旧语言的匹配结果。
+  const filteredTools = useMemo(
+    () => filterTools(tools, inputValue, selectedUserTypes, t),
+    [inputValue, selectedUserTypes, t]
+  );
   const [bookmarkedToolPaths, setBookmarkedToolPaths] = useState<string[]>(
     getBookmarkedToolPaths()
   );
   const navigate = useNavigate();
 
   const exampleTools: ToolInfo[] = [
+    {
+      label: 'translation:hero.examples.markdownToDocx',
+      url: '/converters/markdown-to-docx'
+    },
+    {
+      label: 'translation:hero.examples.compressImage',
+      url: '/image-generic/compress'
+    },
     {
       label: 'translation:hero.examples.createTransparentImage',
       url: '/image-generic/create-transparent'
@@ -97,14 +109,6 @@ export default function Hero() {
     }
   ];
 
-  const handleInputChange = (
-    _event: React.ChangeEvent<{}>,
-    newInputValue: string
-  ) => {
-    setInputValue(newInputValue);
-    setFilteredTools(filterTools(tools, newInputValue, selectedUserTypes, t));
-  };
-
   const toolsMap = new Map<string, ToolInfo>();
   for (const tool of filteredTools) {
     toolsMap.set(tool.path, {
@@ -122,12 +126,19 @@ export default function Hero() {
           }
           return [tool];
         })
-      : exampleTools;
+      : // 暂缓开放的工具不应留在首页快捷入口中；收藏记录本身保持不变。
+        exampleTools.filter((example) =>
+          tools.some((tool) => `/${tool.path}` === example.url)
+        );
 
   return (
     <Box width={{ xs: '90%', md: '80%', lg: '60%' }}>
       <Stack mb={1} direction={'row'} spacing={1} justifyContent={'center'}>
-        <Typography sx={{ textAlign: 'center' }} fontSize={{ xs: 25, md: 30 }}>
+        <Typography
+          component="h1"
+          sx={{ textAlign: 'center' }}
+          fontSize={{ xs: 25, md: 30 }}
+        >
           {t('translation:hero.title')}{' '}
           <Typography
             fontSize={{ xs: 25, md: 30 }}
@@ -167,6 +178,10 @@ export default function Hero() {
         renderInput={(params) => (
           <TextField
             {...params}
+            inputProps={{
+              ...params.inputProps,
+              'aria-label': t('translation:hero.search.placeholder')
+            }}
             fullWidth
             placeholder={t('translation:hero.search.placeholder')}
             InputProps={{
@@ -177,7 +192,7 @@ export default function Hero() {
                 backgroundColor: 'background.paper'
               }
             }}
-            onChange={(event) => handleInputChange(event, event.target.value)}
+            onChange={(event) => setInputValue(event.target.value)}
           />
         )}
         renderOption={(props, option) => (
@@ -202,6 +217,11 @@ export default function Hero() {
                 </Box>
               </Stack>
               <IconButton
+                aria-label={t(
+                  isBookmarked(option.path)
+                    ? 'translation:toolHeader.unbookmark'
+                    : 'translation:toolHeader.bookmark'
+                )}
                 onClick={(e) => {
                   e.stopPropagation();
                   toggleBookmarked(option.path);
@@ -225,7 +245,7 @@ export default function Hero() {
             </Stack>
           </Box>
         )}
-        onChange={(event, newValue) => {
+        onChange={(_event, newValue) => {
           if (newValue) {
             navigate('/' + newValue.path);
           }
@@ -233,16 +253,7 @@ export default function Hero() {
       />
       <Grid container spacing={2} mt={2}>
         {displayedTools.map((tool) => (
-          <Grid
-            onClick={() =>
-              navigate(tool.url.startsWith('/') ? tool.url : `/${tool.url}`)
-            }
-            item
-            xs={12}
-            md={6}
-            lg={4}
-            key={tool.label}
-          >
+          <Grid item xs={12} md={6} lg={4} key={tool.label}>
             <Box
               sx={{
                 display: 'flex',
@@ -262,9 +273,19 @@ export default function Hero() {
               }}
             >
               <Stack direction={'row'} spacing={1} alignItems={'center'}>
-                <Typography textAlign={'center'}>{t(tool.label)}</Typography>
+                <Button
+                  component={Link}
+                  to={tool.url.startsWith('/') ? tool.url : `/${tool.url}`}
+                  color="inherit"
+                  sx={{ minHeight: 44, flex: 1, fontWeight: 400 }}
+                >
+                  {t(tool.label)}
+                </Button>
                 {bookmarkedToolPaths.length > 0 && (
                   <IconButton
+                    aria-label={t('translation:hero.removeBookmark', {
+                      title: t(tool.label)
+                    })}
                     onClick={(e) => {
                       e.stopPropagation();
                       const path = tool.url.substring(1);

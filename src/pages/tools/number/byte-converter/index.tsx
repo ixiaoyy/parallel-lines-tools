@@ -1,3 +1,4 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import React, { useState } from 'react';
 import ToolContent from '@components/ToolContent';
@@ -101,6 +102,33 @@ export const exampleCards: CardExampleType<InitialValuesType>[] = [
 ];
 
 export default function ByteConverter({ title }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('number');
+  // 保留导出的原始示例供旧调用方使用；这里只本地化实际传给界面的说明。
+  const exampleKeys = [
+    {
+      title: 'exampleUi.convertGigabytesToMegabytes',
+      description: 'exampleUi.thisExampleConvertsAListOfStorageValues'
+    },
+    {
+      title: 'exampleUi.convertMibToGibIecSystem',
+      description: 'exampleUi.thisExampleConvertsValuesInMebibytesMibTo'
+    },
+    {
+      title: 'exampleUi.crossSystemConversionGbToGib',
+      description: 'exampleUi.thisExampleDemonstratesACrossSystemConversionFrom'
+    },
+    {
+      title: 'exampleUi.convertBytesToBits',
+      description: 'exampleUi.thisExampleConvertsValuesFromBytesBTo'
+    }
+  ] as const;
+  const localizedExampleCards = exampleCards.map((card, index) => ({
+    ...card,
+    title: exampleText(exampleKeys[index].title),
+    description: exampleText(exampleKeys[index].description)
+  }));
+
   const { t } = useTranslation('number');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');
@@ -114,7 +142,7 @@ export default function ByteConverter({ title }: ToolComponentProps) {
       title={title}
       input={input}
       setInput={setInput}
-      exampleCards={exampleCards}
+      exampleCards={localizedExampleCards}
       initialValues={initialValues}
       inputComponent={
         <ToolTextInput

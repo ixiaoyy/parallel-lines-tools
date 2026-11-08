@@ -1,3 +1,4 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import React, { useState } from 'react';
 import ToolCodeInput from '@components/input/ToolCodeInput';
@@ -17,31 +18,32 @@ const initialValues: InitialValuesType = {
   spacesCount: 2
 };
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Beautify an Ugly JSON Array',
-    description:
-      'In this example, we prettify an ugly JSON array. The input data is a one-dimensional array of numbers [1,2,3] but they are all over the place. This array gets cleaned up and transformed into a more readable format where each element is on a new line with an appropriate indentation using four spaces.',
-    sampleText: `[
+export default function PrettifyJson({ title }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('json');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.beautifyAnUglyJsonArray'),
+      description: exampleText('exampleUi.inThisExampleWePrettifyAnUglyJson'),
+      sampleText: `[
  1,
 2,3
 ]`,
-    sampleResult: `[
+      sampleResult: `[
     1,
     2,
     3
 ]`,
-    sampleOptions: {
-      indentationType: 'space',
-      spacesCount: 4
-    }
-  },
-  {
-    title: 'Prettify a Complex JSON Object',
-    description:
-      'In this example, we prettify a complex JSON data structure consisting of arrays and objects. The input data is a minified JSON object with multiple data structure depth levels. To make it neat and readable, we add two spaces for indentation to each depth level, making the JSON structure clear and easy to understand.',
-    sampleText: `{"names":["jack","john","alex"],"hobbies":{"jack":["programming","rock climbing"],"john":["running","racing"],"alex":["dancing","fencing"]}}`,
-    sampleResult: `{
+      sampleOptions: {
+        indentationType: 'space',
+        spacesCount: 4
+      }
+    },
+    {
+      title: exampleText('exampleUi.prettifyAComplexJsonObject'),
+      description: exampleText('exampleUi.inThisExampleWePrettifyAComplexJson'),
+      sampleText: `{"names":["jack","john","alex"],"hobbies":{"jack":["programming","rock climbing"],"john":["running","racing"],"alex":["dancing","fencing"]}}`,
+      sampleResult: `{
   "names": [
     "jack",
     "john",
@@ -62,16 +64,15 @@ const exampleCards: CardExampleType<InitialValuesType>[] = [
     ]
   }
 }`,
-    sampleOptions: {
-      indentationType: 'space',
-      spacesCount: 2
-    }
-  },
-  {
-    title: 'Beautify a JSON with Excessive Whitespace',
-    description:
-      "In this example, we show how the JSON prettify tool can handle code with excessive whitespace. The input file has many leading and trailing spaces as well as spaces within the objects. The excessive whitespace makes the file bulky and hard to read and leads to a bad impression of the programmer who wrote it. The program removes all these unnecessary spaces and creates a proper data hierarchy that's easy to work with by adding indentation via tabs.",
-    sampleText: `
+      sampleOptions: {
+        indentationType: 'space',
+        spacesCount: 2
+      }
+    },
+    {
+      title: exampleText('exampleUi.beautifyAJsonWithExcessiveWhitespace'),
+      description: exampleText('exampleUi.inThisExampleWeShowHowTheJson'),
+      sampleText: `
 {
      "name":  "The Name of the Wind",
  "author"  : "Patrick Rothfuss",
@@ -87,7 +88,7 @@ const exampleCards: CardExampleType<InitialValuesType>[] = [
 
 
 `,
-    sampleResult: `{
+      sampleResult: `{
 \t"name": "The Name of the Wind",
 \t"author": "Patrick Rothfuss",
 \t"genre": "Fantasy",
@@ -99,14 +100,13 @@ const exampleCards: CardExampleType<InitialValuesType>[] = [
 \t},
 \t"is_fiction": true
 }`,
-    sampleOptions: {
-      indentationType: 'tab',
-      spacesCount: 0
+      sampleOptions: {
+        indentationType: 'tab',
+        spacesCount: 0
+      }
     }
-  }
-];
+  ];
 
-export default function PrettifyJson({ title }: ToolComponentProps) {
   const { t } = useTranslation('json');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');

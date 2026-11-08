@@ -1,3 +1,4 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import ToolContent from '@components/ToolContent';
 import { ToolComponentProps } from '@tools/defineTool';
@@ -12,12 +13,17 @@ const initialValues = {};
 
 type InitialValuesType = typeof initialValues;
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Find Birthdays on February 29',
-    description:
-      "One of our friends was born on a leap year on February 29th and as a consequence, she has a birthday only once every 4 years. As we can never really remember when her birthday is, we are using our program to create a reminder list of the upcoming leap years. To create a list of her next birthdays, we load a sequence of years from 2025 to 2040 into the input and get the status of each year. If the program says that it's a leap year, then we know that we'll be invited to a birthday party on February 29th.",
-    sampleText: `2025
+export default function ConvertDaysToHours({
+  title,
+  longDescription
+}: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('time');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('checkLeapYears.exampleTitle'),
+      description: exampleText('checkLeapYears.exampleDescription'),
+      sampleText: `2025
 2026
 2027
 2028
@@ -33,7 +39,7 @@ const exampleCards: CardExampleType<InitialValuesType>[] = [
 2038
 2039
 2040`,
-    sampleResult: `2025 is not a leap year.
+      sampleResult: `2025 is not a leap year.
 2026 is not a leap year.
 2027 is not a leap year.
 2028 is a leap year.
@@ -49,14 +55,10 @@ const exampleCards: CardExampleType<InitialValuesType>[] = [
 2038 is not a leap year.
 2039 is not a leap year.
 2040 is a leap year.`,
-    sampleOptions: {}
-  }
-];
+      sampleOptions: {}
+    }
+  ];
 
-export default function ConvertDaysToHours({
-  title,
-  longDescription
-}: ToolComponentProps) {
   const { t } = useTranslation('time');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');

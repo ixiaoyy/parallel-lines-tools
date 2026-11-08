@@ -177,5 +177,24 @@
     "startTime": "Start Time",
     "timestamps": "Timestamps",
     "title": "Trim Video"
+  },
+  "inline": {
+    "widthIsRequired": "Width is required",
+    "crfIsRequired": "CRF is required",
+    "crfMustBeAtMost51": "CRF must be at most 51",
+    "crfMustBeAtLeast0": "CRF must be at least 0",
+    "orientationIsRequired": "Orientation is required",
+    "numberOfLoopsMustBeGreaterThan": "Number of loops must be greater than 1",
+    "widthMustBeAtMost7680": "Width must be at most 7680",
+    "widthMustBeAtLeast1": "Width must be at least 1",
+    "heightIsRequired": "Height is required",
+    "heightMustBeAtMost4320": "Height must be at most 4320",
+    "heightMustBeAtLeast1": "Height must be at least 1",
+    "rotationIsRequired": "Rotation is required",
+    "startTimeMustBePositive": "Start time must be positive",
+    "endTimeMustBeGreaterThanStart": "End time must be greater than start time",
+    "standardResolutionsOnly": "Width must be one of the standard resolutions.",
+    "orientationValues": "Orientation must be horizontal or vertical.",
+    "rotationValues": "Rotation must be 90, 180, or 270 degrees."
   }
 }

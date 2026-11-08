@@ -1,3 +1,5 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import ToolContent from '@components/ToolContent';
 import ToolCodeInput from '@components/input/ToolCodeInput';
@@ -12,24 +14,27 @@ type InitialValuesType = Record<string, never>;
 
 const initialValues: InitialValuesType = {};
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Minify a Simple JSON Object',
-    description:
-      'This example shows how to minify a simple JSON object by removing all unnecessary whitespace.',
-    sampleText: `{
+export default function MinifyJson({ title }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('json');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.minifyASimpleJsonObject'),
+      description: exampleText('exampleUi.thisExampleShowsHowToMinifyASimple'),
+      sampleText: `{
   "name": "John Doe",
   "age": 30,
   "city": "New York"
 }`,
-    sampleResult: `{"name":"John Doe","age":30,"city":"New York"}`,
-    sampleOptions: {}
-  },
-  {
-    title: 'Minify a Nested JSON Structure',
-    description:
-      'This example demonstrates minification of a complex nested JSON structure with arrays and objects.',
-    sampleText: `{
+      sampleResult: `{"name":"John Doe","age":30,"city":"New York"}`,
+      sampleOptions: {}
+    },
+    {
+      title: exampleText('exampleUi.minifyANestedJsonStructure'),
+      description: exampleText(
+        'exampleUi.thisExampleDemonstratesMinificationOfAComplexNested'
+      ),
+      sampleText: `{
   "users": [
     {
       "id": 1,
@@ -43,12 +48,14 @@ const exampleCards: CardExampleType<InitialValuesType>[] = [
     }
   ]
 }`,
-    sampleResult: `{"users":[{"id":1,"name":"Alice","hobbies":["reading","gaming"]},{"id":2,"name":"Bob","hobbies":["swimming","coding"]}]}`,
-    sampleOptions: {}
-  }
-];
+      sampleResult: `{"users":[{"id":1,"name":"Alice","hobbies":["reading","gaming"]},{"id":2,"name":"Bob","hobbies":["swimming","coding"]}]}`,
+      sampleOptions: {}
+    }
+  ];
 
-export default function MinifyJson({ title }: ToolComponentProps) {
+  // 校验提示仅做语言接线，规则和数据处理保持不变。
+  const { t: inlineText } = useInlineTranslation('json');
+
   const { t } = useTranslation('json');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');
@@ -62,7 +69,11 @@ export default function MinifyJson({ title }: ToolComponentProps) {
         setFormat(format);
       } catch (error) {
         setResult(
-          ` ${error instanceof Error ? error.message : 'Invalid JSON format'}`
+          ` ${
+            error instanceof Error
+              ? error.message
+              : inlineText('inline.invalidJsonFormat')
+          }`
         );
       }
     }

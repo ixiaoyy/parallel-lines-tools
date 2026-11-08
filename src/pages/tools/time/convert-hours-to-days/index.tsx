@@ -1,3 +1,5 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import React, { useState } from 'react';
 import ToolContent from '@components/ToolContent';
@@ -15,12 +17,18 @@ const initialValues = {
   accuracy: '1'
 };
 type InitialValuesType = typeof initialValues;
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Hours to Integer Days',
-    description:
-      'In this example, we convert ten hour values to ten day values. Each input hour is divisible by 24 without a remainder, so all converted output values are full days. To better communicate the time units, we use the word "hours" in the input data and also add the word "days" to the output data.',
-    sampleText: `24 hours
+
+export default function ConvertDaysToHours({
+  title,
+  longDescription
+}: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('time');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.hoursToIntegerDays'),
+      description: exampleText('exampleUi.inThisExampleWeConvertTenHourValues'),
+      sampleText: `24 hours
 48 hours
 72 hours
 96 hours
@@ -30,7 +38,7 @@ const exampleCards: CardExampleType<InitialValuesType>[] = [
 192 hours
 216 hours
 240 hours`,
-    sampleResult: `1 day
+      sampleResult: `1 day
 2 days
 3 days
 4 days
@@ -40,42 +48,43 @@ const exampleCards: CardExampleType<InitialValuesType>[] = [
 8 days
 9 days
 10 days`,
-    sampleOptions: { daysFlag: true, accuracy: '2' }
-  },
-  {
-    title: 'Decimal Days',
-    description:
-      'In this example, we convert five decimal fraction day values to hours. Conversion of partial days is similar to the conversion of full days – they are all multiplied by 24. We turn off the option that appends the "hours" string after the converted values and get only the numerical hour values in the output.',
-    sampleText: `1 hr
+      sampleOptions: { daysFlag: true, accuracy: '2' }
+    },
+    {
+      title: exampleText('exampleUi.decimalDays'),
+      description: exampleText(
+        'exampleUi.inThisExampleWeConvertFiveDecimalFraction'
+      ),
+      sampleText: `1 hr
 100 hr
 9999 hr
 12345 hr
 333333 hr`,
-    sampleResult: `0.0417 days
+      sampleResult: `0.0417 days
 4.1667 days
 416.625 days
 514.375 days
 13888.875 days`,
-    sampleOptions: { daysFlag: true, accuracy: '4' }
-  },
-  {
-    title: 'Partial Hours',
-    description:
-      'In the modern Gregorian calendar, a common year has 365 days and a leap year has 366 days. This makes the true average length of a year to be 365.242199 days. In this example, we load this number in the input field and convert it to the hours. It turns out that there 8765.812776 hours in an average year.',
-    sampleText: `0.5
+      sampleOptions: { daysFlag: true, accuracy: '4' }
+    },
+    {
+      title: exampleText('exampleUi.partialHours'),
+      description: exampleText(
+        'exampleUi.inTheModernGregorianCalendarACommonYear'
+      ),
+      sampleText: `0.5
 0.01
 0.99`,
-    sampleResult: `0.02083333
+      sampleResult: `0.02083333
 0.00041667
 0.04125`,
-    sampleOptions: { daysFlag: false, accuracy: '8' }
-  }
-];
+      sampleOptions: { daysFlag: false, accuracy: '8' }
+    }
+  ];
 
-export default function ConvertDaysToHours({
-  title,
-  longDescription
-}: ToolComponentProps) {
+  // 本工具的展示文案随语言切换更新；示例原始数据与计算参数保持不变。
+  const { t: inlineText } = useInlineTranslation('time');
+
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');
 
@@ -90,13 +99,11 @@ export default function ConvertDaysToHours({
     updateField
   }) => [
     {
-      title: 'Day Value Accuracy',
+      title: inlineText('inline.dayValueAccuracy'),
       component: (
         <Box>
           <TextFieldWithDesc
-            description={
-              'If the calculated days is a decimal number, then how many digits should be left after the decimal point?.'
-            }
+            description={inlineText('inline.ifTheCalculatedDaysIsADecimal')}
             value={values.accuracy}
             onOwnChange={(val) => updateField('accuracy', val)}
             type={'text'}
@@ -105,14 +112,16 @@ export default function ConvertDaysToHours({
       )
     },
     {
-      title: 'Days Postfix',
+      title: inlineText('inline.daysPostfix'),
       component: (
         <Box>
           <CheckboxWithDesc
             onChange={(val) => updateField('daysFlag', val)}
             checked={values.daysFlag}
-            title={'Append Days Postfix'}
-            description={'Display numeric day values with the postfix "days".'}
+            title={inlineText('inline.appendDaysPostfix')}
+            description={inlineText(
+              'inline.displayNumericDayValuesWithThePostfix'
+            )}
           />
         </Box>
       )

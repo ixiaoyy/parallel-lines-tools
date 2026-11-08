@@ -1,3 +1,5 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import ToolContent from '@components/ToolContent';
 import ToolTextInput from '@components/input/ToolTextInput';
@@ -18,12 +20,15 @@ const initialValues: InitialValuesType = {
   skipEmptyLines: true
 };
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Basic CSV to XML',
-    description: 'Convert a simple CSV file into an XML format.',
-    sampleText: 'name,age,city\nJohn,30,New York\nAlice,25,London',
-    sampleResult: `<root>
+export default function CsvToXml({ title }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('csv');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.basicCsvToXml'),
+      description: exampleText('exampleUi.convertASimpleCsvFileIntoAnXml'),
+      sampleText: 'name,age,city\nJohn,30,New York\nAlice,25,London',
+      sampleResult: `<root>
   <row>
     <name>John</name>
     <age>30</age>
@@ -35,14 +40,16 @@ const exampleCards: CardExampleType<InitialValuesType>[] = [
     <city>London</city>
   </row>
 </root>`,
-    sampleOptions: {
-      ...initialValues,
-      useHeaders: true
+      sampleOptions: {
+        ...initialValues,
+        useHeaders: true
+      }
     }
-  }
-];
+  ];
 
-export default function CsvToXml({ title }: ToolComponentProps) {
+  // 本工具的展示文案随语言切换更新；示例原始数据与计算参数保持不变。
+  const { t: inlineText } = useInlineTranslation(['csv', 'translation']);
+
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');
 
@@ -53,9 +60,13 @@ export default function CsvToXml({ title }: ToolComponentProps) {
         setResult(xmlResult);
       } catch (error) {
         setResult(
-          `Error: ${
-            error instanceof Error ? error.message : 'Invalid CSV format'
-          }`
+          inlineText('translation:common.error', {
+            error: String(
+              error instanceof Error
+                ? error.message
+                : inlineText('inline.invalidCsvFormat')
+            )
+          })
         );
       }
     }
@@ -70,28 +81,36 @@ export default function CsvToXml({ title }: ToolComponentProps) {
       compute={compute}
       exampleCards={exampleCards}
       inputComponent={
-        <ToolTextInput title="Input CSV" value={input} onChange={setInput} />
+        <ToolTextInput
+          title={inlineText('csvToJson.inputTitle')}
+          value={input}
+          onChange={setInput}
+        />
       }
       resultComponent={
-        <ToolTextResult title="Output XML" value={result} extension={'xml'} />
+        <ToolTextResult
+          title={inlineText('inline.outputXml')}
+          value={result}
+          extension={'xml'}
+        />
       }
       getGroups={({ values, updateField }) => [
         {
-          title: 'Input CSV Format',
+          title: inlineText('csvToJson.inputCsvFormat'),
           component: (
             <Box>
               <TextFieldWithDesc
-                description="Column Separator"
+                description={inlineText('inline.columnSeparator')}
                 value={values.delimiter}
                 onOwnChange={(val) => updateField('delimiter', val)}
               />
               <TextFieldWithDesc
-                description="Field Quote"
+                description={inlineText('inline.fieldQuote')}
                 onOwnChange={(val) => updateField('quote', val)}
                 value={values.quote}
               />
               <TextFieldWithDesc
-                description="Comment Symbol"
+                description={inlineText('inline.commentSymbol')}
                 value={values.comment}
                 onOwnChange={(val) => updateField('comment', val)}
               />
@@ -99,20 +118,22 @@ export default function CsvToXml({ title }: ToolComponentProps) {
           )
         },
         {
-          title: 'Conversion Options',
+          title: inlineText('csvToJson.conversionOptions'),
           component: (
             <Box>
               <CheckboxWithDesc
                 checked={values.useHeaders}
                 onChange={(value) => updateField('useHeaders', value)}
-                title="Use Headers"
-                description="First row is treated as column headers"
+                title={inlineText('csvToJson.useHeaders')}
+                description={inlineText(
+                  'inline.firstRowIsTreatedAsColumnHeaders'
+                )}
               />
               <CheckboxWithDesc
                 checked={values.skipEmptyLines}
                 onChange={(value) => updateField('skipEmptyLines', value)}
-                title="Skip Empty Lines"
-                description="Don't process empty lines in the CSV"
+                title={inlineText('csvToJson.skipEmptyLines')}
+                description={inlineText('inline.donTProcessEmptyLinesInThe')}
               />
             </Box>
           )

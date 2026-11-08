@@ -1,0 +1,6 @@
+Source: https://raw.githubusercontent.com/Arcticons-Team/Arcticons/4352d0e53c991111c5bca22d116aba227196ad7c/README.md
+
+## License
+
+Arcticons uses the [GPL-3.0 license](https://www.gnu.org/licenses/gpl-3.0.en.html).<br>
+All icons are licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).

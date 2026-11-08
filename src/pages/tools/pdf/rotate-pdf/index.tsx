@@ -1,3 +1,4 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
 import { Box, Typography, FormControlLabel, Switch } from '@mui/material';
 import { useEffect, useState } from 'react';
 import ToolFileResult from '@components/result/ToolFileResult';
@@ -18,46 +19,48 @@ const initialValues: InitialValuesType = {
   pageRanges: ''
 };
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Rotate All Pages 90°',
-    description: 'Rotate all pages in the PDF by 90 degrees clockwise',
-    sampleText: '',
-    sampleResult: '',
-    sampleOptions: {
-      rotationAngle: 90,
-      applyToAllPages: true,
-      pageRanges: ''
-    }
-  },
-  {
-    title: 'Rotate Specific Pages 180°',
-    description: 'Rotate pages 1 and 3 by 180 degrees',
-    sampleText: '',
-    sampleResult: '',
-    sampleOptions: {
-      rotationAngle: 180,
-      applyToAllPages: false,
-      pageRanges: '1,3'
-    }
-  },
-  {
-    title: 'Rotate Page Range 270°',
-    description: 'Rotate pages 2 through 5 by 270 degrees',
-    sampleText: '',
-    sampleResult: '',
-    sampleOptions: {
-      rotationAngle: 270,
-      applyToAllPages: false,
-      pageRanges: '2-5'
-    }
-  }
-];
-
 export default function RotatePdf({
   title,
   longDescription
 }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('pdf');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.rotateAllPages90'),
+      description: exampleText('exampleUi.rotateAllPagesInThePdfBy90'),
+      sampleText: '',
+      sampleResult: '',
+      sampleOptions: {
+        rotationAngle: 90,
+        applyToAllPages: true,
+        pageRanges: ''
+      }
+    },
+    {
+      title: exampleText('exampleUi.rotateSpecificPages180'),
+      description: exampleText('exampleUi.rotatePages1And3By180Degrees'),
+      sampleText: '',
+      sampleResult: '',
+      sampleOptions: {
+        rotationAngle: 180,
+        applyToAllPages: false,
+        pageRanges: '1,3'
+      }
+    },
+    {
+      title: exampleText('exampleUi.rotatePageRange270'),
+      description: exampleText('exampleUi.rotatePages2Through5By270Degrees'),
+      sampleText: '',
+      sampleResult: '',
+      sampleOptions: {
+        rotationAngle: 270,
+        applyToAllPages: false,
+        pageRanges: '2-5'
+      }
+    }
+  ];
+
   const { t } = useTranslation('pdf');
   const [input, setInput] = useState<File | null>(null);
   const [result, setResult] = useState<File | null>(null);

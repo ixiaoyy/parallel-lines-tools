@@ -1,3 +1,4 @@
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import React, { useState, useContext } from 'react';
 import * as Yup from 'yup';
@@ -27,19 +28,21 @@ const initialValues: InitialValuesType = {
   color: '#ffffff'
 };
 
-const validationSchema = Yup.object({
-  watermarkOpacity: Yup.number()
-    .min(0, 'Opacity must be between 0 and 1')
-    .max(1, 'Opacity must be between 0 and 1')
-    .required('Opacity is required'),
-  fontSize: Yup.number()
-    .min(8, 'Font size must be at least 8px')
-    .max(512, 'Font size is too large')
-    .required('Font size is required'),
-  color: Yup.string().required('Color is required')
-});
-
 export default function Watermark({ title }: ToolComponentProps) {
+  // 仅本地化界面展示与校验提示；格式参数和处理流程保持原样。
+  const { t: inlineText } = useInlineTranslation('image');
+  const validationSchema = Yup.object({
+    watermarkOpacity: Yup.number()
+      .min(0, inlineText('inline.opacityMustBeBetween0And1'))
+      .max(1, inlineText('inline.opacityMustBeBetween0And1'))
+      .required(inlineText('inline.opacityIsRequired')),
+    fontSize: Yup.number()
+      .min(8, inlineText('inline.fontSizeMustBeAtLeast8px'))
+      .max(512, inlineText('inline.fontSizeIsTooLarge'))
+      .required(inlineText('inline.fontSizeIsRequired')),
+    color: Yup.string().required(inlineText('inline.colorIsRequired'))
+  });
+
   const { t } = useTranslation('image');
   const [input, setInput] = useState<MultiImageInput[]>([]);
   const [result, setResult] = useState<File[]>([]);
@@ -69,7 +72,10 @@ export default function Watermark({ title }: ToolComponentProps) {
         setZipFile(output.zipFile);
       }
     } catch (error) {
-      showSnackBar(`Error converting files: ${error}`, 'error');
+      showSnackBar(
+        inlineText('inline.processingError', { error: String(error) }),
+        'error'
+      );
       setZipFile(null);
     } finally {
       setIsProcessing(false);

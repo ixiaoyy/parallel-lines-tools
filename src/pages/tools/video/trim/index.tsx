@@ -1,3 +1,4 @@
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 import * as Yup from 'yup';
@@ -18,15 +19,17 @@ const initialValues: InitialValuesType = {
   end: 100
 };
 
-const validationSchema = Yup.object({
-  start: Yup.number().min(0, 'Start time must be positive'),
-  end: Yup.number().min(
-    Yup.ref('start'),
-    'End time must be greater than start time'
-  )
-});
-
 export default function TrimVideo({ title }: ToolComponentProps) {
+  // 仅本地化界面展示与校验提示；格式参数和处理流程保持原样。
+  const { t: inlineText } = useInlineTranslation('video');
+  const validationSchema = Yup.object({
+    start: Yup.number().min(0, inlineText('inline.startTimeMustBePositive')),
+    end: Yup.number().min(
+      Yup.ref('start'),
+      inlineText('inline.endTimeMustBeGreaterThanStart')
+    )
+  });
+
   const { t } = useTranslation('video');
   const [input, setInput] = useState<File | null>(null);
   const [result, setResult] = useState<File | null>(null);

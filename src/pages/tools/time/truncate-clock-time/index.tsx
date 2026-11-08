@@ -1,3 +1,4 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import React, { useState } from 'react';
 import ToolContent from '@components/ToolContent';
@@ -17,57 +18,59 @@ const initialValues = {
   zeroPadding: true
 };
 type InitialValuesType = typeof initialValues;
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Truncate Seconds',
-    description:
-      'In this example, we get rid of the seconds part from several timer values. We select the "Truncate Only Seconds" mode and get a list of timer values consisting only of hours and minutes in format "hh:mm" (the ":ss" part is removed).',
-    sampleText: `01:28:06
-07:39:56
-02:12:41
-10:10:38`,
-    sampleResult: `01:28
-07:39
-02:12
-10:10`,
-    sampleOptions: { onlySecond: true, zeroPrint: false, zeroPadding: true }
-  },
-  {
-    title: 'Truncate Minutes and Seconds',
-    description:
-      'This example truncates five clock times to an hour. It drops the minutes and seconds parts and only outputs the hours with zero padding.',
-    sampleText: `04:42:03
-07:09:59
-11:29:16
-21:30:45
-13:03:09`,
-    sampleResult: `04
-07
-11
-21
-13`,
-    sampleOptions: { onlySecond: false, zeroPrint: false, zeroPadding: true }
-  },
-  {
-    title: 'Set Seconds to Zero',
-    description:
-      'In this example, we set the seconds part of each time to zero by first truncating the time to minutes and then appending a zero at the end in place of the truncated seconds. To do this, we switch on the seconds-truncation mode and activate the option to print-zero-time-parts. We also turn off the padding option and get the output time in format "h:m:s", where the seconds are always zero so the final format is "h:m:0".',
-    sampleText: `17:25:55
-10:16:07
-12:02:09
-06:05:11`,
-    sampleResult: `17:25:0
-10:16:0
-12:2:0
-6:5:0`,
-    sampleOptions: { onlySecond: true, zeroPrint: true, zeroPadding: true }
-  }
-];
 
 export default function TruncateClockTime({
   title,
   longDescription
 }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('time');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.truncateSeconds'),
+      description: exampleText('exampleUi.inThisExampleWeGetRidOfThe'),
+      sampleText: `01:28:06
+07:39:56
+02:12:41
+10:10:38`,
+      sampleResult: `01:28
+07:39
+02:12
+10:10`,
+      sampleOptions: { onlySecond: true, zeroPrint: false, zeroPadding: true }
+    },
+    {
+      title: exampleText('truncateClockTime.truncateMinutesAndSeconds'),
+      description: exampleText(
+        'exampleUi.thisExampleTruncatesFiveClockTimesToAn'
+      ),
+      sampleText: `04:42:03
+07:09:59
+11:29:16
+21:30:45
+13:03:09`,
+      sampleResult: `04
+07
+11
+21
+13`,
+      sampleOptions: { onlySecond: false, zeroPrint: false, zeroPadding: true }
+    },
+    {
+      title: exampleText('exampleUi.setSecondsToZero'),
+      description: exampleText('exampleUi.inThisExampleWeSetTheSecondsPart'),
+      sampleText: `17:25:55
+10:16:07
+12:02:09
+06:05:11`,
+      sampleResult: `17:25:0
+10:16:0
+12:2:0
+6:5:0`,
+      sampleOptions: { onlySecond: true, zeroPrint: true, zeroPadding: true }
+    }
+  ];
+
   const { t } = useTranslation('time');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');

@@ -1,3 +1,4 @@
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import React, { useState, useRef } from 'react';
 import { Box, Paper, Typography, Button } from '@mui/material';
 import { Document, Page, pdfjs } from 'react-pdf';
@@ -22,6 +23,9 @@ interface Field {
 }
 
 export default function DragDropPdfEditor() {
+  // 本工具的展示文案随语言切换更新；示例原始数据与计算参数保持不变。
+  const { t: inlineText } = useInlineTranslation('pdf');
+
   const { t } = useTranslation('pdf');
   const [file, setFile] = useState<File | null>(null);
   const [numPages, setNumPages] = useState(0);
@@ -337,7 +341,7 @@ export default function DragDropPdfEditor() {
             <Document
               file={file}
               onLoadSuccess={({ numPages }) => setNumPages(numPages)}
-              loading="Loading PDF..."
+              loading={inlineText('inline.loadingPdf')}
             >
               {Array.from({ length: numPages }, (_, i) => {
                 const pageNo = i + 1;
@@ -486,7 +490,7 @@ export default function DragDropPdfEditor() {
                           {selectedId === f.id && (
                             <button
                               type="button"
-                              title="Remove"
+                              title={inlineText('inline.remove')}
                               onMouseDown={(e) => e.stopPropagation()}
                               onClick={(e) => {
                                 e.stopPropagation();

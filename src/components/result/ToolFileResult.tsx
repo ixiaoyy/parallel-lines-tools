@@ -8,7 +8,7 @@ import { CustomSnackBarContext } from '../../contexts/CustomSnackBarContext';
 import { useTranslation } from 'react-i18next';
 
 export default function ToolFileResult({
-  title = 'Result',
+  title,
   value,
   extension,
   loading,
@@ -135,7 +135,7 @@ export default function ToolFileResult({
               {fileType === 'image' && (
                 <img
                   src={preview}
-                  alt="Result"
+                  alt={t('toolFileResult.preview')}
                   style={{ maxWidth: '100%', maxHeight: globalInputHeight }}
                 />
               )}
@@ -156,6 +156,7 @@ export default function ToolFileResult({
               {fileType === 'pdf' && (
                 <iframe
                   src={preview}
+                  title={t('toolFileResult.preview')}
                   width="100%"
                   height="100%"
                   style={{ maxWidth: '500px' }}
@@ -163,8 +164,7 @@ export default function ToolFileResult({
               )}
               {fileType === 'unknown' && (
                 <Box sx={{ padding: 2, textAlign: 'center' }}>
-                  File processed successfully. Click download to save the
-                  result.
+                  {t('toolFileResult.processed')}
                 </Box>
               )}
             </Box>

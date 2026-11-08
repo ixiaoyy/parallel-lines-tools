@@ -6,8 +6,11 @@
     "shortDescription": "更改视频播放速度",
     "title": "更改视频速度",
     "toolInfo": {
-      "title": "什么是 {{title}}？"
-    }
+      "title": "什么是 {{title}}？",
+      "longDescription": "{{title}}可在浏览器中调整视频播放速度，同时保持音画同步。可在 0.25 倍至 4 倍之间选择，制作快放或慢放效果。支持常见视频格式，无需安装额外软件，处理时尽量保留原始画质。"
+    },
+    "options": "选项",
+    "speedLabel": "速度倍数："
   },
   "compress": {
     "default": "默认",
@@ -63,7 +66,27 @@
     "changeSpeed": {
       "description": "更改 GIF 动画的播放速度。在保持动画流畅的情况下，加快或减慢 GIF 的速度。",
       "shortDescription": "更改 GIF 动画速度",
-      "title": "更改 GIF 速度"
+      "title": "更改 GIF 速度",
+      "inputTitle": "输入 GIF",
+      "options": {
+        "speedLabel": "速度倍数：",
+        "title": "选项"
+      },
+      "resultTitle": "输出 GIF"
+    },
+    "imagesToGif": {
+      "title": "图片转 GIF",
+      "description": "将多张图片制作成 GIF 动画，调整帧顺序和播放时间后生成动画。",
+      "shortDescription": "将多张图片制作成 GIF 动画",
+      "inputTitle": "输入图片",
+      "resultTitle": "GIF 动画",
+      "loadingText": "正在生成 GIF…",
+      "frameOptions": "帧选项",
+      "frameDelayDescription": "每帧显示的毫秒数，例如 500 表示每帧 0.5 秒。",
+      "frameRateDescription": "按每秒帧数（FPS）设置动画速度。",
+      "frameRateValueDescription": "设置目标数值。",
+      "frameDelay": "每帧时长",
+      "frameRate": "每秒帧数（FPS）"
     }
   },
   "loop": {
@@ -83,7 +106,9 @@
     "description": "将多个视频文件合并为一个连续的视频。",
     "longDescription": "此工具允许您将多个视频文件合并或附加为一个连续的视频。只需上传您的视频文件，按所需顺序排列，然后将它们合并为一个文件，即可轻松共享或编辑。",
     "shortDescription": "轻松附加和合并视频。",
-    "title": "合并视频"
+    "title": "合并视频",
+    "inputTitle": "输入视频",
+    "resultTitle": "合并后的视频"
   },
   "rotate": {
     "180Degrees": "180°（上下颠倒）",
@@ -105,5 +130,71 @@
     "startTime": "开始时间",
     "timestamps": "时间戳",
     "title": "修剪视频"
+  },
+  "addAudio": {
+    "audioFile": "音频文件",
+    "audioInputTitle": "输入音频",
+    "description": "为视频添加音轨，可替换原始音频或与原音频混合。支持调节音量、循环播放和精确设置开始及结束时间，适用于常见音视频格式。",
+    "durationMode": "时间范围",
+    "endTime": "结束时间",
+    "endTimeDesc": "新音轨停止播放的时间（HH:MM:SS.mm）。",
+    "loadingText": "正在为视频添加音频…",
+    "loop": "循环（重复音频至视频结束或指定结束时间）",
+    "loopOption": "循环选项",
+    "mode": "音频模式",
+    "modeMix": "混合（保留原音频并添加新音轨）",
+    "modeReplace": "替换原始音频",
+    "noLoop": "不循环（音频仅播放一次）",
+    "resultTitle": "处理后的视频",
+    "shortDescription": "添加或替换视频中的音轨",
+    "startTime": "开始时间",
+    "startTimeDesc": "新音轨开始播放的时间（HH:MM:SS.mm）。",
+    "timing": "音轨时间",
+    "timingDefault": "默认（整个视频）",
+    "timingEnd": "设置结束时间",
+    "timingModeDesc": "设置新音轨在视频中的播放时间段。",
+    "timingStart": "设置开始时间",
+    "timingStartEnd": "设置开始与结束时间",
+    "title": "为视频添加音频",
+    "videoInputTitle": "输入视频",
+    "volume": "新音轨音量",
+    "volumeDesc": "新添加音轨的音量。"
+  },
+  "resize": {
+    "customDimensions": "自定义尺寸",
+    "customMode": "自定义尺寸",
+    "customModeDesc": "自行设置宽度和高度。",
+    "description": "将视频调整为 240p、360p、480p、720p、1080p 等预设分辨率，或自定义宽高。默认保留宽高比以避免拉伸，支持 MP4、WebM、OGG 等常见格式。",
+    "height": "高度（像素）",
+    "inputTitle": "输入视频",
+    "loadingText": "正在调整视频尺寸…",
+    "maintainAspectRatio": "保持宽高比",
+    "mode": "尺寸模式",
+    "presetMode": "预设分辨率",
+    "presetModeDesc": "选择标准视频分辨率。",
+    "resolution": "分辨率",
+    "resultTitle": "调整后的视频",
+    "shortDescription": "调整视频分辨率",
+    "title": "调整视频尺寸",
+    "width": "宽度（像素）"
+  },
+  "inline": {
+    "widthIsRequired": "请填写宽度。",
+    "crfIsRequired": "请填写恒定质量参数（CRF）。",
+    "crfMustBeAtMost51": "恒定质量参数（CRF）不能超过 51。",
+    "crfMustBeAtLeast0": "恒定质量参数（CRF）不能小于 0。",
+    "orientationIsRequired": "请选择方向。",
+    "numberOfLoopsMustBeGreaterThan": "循环次数必须大于 1。",
+    "widthMustBeAtMost7680": "宽度不能超过 7680。",
+    "widthMustBeAtLeast1": "宽度至少为 1。",
+    "heightIsRequired": "请填写高度。",
+    "heightMustBeAtMost4320": "高度不能超过 4320。",
+    "heightMustBeAtLeast1": "高度至少为 1。",
+    "rotationIsRequired": "请选择旋转角度。",
+    "startTimeMustBePositive": "开始时间不能小于 0。",
+    "endTimeMustBeGreaterThanStart": "结束时间不能早于开始时间。",
+    "standardResolutionsOnly": "请选择标准分辨率对应的宽度。",
+    "orientationValues": "方向必须是水平或垂直。",
+    "rotationValues": "旋转角度必须是 90、180 或 270 度。"
   }
 }

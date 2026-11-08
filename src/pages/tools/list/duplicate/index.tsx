@@ -1,3 +1,5 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import ToolContent from '@components/ToolContent';
@@ -31,77 +33,83 @@ const initialValues: InitialValuesType = {
   copy: '2'
 };
 
-const validationSchema = Yup.object({
-  splitSeparator: Yup.string().required('The separator is required'),
-  joinSeparator: Yup.string().required('The join separator is required'),
-  copy: Yup.number()
-    .typeError('Number of copies must be a number')
-    .min(0.1, 'Number of copies must be positive')
-    .required('Number of copies is required')
-});
-
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Simple duplication',
-    description: 'This example shows how to duplicate a list of words.',
-    sampleText: 'Hello World',
-    sampleResult: 'Hello World Hello World',
-    sampleOptions: {
-      splitOperatorType: 'symbol',
-      splitSeparator: ' ',
-      joinSeparator: ' ',
-      concatenate: true,
-      reverse: false,
-      copy: '2'
-    }
-  },
-  {
-    title: 'Reverse duplication',
-    description: 'This example shows how to duplicate a list in reverse order.',
-    sampleText: 'Hello World',
-    sampleResult: 'Hello World World Hello',
-    sampleOptions: {
-      splitOperatorType: 'symbol',
-      splitSeparator: ' ',
-      joinSeparator: ' ',
-      concatenate: true,
-      reverse: true,
-      copy: '2'
-    }
-  },
-  {
-    title: 'Interweaving items',
-    description:
-      'This example shows how to interweave items instead of concatenating them.',
-    sampleText: 'Hello World',
-    sampleResult: 'Hello Hello World World',
-    sampleOptions: {
-      splitOperatorType: 'symbol',
-      splitSeparator: ' ',
-      joinSeparator: ' ',
-      concatenate: false,
-      reverse: false,
-      copy: '2'
-    }
-  },
-  {
-    title: 'Fractional duplication',
-    description:
-      'This example shows how to duplicate a list with a fractional number of copies.',
-    sampleText: 'apple banana cherry',
-    sampleResult: 'apple banana cherry apple banana',
-    sampleOptions: {
-      splitOperatorType: 'symbol',
-      splitSeparator: ' ',
-      joinSeparator: ' ',
-      concatenate: true,
-      reverse: false,
-      copy: '1.7'
-    }
-  }
-];
-
 export default function Duplicate({ title }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('list');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('duplicate.example1Title'),
+      description: exampleText('duplicate.example1Description'),
+      sampleText: 'Hello World',
+      sampleResult: 'Hello World Hello World',
+      sampleOptions: {
+        splitOperatorType: 'symbol',
+        splitSeparator: ' ',
+        joinSeparator: ' ',
+        concatenate: true,
+        reverse: false,
+        copy: '2'
+      }
+    },
+    {
+      title: exampleText('duplicate.example2Title'),
+      description: exampleText('duplicate.example2Description'),
+      sampleText: 'Hello World',
+      sampleResult: 'Hello World World Hello',
+      sampleOptions: {
+        splitOperatorType: 'symbol',
+        splitSeparator: ' ',
+        joinSeparator: ' ',
+        concatenate: true,
+        reverse: true,
+        copy: '2'
+      }
+    },
+    {
+      title: exampleText('duplicate.example3Title'),
+      description: exampleText('duplicate.example3Description'),
+      sampleText: 'Hello World',
+      sampleResult: 'Hello Hello World World',
+      sampleOptions: {
+        splitOperatorType: 'symbol',
+        splitSeparator: ' ',
+        joinSeparator: ' ',
+        concatenate: false,
+        reverse: false,
+        copy: '2'
+      }
+    },
+    {
+      title: exampleText('duplicate.example4Title'),
+      description: exampleText('duplicate.example4Description'),
+      sampleText: 'apple banana cherry',
+      sampleResult: 'apple banana cherry apple banana',
+      sampleOptions: {
+        splitOperatorType: 'symbol',
+        splitSeparator: ' ',
+        joinSeparator: ' ',
+        concatenate: true,
+        reverse: false,
+        copy: '1.7'
+      }
+    }
+  ];
+
+  // 校验提示仅做语言接线，规则和数据处理保持不变。
+  const { t: inlineText } = useInlineTranslation('list');
+  const validationSchema = Yup.object({
+    splitSeparator: Yup.string().required(
+      inlineText('inline.theSeparatorIsRequired')
+    ),
+    joinSeparator: Yup.string().required(
+      inlineText('inline.theJoinSeparatorIsRequired')
+    ),
+    copy: Yup.number()
+      .typeError(inlineText('inline.numberOfCopiesMustBeANumber'))
+      .min(0.1, inlineText('inline.numberOfCopiesMustBePositive'))
+      .required(inlineText('inline.numberOfCopiesIsRequired'))
+  });
+
   const { t } = useTranslation('list');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');

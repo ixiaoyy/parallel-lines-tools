@@ -13,6 +13,7 @@ import ScrollToTopButton from './ScrollToTopButton';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '../i18n';
 import { UserTypeFilterProvider } from 'providers/UserTypeFilterProvider';
+import SiteFooter from './SiteFooter';
 
 export type Mode = 'dark' | 'light' | 'system';
 
@@ -70,6 +71,7 @@ function App() {
                 <Suspense fallback={<Loading />}>
                   <AppRoutes />
                 </Suspense>
+                <SiteFooter />
               </BrowserRouter>
             </UserTypeFilterProvider>
           </CustomSnackBarProvider>

@@ -1,3 +1,4 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import { useState } from 'react';
 import ToolContent from '@components/ToolContent';
@@ -72,19 +73,26 @@ const ERROR_I18N_KEYS = {
   [DATE_WEEKDAY_ERRORS.EMPTY_INPUT]: 'dateWeekdayCalculator.errors.emptyInput'
 } as const;
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'July 23 on Friday',
-    description:
-      'Find every year between 2000 and 2050 where July 23 falls on a Friday.',
-    sampleOptions: {
-      month: '7',
-      day: '23',
-      weekday: 'friday',
-      startYear: '2000',
-      endYear: '2050'
-    },
-    sampleResult: `Found 7 matching years
+export default function DateWeekdayCalculator({
+  title,
+  longDescription
+}: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('time');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.july23OnFriday'),
+      description: exampleText(
+        'exampleUi.findEveryYearBetween2000And2050Where'
+      ),
+      sampleOptions: {
+        month: '7',
+        day: '23',
+        weekday: 'friday',
+        startYear: '2000',
+        endYear: '2050'
+      },
+      sampleResult: `Found 7 matching years
 
 Friday, July 23, 2004
 Friday, July 23, 2010
@@ -93,44 +101,41 @@ Friday, July 23, 2027
 Friday, July 23, 2032
 Friday, July 23, 2038
 Friday, July 23, 2049`
-  },
-  {
-    title: 'Leap day on Monday',
-    description:
-      'Find leap days (February 29) that fall on a Monday between 2000 and 2100. Non-leap years are skipped automatically.',
-    sampleOptions: {
-      month: '2',
-      day: '29',
-      weekday: 'monday',
-      startYear: '2000',
-      endYear: '2100'
     },
-    sampleResult: `Found 3 matching years
+    {
+      title: exampleText('exampleUi.leapDayOnMonday'),
+      description: exampleText('exampleUi.findLeapDaysFebruary29ThatFallOn'),
+      sampleOptions: {
+        month: '2',
+        day: '29',
+        weekday: 'monday',
+        startYear: '2000',
+        endYear: '2100'
+      },
+      sampleResult: `Found 3 matching years
 
 Monday, February 29, 2016
 Monday, February 29, 2044
 Monday, February 29, 2072`
-  },
-  {
-    title: 'Single-year range',
-    description: 'Check whether a specific year matches the selected weekday.',
-    sampleOptions: {
-      month: '7',
-      day: '23',
-      weekday: 'friday',
-      startYear: '2021',
-      endYear: '2021'
     },
-    sampleResult: `Found 1 matching year
+    {
+      title: exampleText('exampleUi.singleYearRange'),
+      description: exampleText(
+        'exampleUi.checkWhetherASpecificYearMatchesTheSelected'
+      ),
+      sampleOptions: {
+        month: '7',
+        day: '23',
+        weekday: 'friday',
+        startYear: '2021',
+        endYear: '2021'
+      },
+      sampleResult: `Found 1 matching year
 
 Friday, July 23, 2021`
-  }
-];
+    }
+  ];
 
-export default function DateWeekdayCalculator({
-  title,
-  longDescription
-}: ToolComponentProps) {
   const { t } = useTranslation('time');
   const [result, setResult] = useState('');
 

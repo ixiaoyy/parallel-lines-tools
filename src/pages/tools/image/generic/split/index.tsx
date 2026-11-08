@@ -170,7 +170,10 @@ export default function Split({ title, longDescription }: ToolComponentProps) {
       getGroups={getGroups}
       setInput={setInput}
       compute={debouncedCompute}
-      toolInfo={{ title: `What is a ${title}?`, description: longDescription }}
+      toolInfo={{
+        title: t('image:split.aboutTitle', { title }),
+        description: longDescription
+      }}
     />
   );
 }

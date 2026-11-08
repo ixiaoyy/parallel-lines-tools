@@ -22,5 +22,76 @@
     "resultTitle": "WEBP 图像",
     "shortDescription": "使用质量控制将图像转换为 WebP 格式。",
     "title": "将图像转换为 WebP"
+  },
+  "convertToJPG": {
+    "description": "将图片转换为 JPG，可设置质量和透明区域的背景颜色。",
+    "failedToConvert": "转换为 JPG 失败，请重试。",
+    "inputTitle": "输入图片",
+    "options": {
+      "colorDescription": "透明区域的背景颜色",
+      "quality": "转换质量：",
+      "qualityDescription": "值越高，画质通常越好，文件也可能越大",
+      "title": "转换设置"
+    },
+    "resultTitle": "JPG 图片",
+    "shortDescription": "将图片转为 JPG，并调整输出质量",
+    "title": "图片转 JPG"
+  },
+  "videoToGif": {
+    "description": "将视频的指定片段转换为 GIF 动图。",
+    "inputTitle": "输入视频",
+    "options": {
+      "endTime": "结束时间",
+      "high": "高",
+      "low": "低",
+      "mid": "中",
+      "quality": "质量",
+      "startTime": "开始时间",
+      "timestamps": "时间范围",
+      "ultra": "极高"
+    },
+    "resultTitle": "输出 GIF",
+    "shortDescription": "将视频转换为 GIF 动图",
+    "title": "视频转 GIF"
+  },
+  "markdownToDocx": {
+    "title": "Markdown 转 Word",
+    "description": "粘贴 Markdown 或打开 UTF-8 编码的 .md 文件，在浏览器中生成 Word 文档。支持标题、列表、表格、代码和公式；图片与 HTML 不导入。",
+    "shortDescription": "在本地将 Markdown 转换为 DOCX 文档",
+    "privacy": "仅在当前浏览器处理，无需上传、登录，不保存文档历史。",
+    "upload": "打开 Markdown 文件",
+    "dropHint": "也可将一份 UTF-8 编码的 .md 文件拖到这里，最大 1 MiB。",
+    "inputLabel": "Markdown 内容",
+    "placeholder": "粘贴 Markdown，或加载下方示例…",
+    "limits": "{{count}} 个字符 · 最多 100,000 个字符且不超过 1 MiB",
+    "sample": "加载示例",
+    "filename": "下载文件名",
+    "extensionHint": "自动添加 .docx 扩展名。",
+    "font": "文档字体",
+    "fontSans": "无衬线 · 微软雅黑",
+    "fontSerif": "衬线 · 宋体",
+    "fontHint": "不嵌入或下载字体。阅读设备缺少所选字体时，由阅读软件使用本地字体替代。",
+    "imageNotice": "预览和 Word 均不导入图片或内联 HTML，不会访问外链取图。普通链接在 Word 中仍可点击。",
+    "convert": "生成 Word 文档",
+    "converting": "正在生成…",
+    "cancel": "取消",
+    "reset": "重置",
+    "reading": "正在读取文件…",
+    "busyHint": "正在本地转换，超过 30 秒将自动停止。",
+    "ready": "Word 文档已生成 · {{size}} KB",
+    "download": "下载 DOCX",
+    "previewTitle": "近似预览",
+    "previewHint": "仅供检查内容结构。这里的公式显示为源码，Word 内会生成常见公式的可编辑形式；不支持的公式可能保留源码。分页、字体和排版可能不同。",
+    "previewEmpty": "输入内容后，这里会显示预览。",
+    "errors": {
+      "empty": "请先输入 Markdown 内容。",
+      "tooLarge": "文档最多 1 MiB 且不超过 100,000 个字符，请将较大的文档分段转换。",
+      "invalidText": "内容不是有效的 UTF-8 文本，或包含二进制数据。请另存为 UTF-8 编码的 Markdown 文件。",
+      "unsupportedFile": "请选择或拖入一份 .md 或 .markdown 文件。",
+      "readFailed": "无法读取文件，请重新选择文件或直接粘贴内容。",
+      "cancelled": "已取消转换，未保存结果。",
+      "timeout": "转换超过 30 秒，已停止。请缩短文档后重试。",
+      "failed": "无法生成文档，请简化复杂表格或公式后重试。"
+    }
   }
 }

@@ -1,3 +1,4 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
 import { useState } from 'react';
 import ToolContent from '@components/ToolContent';
 import ToolTextInput from '@components/input/ToolTextInput';
@@ -15,25 +16,26 @@ const initialValues: InitialValuesType = {
   mode: 'encode'
 };
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Encode data in UTF-8 with Base64',
-    description: 'This example shows how to encode a simple text using Base64.',
-    sampleText: 'Hello, World!',
-    sampleResult: 'SGVsbG8sIFdvcmxkIQ==',
-    sampleOptions: { mode: 'encode' }
-  },
-  {
-    title: 'Decode Base64-encoded data to UTF-8',
-    description:
-      'This example shows how to decode data that was encoded with Base64.',
-    sampleText: 'SGVsbG8sIFdvcmxkIQ==',
-    sampleResult: 'Hello, World!',
-    sampleOptions: { mode: 'decode' }
-  }
-];
-
 export default function Base64({ title }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('string');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.encodeDataInUtf8WithBase64'),
+      description: exampleText('exampleUi.thisExampleShowsHowToEncodeASimple'),
+      sampleText: 'Hello, World!',
+      sampleResult: 'SGVsbG8sIFdvcmxkIQ==',
+      sampleOptions: { mode: 'encode' }
+    },
+    {
+      title: exampleText('exampleUi.decodeBase64EncodedDataToUtf8'),
+      description: exampleText('exampleUi.thisExampleShowsHowToDecodeDataThat'),
+      sampleText: 'SGVsbG8sIFdvcmxkIQ==',
+      sampleResult: 'Hello, World!',
+      sampleOptions: { mode: 'decode' }
+    }
+  ];
+
   const { t } = useTranslation('string');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');

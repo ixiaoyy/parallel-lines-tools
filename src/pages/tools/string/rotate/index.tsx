@@ -1,3 +1,4 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import ToolContent from '@components/ToolContent';
@@ -24,46 +25,45 @@ const initialValues: InitialValuesType = {
   multiLine: true
 };
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Rotate text to the right',
-    description:
-      'This example shows how to rotate text to the right by 2 positions.',
-    sampleText: 'abcdef',
-    sampleResult: 'efabcd',
-    sampleOptions: {
-      step: '2',
-      direction: 'right',
-      multiLine: false
-    }
-  },
-  {
-    title: 'Rotate text to the left',
-    description:
-      'This example shows how to rotate text to the left by 2 positions.',
-    sampleText: 'abcdef',
-    sampleResult: 'cdefab',
-    sampleOptions: {
-      step: '2',
-      direction: 'left',
-      multiLine: false
-    }
-  },
-  {
-    title: 'Rotate multi-line text',
-    description:
-      'This example shows how to rotate each line of a multi-line text.',
-    sampleText: 'abcdef\nghijkl',
-    sampleResult: 'fabcde\nlghijk',
-    sampleOptions: {
-      step: '1',
-      direction: 'right',
-      multiLine: true
-    }
-  }
-];
-
 export default function Rotate({ title }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('string');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.rotateTextToTheRight'),
+      description: exampleText('exampleUi.thisExampleShowsHowToRotateTextTo'),
+      sampleText: 'abcdef',
+      sampleResult: 'efabcd',
+      sampleOptions: {
+        step: '2',
+        direction: 'right',
+        multiLine: false
+      }
+    },
+    {
+      title: exampleText('exampleUi.rotateTextToTheLeft'),
+      description: exampleText('exampleUi.thisExampleShowsHowToRotateTextTo2'),
+      sampleText: 'abcdef',
+      sampleResult: 'cdefab',
+      sampleOptions: {
+        step: '2',
+        direction: 'left',
+        multiLine: false
+      }
+    },
+    {
+      title: exampleText('exampleUi.rotateMultiLineText'),
+      description: exampleText('exampleUi.thisExampleShowsHowToRotateEachLine'),
+      sampleText: 'abcdef\nghijkl',
+      sampleResult: 'fabcde\nlghijk',
+      sampleOptions: {
+        step: '1',
+        direction: 'right',
+        multiLine: true
+      }
+    }
+  ];
+
   const { t } = useTranslation('string');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');

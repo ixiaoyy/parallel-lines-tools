@@ -1,3 +1,4 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import React, { useState } from 'react';
 import ToolContent from '@components/ToolContent';
@@ -17,52 +18,6 @@ const initialValues: InitialValuesType = {
   enforceUTC: true
 };
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Convert a single datetime',
-    description:
-      "In this example, we convert a single datetime into a Discord timestamp using the Long Date & Time format (F). The input is an ISO 8601 datetime string and the output is a Discord timestamp that will display the full date and time in each viewer's local timezone.",
-    sampleText: `2025-03-15T10:00:00`,
-    sampleResult: `<t:1742032800:F>`,
-    sampleOptions: {
-      ...initialValues,
-      format: 'F'
-    }
-  },
-  {
-    title: 'Convert multiple datetimes',
-    description:
-      'In this example, we convert multiple datetimes at once — one per line. Blank lines are preserved in the output. Each valid datetime is converted to a Discord timestamp using the Short Date & Time format (f).',
-    sampleText: `2025-03-15T10:00:00
-2025-07-20T18:45:00
-
-2025-11-05T08:15:00`,
-    sampleResult: `<t:1742032800:f>
-<t:1753037100:f>
-
-<t:1762330500:f>`,
-    sampleOptions: {
-      ...initialValues,
-      format: 'f'
-    }
-  },
-  {
-    title: 'Relative timestamps',
-    description:
-      'In this example, we use the Relative format (R) which displays how long ago or how far in the future a datetime is — for example "2 hours ago" or "in 3 days". This format is useful for countdowns or activity feeds and updates dynamically in Discord.',
-    sampleText: `2025-03-15T10:00:00
-2025-07-20T18:45:00
-2025-11-05T08:15:00`,
-    sampleResult: `<t:1742032800:R>
-<t:1753037100:R>
-<t:1762330500:R>`,
-    sampleOptions: {
-      ...initialValues,
-      format: 'R'
-    }
-  }
-];
-
 type formatProps = {
   label: string;
   value: DiscordTimestampFormat;
@@ -72,6 +27,55 @@ export default function TruncateClockTime({
   title,
   longDescription
 }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('time');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.convertASingleDatetime'),
+      description: exampleText(
+        'exampleUi.inThisExampleWeConvertASingleDatetime'
+      ),
+      sampleText: `2025-03-15T10:00:00`,
+      sampleResult: `<t:1742032800:F>`,
+      sampleOptions: {
+        ...initialValues,
+        format: 'F'
+      }
+    },
+    {
+      title: exampleText('exampleUi.convertMultipleDatetimes'),
+      description: exampleText(
+        'exampleUi.inThisExampleWeConvertMultipleDatetimesAt'
+      ),
+      sampleText: `2025-03-15T10:00:00
+2025-07-20T18:45:00
+
+2025-11-05T08:15:00`,
+      sampleResult: `<t:1742032800:f>
+<t:1753037100:f>
+
+<t:1762330500:f>`,
+      sampleOptions: {
+        ...initialValues,
+        format: 'f'
+      }
+    },
+    {
+      title: exampleText('exampleUi.relativeTimestamps'),
+      description: exampleText('exampleUi.inThisExampleWeUseTheRelativeFormat'),
+      sampleText: `2025-03-15T10:00:00
+2025-07-20T18:45:00
+2025-11-05T08:15:00`,
+      sampleResult: `<t:1742032800:R>
+<t:1753037100:R>
+<t:1762330500:R>`,
+      sampleOptions: {
+        ...initialValues,
+        format: 'R'
+      }
+    }
+  ];
+
   const { t } = useTranslation('time');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');

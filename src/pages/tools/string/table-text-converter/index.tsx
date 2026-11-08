@@ -1,3 +1,4 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import { Box, FormControlLabel, Switch } from '@mui/material';
 import ToolContent from '@components/ToolContent';
@@ -25,62 +26,6 @@ const formatOptions: { label: string; value: TableFormat }[] = [
   { label: 'JSON', value: 'json' }
 ];
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Markdown table to CSV',
-    description: 'Convert a markdown table into CSV format.',
-    sampleText: `| Name  | Age | City     |
-| ----- | --- | -------- |
-| John  | 30  | New York |
-| Alice | 25  | London   |`,
-    sampleResult: `Name,Age,City
-John,30,New York
-Alice,25,London`,
-    sampleOptions: {
-      autodetect: false,
-      inputFormat: 'markdown',
-      outputFormat: 'csv'
-    }
-  },
-  {
-    title: 'HTML table to Markdown',
-    description: 'Convert an HTML table into a markdown table.',
-    sampleText: `<table>
-  <tr><th>Product</th><th>Price</th></tr>
-  <tr><td>Apple</td><td>1.99</td></tr>
-  <tr><td>Banana</td><td>0.99</td></tr>
-</table>`,
-    sampleResult: `| Product | Price |
-| --- | --- |
-| Apple | 1.99 |
-| Banana | 0.99 |`,
-    sampleOptions: {
-      autodetect: false,
-      inputFormat: 'html',
-      outputFormat: 'markdown'
-    }
-  },
-  {
-    title: 'MySQL output to Markdown',
-    description: 'Convert a MySQL query result to a markdown table.',
-    sampleText: `+----+-------+
-| id | name  |
-+----+-------+
-| 1  | John  |
-| 2  | Alice |
-+----+-------+`,
-    sampleResult: `| id | name |
-| --- | --- |
-| 1 | John |
-| 2 | Alice |`,
-    sampleOptions: {
-      autodetect: false,
-      inputFormat: 'mysql',
-      outputFormat: 'markdown'
-    }
-  }
-];
-
 const extensionByFormat: Record<TableFormat, string> = {
   markdown: 'md',
   csv: 'csv',
@@ -94,6 +39,66 @@ export default function TableTextConverter({
   title,
   longDescription
 }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('string');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.markdownTableToCsv'),
+      description: exampleText('exampleUi.convertAMarkdownTableIntoCsvFormat'),
+      sampleText: `| Name  | Age | City     |
+| ----- | --- | -------- |
+| John  | 30  | New York |
+| Alice | 25  | London   |`,
+      sampleResult: `Name,Age,City
+John,30,New York
+Alice,25,London`,
+      sampleOptions: {
+        autodetect: false,
+        inputFormat: 'markdown',
+        outputFormat: 'csv'
+      }
+    },
+    {
+      title: exampleText('exampleUi.htmlTableToMarkdown'),
+      description: exampleText(
+        'exampleUi.convertAnHtmlTableIntoAMarkdownTable'
+      ),
+      sampleText: `<table>
+  <tr><th>Product</th><th>Price</th></tr>
+  <tr><td>Apple</td><td>1.99</td></tr>
+  <tr><td>Banana</td><td>0.99</td></tr>
+</table>`,
+      sampleResult: `| Product | Price |
+| --- | --- |
+| Apple | 1.99 |
+| Banana | 0.99 |`,
+      sampleOptions: {
+        autodetect: false,
+        inputFormat: 'html',
+        outputFormat: 'markdown'
+      }
+    },
+    {
+      title: exampleText('exampleUi.mysqlOutputToMarkdown'),
+      description: exampleText('exampleUi.convertAMysqlQueryResultToAMarkdown'),
+      sampleText: `+----+-------+
+| id | name  |
++----+-------+
+| 1  | John  |
+| 2  | Alice |
++----+-------+`,
+      sampleResult: `| id | name |
+| --- | --- |
+| 1 | John |
+| 2 | Alice |`,
+      sampleOptions: {
+        autodetect: false,
+        inputFormat: 'mysql',
+        outputFormat: 'markdown'
+      }
+    }
+  ];
+
   const { t } = useTranslation('string');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');

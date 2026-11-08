@@ -1,3 +1,5 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import ToolContent from '@components/ToolContent';
 import ToolCodeInput from '@components/input/ToolCodeInput';
@@ -24,15 +26,20 @@ const initialValues: InitialValuesType = {
   spacesCount: 2
 };
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Basic TSV to JSON Array',
-    description:
-      'Convert a simple TSV file into a JSON array structure by using spaces as formatting indentation.',
-    sampleText: `name	age	city
+export default function TsvToJson({
+  title,
+  longDescription
+}: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('csv');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.basicTsvToJsonArray'),
+      description: exampleText('exampleUi.convertASimpleTsvFileIntoAJson'),
+      sampleText: `name	age	city
 John	30	New York
 Alice	25	London`,
-    sampleResult: `[
+      sampleResult: `[
   {
     "name": "John",
     "age": 30,
@@ -44,29 +51,29 @@ Alice	25	London`,
     "city": "London"
   }
 ]`,
-    sampleOptions: {
-      ...initialValues,
-      useHeaders: true,
-      dynamicTypes: true
-    }
-  },
-  {
-    title: 'Turn TSV to JSON without Headers',
-    description: 'Convert a TSV file in minified JSON file.',
-    sampleText: `Square	Triangle	Circle
+      sampleOptions: {
+        ...initialValues,
+        useHeaders: true,
+        dynamicTypes: true
+      }
+    },
+    {
+      title: exampleText('exampleUi.turnTsvToJsonWithoutHeaders'),
+      description: exampleText('exampleUi.convertATsvFileInMinifiedJsonFile'),
+      sampleText: `Square	Triangle	Circle
 Cube	Cone	Sphere
 #Oval`,
-    sampleResult: `[["Square","Triangle","Circle"],["Cube","Cone","Sphere"]]`,
-    sampleOptions: {
-      ...initialValues,
-      useHeaders: false,
-      indentationType: 'none'
-    }
-  },
-  {
-    title: 'Transform TSV to JSON with Headers',
-    description: 'Convert a TSV file with headers into a JSON file.',
-    sampleText: `item	material	quantity
+      sampleResult: `[["Square","Triangle","Circle"],["Cube","Cone","Sphere"]]`,
+      sampleOptions: {
+        ...initialValues,
+        useHeaders: false,
+        indentationType: 'none'
+      }
+    },
+    {
+      title: exampleText('exampleUi.transformTsvToJsonWithHeaders'),
+      description: exampleText('exampleUi.convertATsvFileWithHeadersIntoA'),
+      sampleText: `item	material	quantity
 
 
 Hat	Wool	3
@@ -78,7 +85,7 @@ Sculpture	Bronze	1
 Table	Wood	1
 
 Bookshelf	Wood	2`,
-    sampleResult: `[
+      sampleResult: `[
   {
     "item": "Hat",
     "material": "Wool",
@@ -115,16 +122,15 @@ Bookshelf	Wood	2`,
     "quantity": 2
   }
 ]`,
-    sampleOptions: {
-      ...initialValues
+      sampleOptions: {
+        ...initialValues
+      }
     }
-  }
-];
+  ];
 
-export default function TsvToJson({
-  title,
-  longDescription
-}: ToolComponentProps) {
+  // 本工具的展示文案随语言切换更新；示例原始数据与计算参数保持不变。
+  const { t: inlineText } = useInlineTranslation('csv');
+
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');
 
@@ -137,16 +143,16 @@ export default function TsvToJson({
     updateField
   }) => [
     {
-      title: 'Input CSV Format',
+      title: inlineText('csvToJson.inputCsvFormat'),
       component: (
         <Box>
           <TextFieldWithDesc
-            description="Character used to qutoe tsv values"
+            description={inlineText('inline.characterUsedToQutoeTsvValues')}
             onOwnChange={(val) => updateField('quote', val)}
             value={values.quote}
           />
           <TextFieldWithDesc
-            description="Symbol use to mark comments in the TSV"
+            description={inlineText('inline.symbolUseToMarkCommentsInThe')}
             value={values.comment}
             onOwnChange={(val) => updateField('comment', val)}
           />
@@ -154,36 +160,38 @@ export default function TsvToJson({
       )
     },
     {
-      title: 'Conversion Options',
+      title: inlineText('csvToJson.conversionOptions'),
       component: (
         <Box>
           <CheckboxWithDesc
             checked={values.useHeaders}
             onChange={(value) => updateField('useHeaders', value)}
-            title="Use Headers"
-            description="First row is treated as column headers"
+            title={inlineText('csvToJson.useHeaders')}
+            description={inlineText('inline.firstRowIsTreatedAsColumnHeaders')}
           />
           <CheckboxWithDesc
             checked={values.dynamicTypes}
             onChange={(value) => updateField('dynamicTypes', value)}
-            title="Dynamic Types"
-            description="Convert numbers and booleans to their proper types"
+            title={inlineText('csvToJson.dynamicTypes')}
+            description={inlineText(
+              'inline.convertNumbersAndBooleansToTheirProper'
+            )}
           />
         </Box>
       )
     },
     {
-      title: 'Output Formatting',
+      title: inlineText('inline.outputFormatting'),
       component: (
         <Box>
           <SimpleRadio
             onClick={() => updateField('indentationType', 'space')}
             checked={values.indentationType === 'space'}
-            title={'Use Spaces for indentation'}
+            title={inlineText('inline.useSpacesForIndentation')}
           />
           {values.indentationType === 'space' && (
             <TextFieldWithDesc
-              description="Number of spaces for indentation"
+              description={inlineText('inline.numberOfSpacesForIndentation')}
               value={values.spacesCount}
               onOwnChange={(val) =>
                 updateNumberField(val, 'spacesCount', updateField)
@@ -194,12 +202,12 @@ export default function TsvToJson({
           <SimpleRadio
             onClick={() => updateField('indentationType', 'tab')}
             checked={values.indentationType === 'tab'}
-            title={'Use Tabs for indentation'}
+            title={inlineText('inline.useTabsForIndentation')}
           />
           <SimpleRadio
             onClick={() => updateField('indentationType', 'none')}
             checked={values.indentationType === 'none'}
-            title={'Minify JSON'}
+            title={inlineText('inline.minifyJson')}
           />
         </Box>
       )
@@ -217,14 +225,18 @@ export default function TsvToJson({
       getGroups={getGroups}
       inputComponent={
         <ToolCodeInput
-          title="Input TSV"
+          title={inlineText('inline.inputTsv')}
           value={input}
           onChange={setInput}
           language="tsv"
         />
       }
       resultComponent={
-        <ToolTextResult title="Output JSON" value={result} extension={'json'} />
+        <ToolTextResult
+          title={inlineText('csvToJson.resultTitle')}
+          value={result}
+          extension={'json'}
+        />
       }
       toolInfo={{ title: `What is a ${title}?`, description: longDescription }}
     />

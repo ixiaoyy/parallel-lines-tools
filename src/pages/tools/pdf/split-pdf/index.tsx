@@ -1,3 +1,4 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
 import { Box, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import ToolFileResult from '@components/result/ToolFileResult';
@@ -18,37 +19,39 @@ const initialValues: InitialValuesType = {
   pageRanges: ''
 };
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Extract Specific Pages',
-    description: 'Extract pages 1, 5, 6, 7, and 8 from a PDF document.',
-    sampleText: '',
-    sampleResult: '',
-    sampleOptions: {
-      pageRanges: '1,5-8'
-    }
-  },
-  {
-    title: 'Extract First and Last Pages',
-    description: 'Extract only the first and last pages from a PDF document.',
-    sampleText: '',
-    sampleResult: '',
-    sampleOptions: {
-      pageRanges: '1,10'
-    }
-  },
-  {
-    title: 'Extract a Range of Pages',
-    description: 'Extract a continuous range of pages from a PDF document.',
-    sampleText: '',
-    sampleResult: '',
-    sampleOptions: {
-      pageRanges: '3-7'
-    }
-  }
-];
-
 export default function SplitPdf({ title }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('pdf');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.extractSpecificPages'),
+      description: exampleText('exampleUi.extractPages1567And8'),
+      sampleText: '',
+      sampleResult: '',
+      sampleOptions: {
+        pageRanges: '1,5-8'
+      }
+    },
+    {
+      title: exampleText('exampleUi.extractFirstAndLastPages'),
+      description: exampleText('exampleUi.extractOnlyTheFirstAndLastPagesFrom'),
+      sampleText: '',
+      sampleResult: '',
+      sampleOptions: {
+        pageRanges: '1,10'
+      }
+    },
+    {
+      title: exampleText('exampleUi.extractARangeOfPages'),
+      description: exampleText('exampleUi.extractAContinuousRangeOfPagesFromA'),
+      sampleText: '',
+      sampleResult: '',
+      sampleOptions: {
+        pageRanges: '3-7'
+      }
+    }
+  ];
+
   const { t } = useTranslation('pdf');
   const [input, setInput] = useState<File | null>(null);
   const [result, setResult] = useState<File | null>(null);

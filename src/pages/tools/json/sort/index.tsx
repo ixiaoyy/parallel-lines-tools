@@ -1,3 +1,5 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import React, { useState } from 'react';
 import ToolCodeInput from '@components/input/ToolCodeInput';
@@ -19,13 +21,20 @@ const initialValues: InitialValuesType = {
   order: 'asc'
 };
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Sort by name ascending',
-    description:
-      'Sort a JSON array of objects alphabetically by the "name" key.',
-    sampleText: `[{"name":"Charlie","age":30},{"name":"Alice","age":25},{"name":"Bob","age":35}]`,
-    sampleResult: `[
+export default function SortJson({
+  title,
+  longDescription
+}: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('json');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.sortByNameAscending'),
+      description: exampleText(
+        'exampleUi.sortAJsonArrayOfObjectsAlphabeticallyBy'
+      ),
+      sampleText: `[{"name":"Charlie","age":30},{"name":"Alice","age":25},{"name":"Bob","age":35}]`,
+      sampleResult: `[
   {
     "name": "Alice",
     "age": 25
@@ -39,26 +48,26 @@ const exampleCards: CardExampleType<InitialValuesType>[] = [
     "age": 30
   }
 ]`,
-    sampleOptions: { mode: 'value', key: 'name', order: 'asc' }
-  },
-  {
-    title: 'Sort object keys alphabetically',
-    description:
-      'Sort the keys of a JSON object alphabetically in ascending order.',
-    sampleText: `{"zebra":1,"apple":2,"mango":3}`,
-    sampleResult: `{
+      sampleOptions: { mode: 'value', key: 'name', order: 'asc' }
+    },
+    {
+      title: exampleText('sortJson.options.sortByKey'),
+      description: exampleText(
+        'exampleUi.sortTheKeysOfAJsonObjectAlphabetically'
+      ),
+      sampleText: `{"zebra":1,"apple":2,"mango":3}`,
+      sampleResult: `{
   "apple": 2,
   "mango": 3,
   "zebra": 1
 }`,
-    sampleOptions: { mode: 'key', key: '', order: 'asc' }
-  }
-];
+      sampleOptions: { mode: 'key', key: '', order: 'asc' }
+    }
+  ];
 
-export default function SortJson({
-  title,
-  longDescription
-}: ToolComponentProps) {
+  // 本工具的展示文案随语言切换更新；示例原始数据与计算参数保持不变。
+  const { t: inlineText } = useInlineTranslation('json');
+
   const { t } = useTranslation('json');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');
@@ -72,7 +81,11 @@ export default function SortJson({
         setFormat(format);
       } catch (error) {
         setResult(
-          ` ${error instanceof Error ? error.message : 'Invalid JSON format'}`
+          ` ${
+            error instanceof Error
+              ? error.message
+              : inlineText('inline.invalidJsonFormat')
+          }`
         );
       }
     }
@@ -117,7 +130,7 @@ export default function SortJson({
             <SelectWithDesc
               selected={values.key}
               options={[
-                { label: 'Please select a key', value: '' },
+                { label: inlineText('inline.pleaseSelectAKey'), value: '' },
                 ...keyOptions
               ]}
               onChange={(value) => updateField('key', value)}

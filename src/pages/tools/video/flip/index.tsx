@@ -1,3 +1,5 @@
+import i18n from '../../../../i18n';
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import { useCallback, useState } from 'react';
 import * as Yup from 'yup';
@@ -12,25 +14,28 @@ import { FlipOrientation, InitialValuesType } from './types';
 import SimpleRadio from '@components/options/SimpleRadio';
 import { useTranslation } from 'react-i18next';
 
+// 导出的校验器保留原有入口；校验发生时再按当前语言生成提示。
+export const validationSchema = Yup.object({
+  orientation: Yup.string()
+    .oneOf(['horizontal', 'vertical'], () =>
+      i18n.t('video:inline.orientationValues')
+    )
+    .required(() => i18n.t('video:inline.orientationIsRequired'))
+});
+
 export const initialValues: InitialValuesType = {
   orientation: 'horizontal'
 };
 
-export const validationSchema = Yup.object({
-  orientation: Yup.string()
-    .oneOf(
-      ['horizontal', 'vertical'],
-      'Orientation must be horizontal or vertical'
-    )
-    .required('Orientation is required')
-});
-
-const orientationOptions: { value: FlipOrientation; label: string }[] = [
-  { value: 'horizontal', label: 'Horizontal (Mirror)' },
-  { value: 'vertical', label: 'Vertical (Upside Down)' }
-];
-
 export default function FlipVideo({ title }: ToolComponentProps) {
+  // 仅本地化界面展示与校验提示；格式参数和处理流程保持原样。
+  const { t: inlineText } = useInlineTranslation('video');
+
+  const orientationOptions: { value: FlipOrientation; label: string }[] = [
+    { value: 'horizontal', label: inlineText('flip.horizontalLabel') },
+    { value: 'vertical', label: inlineText('flip.verticalLabel') }
+  ];
+
   const { t } = useTranslation('video');
   const [input, setInput] = useState<File | null>(null);
   const [result, setResult] = useState<File | null>(null);

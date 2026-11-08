@@ -1,3 +1,4 @@
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import { ToolComponentProps } from '@tools/defineTool';
 import { InitialValuesType } from './type';
 import * as Yup from 'yup';
@@ -19,18 +20,20 @@ const initialValues: InitialValuesType = {
   rotateMethod: 'Preset'
 };
 
-const validationSchema = Yup.object({
-  rotateAngle: Yup.number().when('rotateMethod', {
-    is: 'degrees',
-    then: (schema) =>
-      schema
-        .min(-360, 'Rotate angle must be at least -360')
-        .max(360, 'Rotate angle must be at most 360')
-        .required('Rotate angle is required')
-  })
-});
-
 export default function RotateImage({ title }: ToolComponentProps) {
+  // 仅本地化界面展示与校验提示；格式参数和处理流程保持原样。
+  const { t: inlineText } = useInlineTranslation('image');
+  const validationSchema = Yup.object({
+    rotateAngle: Yup.number().when('rotateMethod', {
+      is: 'degrees',
+      then: (schema) =>
+        schema
+          .min(-360, inlineText('inline.rotateAngleMustBeAtLeast360'))
+          .max(360, inlineText('inline.rotateAngleMustBeAtMost360'))
+          .required(inlineText('inline.rotateAngleIsRequired'))
+    })
+  });
+
   const { t } = useTranslation('image');
   const [input, setInput] = useState<File | null>(null);
   const [result, setResult] = useState<File | null>(null);
@@ -83,9 +86,9 @@ export default function RotateImage({ title }: ToolComponentProps) {
                   onChange={(val) => updateField('rotateAngle', val)}
                   description={''}
                   options={[
-                    { label: '90 degrees', value: '90' },
-                    { label: '180 degrees', value: '180' },
-                    { label: '270 degrees', value: '270' }
+                    { label: inlineText('inline.90Degrees'), value: '90' },
+                    { label: inlineText('inline.180Degrees'), value: '180' },
+                    { label: inlineText('inline.270Degrees'), value: '270' }
                   ]}
                 />
               </Box>

@@ -1,3 +1,4 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import ToolContent from '@components/ToolContent';
 import ToolTextInput from '@components/input/ToolTextInput';
@@ -11,26 +12,26 @@ type InitialValuesType = Record<string, never>;
 
 const initialValues: InitialValuesType = {};
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Encode a message with ROT13',
-    description:
-      'This example shows how to encode a simple message using ROT13 cipher.',
-    sampleText: 'Hello, World!',
-    sampleResult: 'Uryyb, Jbeyq!',
-    sampleOptions: {}
-  },
-  {
-    title: 'Decode a ROT13 message',
-    description:
-      'This example shows how to decode a message that was encoded with ROT13.',
-    sampleText: 'Uryyb, Jbeyq!',
-    sampleResult: 'Hello, World!',
-    sampleOptions: {}
-  }
-];
-
 export default function Rot13({ title }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('string');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.encodeAMessageWithRot13'),
+      description: exampleText('exampleUi.thisExampleShowsHowToEncodeASimple2'),
+      sampleText: 'Hello, World!',
+      sampleResult: 'Uryyb, Jbeyq!',
+      sampleOptions: {}
+    },
+    {
+      title: exampleText('exampleUi.decodeARot13Message'),
+      description: exampleText('exampleUi.thisExampleShowsHowToDecodeAMessage'),
+      sampleText: 'Uryyb, Jbeyq!',
+      sampleResult: 'Hello, World!',
+      sampleOptions: {}
+    }
+  ];
+
   const { t } = useTranslation('string');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');

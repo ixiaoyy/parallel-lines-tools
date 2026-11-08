@@ -1,7 +1,6 @@
 import { Box, Button, Stack, styled, useTheme } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import ToolBreadcrumb from './ToolBreadcrumb';
-import { capitalizeFirstLetter } from '../utils/string';
 import Grid from '@mui/material/Grid';
 import { Icon, IconifyIcon } from '@iconify/react';
 import { categoriesColors } from '../config/uiConfig';
@@ -11,7 +10,6 @@ import { isBookmarked, toggleBookmarked } from '@utils/bookmark';
 import IconButton from '@mui/material/IconButton';
 import { useTranslation } from 'react-i18next';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { validNamespaces } from '../i18n';
 
 const StyledButton = styled(Button)(({ theme }) => ({
   backgroundColor: 'white',
@@ -62,7 +60,7 @@ function ToolLinks() {
             variant="outlined"
             onClick={() => scrollToElement('tool')}
           >
-            Use This Tool
+            {t('toolHeader.useTool')}
           </StyledButton>
         </Grid>
       )}
@@ -101,7 +99,7 @@ export default function ToolHeader({
     <Box my={4}>
       <ToolBreadcrumb
         items={[
-          { title: 'All tools', link: '/' },
+          { title: t('toolHeader.allTools'), link: '/' },
           {
             title: getToolsByCategory([], t).find(
               (category) => category.type === type
@@ -114,11 +112,15 @@ export default function ToolHeader({
       <Grid mt={1} container spacing={2}>
         <Grid item xs={12} md={8}>
           <Stack direction={'row'} spacing={2} alignItems={'center'}>
-            <Typography mb={2} fontSize={30} color={'primary'}>
+            <Typography component="h1" mb={2} fontSize={30} color={'primary'}>
               {title}
             </Typography>
             <IconButton
-              onClick={(e) => {
+              aria-label={t(
+                bookmarked ? 'toolHeader.unbookmark' : 'toolHeader.bookmark'
+              )}
+              aria-pressed={bookmarked}
+              onClick={() => {
                 toggleBookmarked(path);
                 setBookmarked(!bookmarked);
               }}
@@ -138,12 +140,18 @@ export default function ToolHeader({
           <ToolLinks />
         </Grid>
 
+        {/* 手机优先展示操作区，装饰图标不占据首屏；桌面保持原有标题布局。 */}
         {icon && (
-          <Grid item xs={12} md={4}>
+          <Grid
+            item
+            xs={12}
+            md={4}
+            sx={{ display: { xs: 'none', md: 'block' } }}
+          >
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
               <Icon
                 icon={icon}
-                fontSize={'250'}
+                fontSize={'140'}
                 color={
                   categoriesColors[
                     Math.floor(Math.random() * categoriesColors.length)

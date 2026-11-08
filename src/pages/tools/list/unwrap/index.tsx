@@ -1,3 +1,5 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import ToolContent from '@components/ToolContent';
@@ -34,66 +36,76 @@ const initialValues: InitialValuesType = {
   right: ''
 };
 
-const validationSchema = Yup.object({
-  splitSeparator: Yup.string().required('The separator is required'),
-  joinSeparator: Yup.string().required('The join separator is required')
-});
-
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Unwrap quotes from list items',
-    description:
-      'This example shows how to remove quotes from each item in a list.',
-    sampleText: '"apple"\n"banana"\n"orange"',
-    sampleResult: 'apple\nbanana\norange',
-    sampleOptions: {
-      splitOperatorType: 'symbol',
-      splitSeparator: '\n',
-      joinSeparator: '\n',
-      deleteEmptyItems: true,
-      multiLevel: true,
-      trimItems: true,
-      left: '"',
-      right: '"'
-    }
-  },
-  {
-    title: 'Unwrap multiple levels of characters',
-    description:
-      'This example shows how to remove multiple levels of the same character from each item.',
-    sampleText: '###Hello###\n##World##\n#Test#',
-    sampleResult: 'Hello\nWorld\nTest',
-    sampleOptions: {
-      splitOperatorType: 'symbol',
-      splitSeparator: '\n',
-      joinSeparator: '\n',
-      deleteEmptyItems: true,
-      multiLevel: true,
-      trimItems: true,
-      left: '#',
-      right: '#'
-    }
-  },
-  {
-    title: 'Unwrap and join with custom separator',
-    description:
-      'This example shows how to unwrap items and join them with a custom separator.',
-    sampleText: '[item1]\n[item2]\n[item3]',
-    sampleResult: 'item1, item2, item3',
-    sampleOptions: {
-      splitOperatorType: 'symbol',
-      splitSeparator: '\n',
-      joinSeparator: ', ',
-      deleteEmptyItems: true,
-      multiLevel: false,
-      trimItems: true,
-      left: '[',
-      right: ']'
-    }
-  }
-];
-
 export default function Unwrap({ title }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('list');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.unwrapQuotesFromListItems'),
+      description: exampleText(
+        'exampleUi.thisExampleShowsHowToRemoveQuotesFrom'
+      ),
+      sampleText: '"apple"\n"banana"\n"orange"',
+      sampleResult: 'apple\nbanana\norange',
+      sampleOptions: {
+        splitOperatorType: 'symbol',
+        splitSeparator: '\n',
+        joinSeparator: '\n',
+        deleteEmptyItems: true,
+        multiLevel: true,
+        trimItems: true,
+        left: '"',
+        right: '"'
+      }
+    },
+    {
+      title: exampleText('exampleUi.unwrapMultipleLevelsOfCharacters'),
+      description: exampleText(
+        'exampleUi.thisExampleShowsHowToRemoveMultipleLevels'
+      ),
+      sampleText: '###Hello###\n##World##\n#Test#',
+      sampleResult: 'Hello\nWorld\nTest',
+      sampleOptions: {
+        splitOperatorType: 'symbol',
+        splitSeparator: '\n',
+        joinSeparator: '\n',
+        deleteEmptyItems: true,
+        multiLevel: true,
+        trimItems: true,
+        left: '#',
+        right: '#'
+      }
+    },
+    {
+      title: exampleText('exampleUi.unwrapAndJoinWithCustomSeparator'),
+      description: exampleText('exampleUi.thisExampleShowsHowToUnwrapItemsAnd'),
+      sampleText: '[item1]\n[item2]\n[item3]',
+      sampleResult: 'item1, item2, item3',
+      sampleOptions: {
+        splitOperatorType: 'symbol',
+        splitSeparator: '\n',
+        joinSeparator: ', ',
+        deleteEmptyItems: true,
+        multiLevel: false,
+        trimItems: true,
+        left: '[',
+        right: ']'
+      }
+    }
+  ];
+
+  // 本工具的展示文案随语言切换更新；示例原始数据与计算参数保持不变。
+  const { t: inlineText } = useInlineTranslation(['list', 'translation']);
+
+  const validationSchema = Yup.object({
+    splitSeparator: Yup.string().required(
+      inlineText('inline.theSeparatorIsRequired')
+    ),
+    joinSeparator: Yup.string().required(
+      inlineText('inline.theJoinSeparatorIsRequired')
+    )
+  });
+
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');
 
@@ -115,9 +127,13 @@ export default function Unwrap({ title }: ToolComponentProps) {
         );
       } catch (error) {
         if (error instanceof Error) {
-          setResult(`Error: ${error.message}`);
+          setResult(
+            inlineText('translation:common.error', {
+              error: String(error.message)
+            })
+          );
         } else {
-          setResult('An unknown error occurred');
+          setResult(inlineText('inline.anUnknownErrorOccurred'));
         }
       }
     }
@@ -128,60 +144,62 @@ export default function Unwrap({ title }: ToolComponentProps) {
     updateField
   }) => [
     {
-      title: 'Split Options',
+      title: inlineText('duplicate.splitOptions'),
       component: (
         <Box>
           <SimpleRadio
             onClick={() => updateField('splitOperatorType', 'symbol')}
             checked={values.splitOperatorType === 'symbol'}
-            title={'Split by Symbol'}
+            title={inlineText('duplicate.splitBySymbol')}
           />
           <SimpleRadio
             onClick={() => updateField('splitOperatorType', 'regex')}
             checked={values.splitOperatorType === 'regex'}
-            title={'Split by Regular Expression'}
+            title={inlineText('duplicate.splitByRegex')}
           />
           <TextFieldWithDesc
             value={values.splitSeparator}
             onOwnChange={(val) => updateField('splitSeparator', val)}
-            description={'Separator to split the list'}
+            description={inlineText('duplicate.splitSeparatorDescription')}
           />
           <TextFieldWithDesc
             value={values.joinSeparator}
             onOwnChange={(val) => updateField('joinSeparator', val)}
-            description={'Separator to join the unwrapped list'}
+            description={inlineText('inline.separatorToJoinTheUnwrappedList')}
           />
         </Box>
       )
     },
     {
-      title: 'Unwrap Options',
+      title: inlineText('inline.unwrapOptions'),
       component: (
         <Box>
           <TextFieldWithDesc
             value={values.left}
             onOwnChange={(val) => updateField('left', val)}
-            description={'Characters to remove from the left side'}
+            description={inlineText('inline.charactersToRemoveFromTheLeftSide')}
           />
           <TextFieldWithDesc
             value={values.right}
             onOwnChange={(val) => updateField('right', val)}
-            description={'Characters to remove from the right side'}
+            description={inlineText(
+              'inline.charactersToRemoveFromTheRightSide'
+            )}
           />
           <CheckboxWithDesc
             checked={values.multiLevel}
             onChange={(checked) => updateField('multiLevel', checked)}
-            title={'Remove multiple levels of wrapping'}
+            title={inlineText('inline.removeMultipleLevelsOfWrapping')}
           />
           <CheckboxWithDesc
             checked={values.trimItems}
             onChange={(checked) => updateField('trimItems', checked)}
-            title={'Trim whitespace from items'}
+            title={inlineText('inline.trimWhitespaceFromItems')}
           />
           <CheckboxWithDesc
             checked={values.deleteEmptyItems}
             onChange={(checked) => updateField('deleteEmptyItems', checked)}
-            title={'Remove empty items'}
+            title={inlineText('findMostPopular.removeEmptyItems')}
           />
         </Box>
       )
@@ -192,16 +210,24 @@ export default function Unwrap({ title }: ToolComponentProps) {
     <ToolContent
       title={title}
       inputComponent={
-        <ToolTextInput title="Input List" value={input} onChange={setInput} />
+        <ToolTextInput
+          title={inlineText('chunk.inputTitle')}
+          value={input}
+          onChange={setInput}
+        />
       }
-      resultComponent={<ToolTextResult title="Unwrapped List" value={result} />}
+      resultComponent={
+        <ToolTextResult
+          title={inlineText('inline.unwrappedList')}
+          value={result}
+        />
+      }
       initialValues={initialValues}
       getGroups={getGroups}
       validationSchema={validationSchema}
       toolInfo={{
-        title: 'List Unwrapping',
-        description:
-          "This tool allows you to remove wrapping characters from each item in a list. You can specify characters to remove from the left and right sides, handle multiple levels of wrapping, and control how the list is processed. It's useful for cleaning up data, removing quotes or brackets, and formatting lists."
+        title: inlineText('inline.listUnwrapping'),
+        description: inlineText('inline.thisToolAllowsYouToRemoveWrapping')
       }}
       exampleCards={exampleCards}
       input={input}

@@ -1,3 +1,4 @@
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import React, { useState } from 'react';
 import * as Yup from 'yup';
@@ -22,6 +23,9 @@ const validationSchema = Yup.object({
 });
 
 export default function CreateTransparent({ title }: ToolComponentProps) {
+  // 仅本地化界面展示与校验提示；格式参数和处理流程保持原样。
+  const { t: inlineText } = useInlineTranslation('image');
+
   const [input, setInput] = useState<File | null>(null);
   const [result, setResult] = useState<File | null>(null);
 
@@ -94,28 +98,30 @@ export default function CreateTransparent({ title }: ToolComponentProps) {
     updateField
   }) => [
     {
-      title: 'From color and similarity',
+      title: inlineText('inline.fromColorAndSimilarity'),
       component: (
         <Box>
           <ColorSelector
             value={values.fromColor}
             onColorChange={(val) => updateField('fromColor', val)}
-            description={'Replace this color (from color)'}
+            description={inlineText(
+              'changeColors.fromColor.selectorDescription'
+            )}
             inputProps={{ 'data-testid': 'color-input' }}
           />
           <TextFieldWithDesc
             value={values.similarity}
             onOwnChange={(val) => updateField('similarity', val)}
-            description={
-              'Match this % of similar colors of the from color. For example, 10% white will match white and a little bit of gray.'
-            }
+            description={inlineText(
+              'changeColors.fromColor.similarityDescription'
+            )}
           />
 
           {/* NEW FEATURE */}
           <ColorSelector
             value={values.backgroundColor}
             onColorChange={(val) => updateField('backgroundColor', val)}
-            description={'Background color for replaced pixels'}
+            description={inlineText('inline.backgroundColorForReplacedPixels')}
           />
         </Box>
       )
@@ -130,12 +136,12 @@ export default function CreateTransparent({ title }: ToolComponentProps) {
           value={input}
           onChange={setInput}
           accept={['image/*']}
-          title={'Input image'}
+          title={inlineText('changeColors.inputTitle')}
         />
       }
       resultComponent={
         <ToolFileResult
-          title={'Transparent PNG'}
+          title={inlineText('inline.transparentPng')}
           value={result}
           extension={'png'}
         />
@@ -146,9 +152,8 @@ export default function CreateTransparent({ title }: ToolComponentProps) {
       input={input}
       validationSchema={validationSchema}
       toolInfo={{
-        title: 'Create Transparent PNG',
-        description:
-          'This tool allows you to make specific colors in an image transparent. You can select the color to replace and adjust the similarity threshold to include similar colors.'
+        title: inlineText('createTransparent.title'),
+        description: inlineText('inline.thisToolAllowsYouToMakeSpecific')
       }}
     />
   );

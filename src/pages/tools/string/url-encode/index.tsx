@@ -1,3 +1,4 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import { useState } from 'react';
 import ToolTextResult from '@components/result/ToolTextResult';
@@ -15,32 +16,34 @@ const initialValues: InitialValuesType = {
   nonSpecialChar: false
 };
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Encode an actual URL',
-    description:
-      'This example URL-encodes a string that also happens to be a valid web link. Special characters in this example are a colon, slash, question mark and equals sign.',
-    sampleText: 'https://omnitools.app/',
-    sampleResult: 'https%3A%2F%2Fomnitools.app%2F',
-    sampleOptions: initialValues
-  },
-  {
-    title: 'Encode All Characters',
-    description:
-      "In this example, we've enabled the option that encodes absolutely all characters in a string to URL-encoding. This option makes non-special characters, such as letters get encoded to their hex codes prefixed by a percent sign.",
-    sampleText: "I can't believe it's not butter!",
-    sampleResult:
-      '%49%20%63%61%6E%27%74%20%62%65%6C%69%65%76%65%20%69%74%27%73%20%6E%6F%74%20%62%75%74%74%65%72%21',
-    sampleOptions: {
-      nonSpecialChar: true
-    }
-  }
-];
-
 export default function EncodeString({
   title,
   longDescription
 }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('string');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.encodeAnActualUrl'),
+      description: exampleText(
+        'exampleUi.thisExampleUrlEncodesAStringThatAlso'
+      ),
+      sampleText: 'https://omnitools.app/',
+      sampleResult: 'https%3A%2F%2Fomnitools.app%2F',
+      sampleOptions: initialValues
+    },
+    {
+      title: exampleText('exampleUi.encodeAllCharacters'),
+      description: exampleText('exampleUi.inThisExampleWeVeEnabledTheOption'),
+      sampleText: "I can't believe it's not butter!",
+      sampleResult:
+        '%49%20%63%61%6E%27%74%20%62%65%6C%69%65%76%65%20%69%74%27%73%20%6E%6F%74%20%62%75%74%74%65%72%21',
+      sampleOptions: {
+        nonSpecialChar: true
+      }
+    }
+  ];
+
   const { t } = useTranslation('string');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');

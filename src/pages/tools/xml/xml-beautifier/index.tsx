@@ -1,3 +1,4 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import ToolContent from '@components/ToolContent';
 import { ToolComponentProps } from '@tools/defineTool';
@@ -14,17 +15,21 @@ const initialValues: InitialValuesType = {
   preserveAttributes: true
 };
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Beautify XML',
-    description: 'Beautify a compact XML string for readability.',
-    sampleText: '<root><item>1</item><item>2</item></root>',
-    sampleResult: `<root>\n  <item>1</item>\n  <item>2</item>\n</root>`,
-    sampleOptions: { preserveAttributes: true }
-  }
-];
-
 export default function XmlBeautifier({ title }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('xml');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.beautifyXml'),
+      description: exampleText(
+        'exampleUi.beautifyACompactXmlStringForReadability'
+      ),
+      sampleText: '<root><item>1</item><item>2</item></root>',
+      sampleResult: `<root>\n  <item>1</item>\n  <item>2</item>\n</root>`,
+      sampleOptions: { preserveAttributes: true }
+    }
+  ];
+
   const { t } = useTranslation('xml');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');

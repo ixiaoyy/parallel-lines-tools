@@ -1,3 +1,4 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import React, { useState } from 'react';
 import ToolTextInput from '@components/input/ToolTextInput';
@@ -34,24 +35,27 @@ const splitOperators: {
   }
 ];
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Reverse a List of Digits',
-    description:
-      'In this example, we load a list of digits in the input. The digits are separated by a mix of dot, comma, and semicolon characters, so we use the regular expression split mode and enter a regular expression that matches all these characters as the input item separator. In the output, we get a reversed list of digits that all use the semicolon as a separator.',
-    sampleText: `2, 9, 6; 3; 7. 4. 4. 2, 1; 4, 8. 4; 4. 8, 2, 5; 1; 7; 7. 0`,
-    sampleResult: `0; 7; 7; 1; 5; 2; 8; 4; 4; 8; 4; 1; 2; 4; 4; 7; 3; 6; 9; 2`,
-    sampleOptions: {
-      splitOperatorType: 'regex',
-      splitSeparator: '[;,.]\\s*',
-      joinSeparator: '; '
-    }
-  },
-  {
-    title: 'Reverse a Column of Words',
-    description:
-      'This example reverses a column of twenty three-syllable nouns and prints all the words from the bottom to top. To separate the list items, it uses the \n character as input item separator, which means that each item is on its own line..',
-    sampleText: `argument
+export default function Reverse({ title }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('list');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.reverseAListOfDigits'),
+      description: exampleText('exampleUi.inThisExampleWeLoadAListOf'),
+      sampleText: `2, 9, 6; 3; 7. 4. 4. 2, 1; 4, 8. 4; 4. 8, 2, 5; 1; 7; 7. 0`,
+      sampleResult: `0; 7; 7; 1; 5; 2; 8; 4; 4; 8; 4; 1; 2; 4; 4; 7; 3; 6; 9; 2`,
+      sampleOptions: {
+        splitOperatorType: 'regex',
+        splitSeparator: '[;,.]\\s*',
+        joinSeparator: '; '
+      }
+    },
+    {
+      title: exampleText('exampleUi.reverseAColumnOfWords'),
+      description: exampleText(
+        'exampleUi.thisExampleReversesAColumnOfTwentyThree'
+      ),
+      sampleText: `argument
 pollution
 emphasis
 vehicle
@@ -71,7 +75,7 @@ chemistry
 conclusion
 confusion
 memory`,
-    sampleResult: `memory
+      sampleResult: `memory
 confusion
 conclusion
 chemistry
@@ -91,27 +95,27 @@ vehicle
 emphasis
 pollution
 argument`,
-    sampleOptions: {
-      splitOperatorType: 'symbol',
-      splitSeparator: '\\n',
-      joinSeparator: '\\n'
+      sampleOptions: {
+        splitOperatorType: 'symbol',
+        splitSeparator: '\\n',
+        joinSeparator: '\\n'
+      }
+    },
+    {
+      title: exampleText('exampleUi.reverseARandomList'),
+      description: exampleText(
+        'exampleUi.inThisExampleTheListElementsAreRandom'
+      ),
+      sampleText: `Hamburg-21334-Dhaka-Sunny-Managua-Rainy-Chongqing-95123-Oakland`,
+      sampleResult: `Oakland, 95123, Chongqing, Rainy, Managua, Sunny, Dhaka, 21334, Hamburg`,
+      sampleOptions: {
+        splitOperatorType: 'symbol',
+        splitSeparator: '-',
+        joinSeparator: ', '
+      }
     }
-  },
-  {
-    title: 'Reverse a Random List',
-    description:
-      'In this example, the list elements are random cities, zip codes, and weather conditions. To reverse list elements, we first need to identify them and separate them apart. The input list incorrectly uses the dash symbol to separate the elements but the output list fixes this and uses commas.',
-    sampleText: `Hamburg-21334-Dhaka-Sunny-Managua-Rainy-Chongqing-95123-Oakland`,
-    sampleResult: `Oakland, 95123, Chongqing, Rainy, Managua, Sunny, Dhaka, 21334, Hamburg`,
-    sampleOptions: {
-      splitOperatorType: 'symbol',
-      splitSeparator: '-',
-      joinSeparator: ', '
-    }
-  }
-];
+  ];
 
-export default function Reverse({ title }: ToolComponentProps) {
   const { t } = useTranslation('list');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');

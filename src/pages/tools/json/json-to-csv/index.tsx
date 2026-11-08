@@ -1,3 +1,5 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import { useState } from 'react';
 import ToolContent from '@components/ToolContent';
 import ToolCodeInput from '@components/input/ToolCodeInput';
@@ -19,26 +21,31 @@ const initialValues: InitialValuesType = {
   quoteStrings: 'auto'
 };
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Array of objects',
-    description:
-      'Convert multiple JSON objects into CSV rows, one row per object.',
-    sampleText: `[
+export default function JsonToCsv({ title }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('json');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.arrayOfObjects'),
+      description: exampleText(
+        'exampleUi.convertMultipleJsonObjectsIntoCsvRowsOne'
+      ),
+      sampleText: `[
   { "name": "John Doe", "age": 25, "city": "New York" },
   { "name": "Jane Doe", "age": 30, "city": "Los Angeles" },
   { "name": "Bob Smith", "age": 22, "city": "Chicago" }
 ]`,
-    sampleResult: `name,age,city\nJohn Doe,25,New York\nJane Doe,30,Los Angeles\nBob Smith,22,Chicago`,
-    sampleOptions: {
-      ...initialValues
-    }
-  },
-  {
-    title: 'Nested object (dot notation)',
-    description:
-      'Nested keys are flattened using dot notation (e.g. address.city).',
-    sampleText: `[
+      sampleResult: `name,age,city\nJohn Doe,25,New York\nJane Doe,30,Los Angeles\nBob Smith,22,Chicago`,
+      sampleOptions: {
+        ...initialValues
+      }
+    },
+    {
+      title: exampleText('exampleUi.nestedObjectDotNotation'),
+      description: exampleText(
+        'exampleUi.nestedKeysAreFlattenedUsingDotNotationE'
+      ),
+      sampleText: `[
   {
     "name": "John Doe",
     "age": 25,
@@ -51,28 +58,31 @@ const exampleCards: CardExampleType<InitialValuesType>[] = [
     "hobbies": ["reading", "running"]
   }
 ]`,
-    sampleResult: `name,age,address.street,address.city,address.state,address.postalCode,hobbies[0],hobbies[1]\nJohn Doe,25,123 Main St,New York,NY,10001,reading,running`,
-    sampleOptions: {
-      ...initialValues
-    }
-  },
-  {
-    title: 'Sparse rows',
-    description:
-      'Missing keys are filled with empty values to keep columns aligned.',
-    sampleText: `[
+      sampleResult: `name,age,address.street,address.city,address.state,address.postalCode,hobbies[0],hobbies[1]\nJohn Doe,25,123 Main St,New York,NY,10001,reading,running`,
+      sampleOptions: {
+        ...initialValues
+      }
+    },
+    {
+      title: exampleText('exampleUi.sparseRows'),
+      description: exampleText(
+        'exampleUi.missingKeysAreFilledWithEmptyValuesTo'
+      ),
+      sampleText: `[
   { "name": "Alice", "age": 30 },
   { "name": "Bob", "city": "Paris" },
   { "name": "Carol", "age": 25, "city": "Rome" }
 ]`,
-    sampleResult: `name,age,city\nAlice,30,\nBob,,Paris\nCarol,25,Rome`,
-    sampleOptions: {
-      ...initialValues
+      sampleResult: `name,age,city\nAlice,30,\nBob,,Paris\nCarol,25,Rome`,
+      sampleOptions: {
+        ...initialValues
+      }
     }
-  }
-];
+  ];
 
-export default function JsonToCsv({ title }: ToolComponentProps) {
+  // 校验提示仅做语言接线，规则和数据处理保持不变。
+  const { t: inlineText } = useInlineTranslation('json');
+
   const { t } = useTranslation('json');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');
@@ -86,7 +96,11 @@ export default function JsonToCsv({ title }: ToolComponentProps) {
         setInputFormat(inputFormat);
       } catch (error) {
         setResult(
-          ` ${error instanceof Error ? error.message : 'Invalid JSON format'}`
+          ` ${
+            error instanceof Error
+              ? error.message
+              : inlineText('inline.invalidJsonFormat')
+          }`
         );
       }
     }

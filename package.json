@@ -14,7 +14,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && node scripts/package-source.mjs",
     "serve": "vite preview",
     "test": "vitest",
     "test:e2e": "playwright test",
@@ -69,6 +69,8 @@
     "lint-staged": "^15.4.3",
     "locize": "^4.0.14",
     "lodash": "^4.17.21",
+    "markdown-docx": "1.7.1",
+    "marked": "15.0.12",
     "mime": "^4.0.6",
     "morsee": "^1.0.9",
     "nerdamer-prime": "^1.2.4",

@@ -1,3 +1,4 @@
+import i18n from '../../../../i18n';
 import { Box, FormControlLabel, Checkbox } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 import * as Yup from 'yup';
@@ -14,25 +15,26 @@ import { resizeVideo } from './service';
 import { InitialValuesType, VideoResolution } from './types';
 import { useTranslation } from 'react-i18next';
 
+// 导出的校验器保留原有入口；校验发生时再按当前语言生成提示。
+export const validationSchema = Yup.object({
+  width: Yup.number()
+    .min(1, () => i18n.t('video:inline.widthMustBeAtLeast1'))
+    .max(7680, () => i18n.t('video:inline.widthMustBeAtMost7680'))
+    .required(() => i18n.t('video:inline.widthIsRequired')),
+  height: Yup.number()
+    .min(1, () => i18n.t('video:inline.heightMustBeAtLeast1'))
+    .max(4320, () => i18n.t('video:inline.heightMustBeAtMost4320'))
+    .required(() => i18n.t('video:inline.heightIsRequired')),
+  maintainAspectRatio: Yup.boolean(),
+  mode: Yup.string().oneOf(['preset', 'custom'])
+});
+
 export const initialValues: InitialValuesType = {
   width: 480,
   height: 480,
   maintainAspectRatio: true,
   mode: 'preset'
 };
-
-export const validationSchema = Yup.object({
-  width: Yup.number()
-    .min(1, 'Width must be at least 1')
-    .max(7680, 'Width must be at most 7680')
-    .required('Width is required'),
-  height: Yup.number()
-    .min(1, 'Height must be at least 1')
-    .max(4320, 'Height must be at most 4320')
-    .required('Height is required'),
-  maintainAspectRatio: Yup.boolean(),
-  mode: Yup.string().oneOf(['preset', 'custom'])
-});
 
 const resolutionOptions: { value: VideoResolution; label: string }[] = [
   { value: 240, label: '240p' },

@@ -39,5 +39,13 @@
       "description": "This tool allows you to view XML data in a hierarchical tree format, making it easier to explore and understand the structure of XML documents.",
       "title": "XML Viewer"
     }
+  },
+  "exampleUi": {
+    "beautifyXml": "Beautify XML",
+    "beautifyACompactXmlStringForReadability": "Beautify a compact XML string for readability.",
+    "validateXml": "Validate XML",
+    "checkIfAnXmlStringIsWellFormed": "Check if an XML string is well-formed.",
+    "invalidXml": "Invalid XML",
+    "exampleOfMalformedXml": "Example of malformed XML."
   }
 }

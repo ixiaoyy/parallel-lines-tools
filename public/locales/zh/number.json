@@ -25,7 +25,7 @@
     "shortDescription": "生成指定范围内的随机数",
     "startSequenceDescription": "从该数字开始序列。",
     "stepDescription": "将每个元素增加此量",
-    "title": "产生",
+    "title": "生成数字",
     "toolInfo": {
       "description": "此工具允许您生成具有可自定义参数的数字序列。您可以指定起始值、步长和元素数量。",
       "title": "生成数字"
@@ -177,7 +177,7 @@
     "resultTitle": "全部的",
     "runningSum": "运行总和",
     "shortDescription": "计算数字之和",
-    "title": "和",
+    "title": "数字求和",
     "toolInfo": {
       "description": "这是一个基于浏览器的在线实用程序，用于计算一组数字的总和。您可以输入用逗号、空格或任何其他字符（包括换行符）分隔的数字。您也可以直接粘贴一段包含要求和的数值的文本数据，该实用程序会提取这些数据并计算总和。",
       "title": "什么是数字总和计算器？"
@@ -188,5 +188,101 @@
     "longDescription": "这款计算器可帮助计算双芯电缆的电压降和功率损耗。它考虑了电缆长度、线规（横截面积）、材料电阻率和电流。该工具可计算往返电压降、电缆总电阻以及以热量形式耗散的功率。这对于电气工程师、电工和业余爱好者在设计电气系统时尤其有用，可确保负载下的电压水平保持在可接受的范围内。",
     "shortDescription": "根据长度、材料和电流计算电缆的电压降和功率损耗",
     "title": "电缆往返电压降"
+  },
+  "byteConverter": {
+    "description": "在不同字节单位之间换算，支持十进制 SI 和二进制 IEC 单位，也支持逐行批量转换。",
+    "inputTitle": "输入数值",
+    "outputTitle": "换算结果",
+    "shortDescription": "快速换算不同字节单位",
+    "title": "字节单位换算",
+    "unit": {
+      "from": "选择输入数值的单位，例如 KB、MB、GiB。",
+      "precision": "换算结果显示的小数位数。",
+      "title": "换算选项",
+      "to": "选择换算后的目标单位。"
+    }
+  },
+  "numberToWords": {
+    "description": "将数字转换为文字，输出语言与工具箱当前语言一致。",
+    "inputTitle": "输入数字",
+    "options": {
+      "title": "选项",
+      "uppercase": "大写",
+      "uppercaseDescription": "将输出文字转换为大写，常用于支票、发票等文档。",
+      "useAnd": "包含 and",
+      "useAndDescription": "在适用的位置加入 and，例如英文 One Hundred and Twenty。"
+    },
+    "outputTitle": "文字结果",
+    "shortDescription": "将数字转换为文字",
+    "title": "数字转文字",
+    "toolInfo": {
+      "description": "将数值转换为对应的文字形式，输出语言跟随工具箱当前语言。每行输入一个数字，可逐行批量转换。",
+      "title": "什么是数字转文字？"
+    }
+  },
+  "inline": {
+    "inputSeparatorcustomizeTheNumberSeparatorHereBy": "数值输入分隔符，可自行设置，默认使用换行。",
+    "firstTermIsRequired": "请填写首项。",
+    "commonDifferenceIsRequired": "请填写公差。",
+    "mustGenerateAtLeast1Term": "至少生成 1 项。",
+    "maximum1000TermsAllowed": "最多生成 1000 项。",
+    "numberOfTermsIsRequired": "请填写项数。",
+    "separatorIsRequired": "请填写分隔符。"
+  },
+  "genericCalc": {
+    "presets": "预设",
+    "preset": "预设值",
+    "variables": "变量",
+    "solveFor": "求解变量",
+    "extraOutputs": "其他输出",
+    "selectVariable": "请选择需要求解的变量。",
+    "noFormula": "未找到公式。",
+    "mathFail": "计算失败。",
+    "noSolution": "当前输入没有找到解。",
+    "labels": {
+      "voltage": "电压",
+      "current": "电流",
+      "resistance": "电阻",
+      "length": "长度",
+      "weight": "重量",
+      "sagDeflection": "垂度或挠度",
+      "tension": "张力",
+      "area": "面积",
+      "radius": "半径",
+      "diameter": "直径",
+      "volume": "体积",
+      "material": "材料",
+      "wireGauge": "线规",
+      "totalResistance": "总电阻",
+      "totalPowerDissipated": "总功耗",
+      "wireArea": "导线截面积",
+      "resistivity": "电阻率",
+      "voltageDrop": "电压降"
+    }
+  },
+  "exampleUi": {
+    "basicArithmeticSequence": "基础等差数列",
+    "generateASequenceStartingAt1IncreasingBy": "生成首项为 1、公差为 2、共 5 项的数列。",
+    "negativeSequence": "递减数列",
+    "generateADecreasingSequenceStartingAt10": "生成从 10 开始递减的数列。",
+    "decimalSequence": "小数数列",
+    "generateASequenceWithDecimalNumbers": "生成包含小数的数列。",
+    "convertGigabytesToMegabytes": "GB 转 MB",
+    "thisExampleConvertsAListOfStorageValues": "使用 SI 十进制单位制，将多行 GB 存储容量转换为 MB。每行对应一项容量，输出按指定精度显示换算结果。",
+    "convertMibToGibIecSystem": "MiB 转 GiB（IEC 单位制）",
+    "thisExampleConvertsValuesInMebibytesMibTo": "使用 IEC 二进制单位制，将多行 MiB 内存容量转换为 GiB，结果四舍五入并保留 2 位小数。",
+    "crossSystemConversionGbToGib": "跨单位制转换：GB 转 GiB",
+    "thisExampleDemonstratesACrossSystemConversionFrom": "将 SI 单位 GB 转换为 IEC 单位 GiB。由于两种单位大小不同，输出使用较高精度显示小数，便于比较操作系统和厂商标示的存储容量。",
+    "convertBytesToBits": "字节转比特",
+    "thisExampleConvertsValuesFromBytesBTo": "将字节 B 转换为比特 b。1 字节等于 8 比特，因此各输入值都乘以 8；结果均为整数，将小数精度设为 0。",
+    "spellOutALargeNumber": "将大数转换为文字",
+    "thisExampleConverts1234567IntoWords": "将 1,234,567 转换为文字，输出语言自动跟随所选界面语言。",
+    "convertDecimalNumbers": "转换小数",
+    "decimalNumbersAreConvertedWithTheFractionalPart": "将小数转换为文字，在整数部分之后读出小数点和小数部分。",
+    "uppercaseOutputForCheques": "支票用大写字母输出",
+    "uppercaseOutputIsCommonlyRequiredOnBankCheques": "银行支票和法律文书常用大写字母表示金额，以减少被篡改的风险。",
+    "batchConvertAListOfNumbers": "批量转换数字列表",
+    "eachLineIsProcessedIndependentlyPreservingTheLine": "逐行独立处理数字，输出保留原有行结构。",
+    "thisExampleReversesAColumnOfTwentyThree": "将竖排的 20 个三音节名词从下往上排列；输入按换行分隔，每个单词各占一行。"
   }
 }

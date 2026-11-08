@@ -13,7 +13,12 @@
     "useSpaces": "使用空格",
     "useSpacesDescription": "使用空格缩进输出",
     "useTabs": "使用标签",
-    "useTabsDescription": "使用制表符缩进输出。"
+    "useTabsDescription": "使用制表符缩进输出。",
+    "options": {
+      "title": "选项",
+      "preserveAttributesTitle": "保留属性格式",
+      "preserveAttributesDesc": "保留原始 XML 属性的格式和顺序。"
+    }
   },
   "xmlValidator": {
     "description": "验证 XML 语法和结构。",
@@ -34,5 +39,13 @@
       "description": "该工具允许您以分层树格式查看 XML 数据，从而更容易探索和理解 XML 文档的结构。",
       "title": "XML 查看器"
     }
+  },
+  "exampleUi": {
+    "beautifyXml": "格式化 XML",
+    "beautifyACompactXmlStringForReadability": "将紧凑的 XML 字符串格式化，便于阅读。",
+    "validateXml": "校验 XML",
+    "checkIfAnXmlStringIsWellFormed": "检查 XML 字符串的语法是否正确。",
+    "invalidXml": "无效的 XML",
+    "exampleOfMalformedXml": "格式错误的 XML 示例。"
   }
 }

@@ -1,3 +1,4 @@
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import React, { useState } from 'react';
 import ToolTextInput from '@components/input/ToolTextInput';
@@ -18,24 +19,31 @@ const initialValues = {
   trimItems: true,
   absolutelyUnique: false
 };
-const splitOperators: {
-  title: string;
-  description: string;
-  type: SplitOperatorType;
-}[] = [
-  {
-    title: 'Use a Symbol for Splitting',
-    description: 'Delimit input list items with a character.',
-    type: 'symbol'
-  },
-  {
-    title: 'Use a Regex for Splitting',
-    type: 'regex',
-    description: 'Delimit input list items with a regular expression.'
-  }
-];
 
 export default function FindUnique() {
+  // 本工具的展示文案随语言切换更新；示例原始数据与计算参数保持不变。
+  const { t: inlineText } = useInlineTranslation('list');
+  const splitOperators: {
+    title: string;
+    description: string;
+    type: SplitOperatorType;
+  }[] = [
+    {
+      title: inlineText('findMostPopular.splitOperators.symbol.title'),
+      description: inlineText(
+        'findMostPopular.splitOperators.symbol.description'
+      ),
+      type: 'symbol'
+    },
+    {
+      title: inlineText('findMostPopular.splitOperators.regex.title'),
+      type: 'regex',
+      description: inlineText(
+        'findMostPopular.splitOperators.regex.description'
+      )
+    }
+  ];
+
   const { t } = useTranslation('list');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');

@@ -4,9 +4,11 @@ import Categories from './Categories';
 import { Helmet } from 'react-helmet';
 import { useUserTypeFilter } from 'providers/UserTypeFilterProvider';
 import UserTypeFilter from '@components/UserTypeFilter';
+import { useTranslation } from 'react-i18next';
 
 export default function Home() {
   const theme = useTheme();
+  const { t } = useTranslation();
   const { selectedUserTypes, setSelectedUserTypes } = useUserTypeFilter();
   return (
     <Box
@@ -29,7 +31,10 @@ export default function Home() {
       justifyContent={'center'}
       width={'100%'}
     >
-      <Helmet title={'OmniTools'} />
+      <Helmet>
+        <title>{t('hero.brand')}</title>
+        <meta name="description" content={t('hero.description')} />
+      </Helmet>
       <Hero />
       <Box my={3}>
         <UserTypeFilter

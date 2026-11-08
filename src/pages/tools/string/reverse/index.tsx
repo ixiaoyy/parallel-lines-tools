@@ -1,3 +1,4 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import React, { useState, useRef } from 'react';
 import ToolTextInput from '@components/input/ToolTextInput';
@@ -20,45 +21,50 @@ const initialValues = {
   trim: false
 };
 
-const exampleCards: CardExampleType<typeof initialValues>[] = [
-  {
-    title: 'Simple Text Reversal',
-    description:
-      'Reverses each character in the text. Perfect for creating mirror text.',
-    sampleText: 'Hello World',
-    sampleResult: 'dlroW olleH',
-    sampleOptions: {
-      ...initialValues,
-      multiLine: false
-    }
-  },
-  {
-    title: 'Multi-line Reversal',
-    description:
-      'Reverses each line independently while preserving the line breaks.',
-    sampleText: 'First line\nSecond line\nThird line',
-    sampleResult: 'enil tsriF\nenil dnoceS\nenil drihT',
-    sampleOptions: {
-      ...initialValues,
-      multiLine: true
-    }
-  },
-  {
-    title: 'Clean Reversed Text',
-    description:
-      'Trims whitespace and skips empty lines before reversing the text.',
-    sampleText: '  Spaces removed  \n\nEmpty line skipped',
-    sampleResult: 'devomer secapS\ndeppiks enil ytpmE',
-    sampleOptions: {
-      ...initialValues,
-      multiLine: true,
-      emptyItems: true,
-      trim: true
-    }
-  }
-];
-
 export default function Reverse({ title }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('string');
+  const exampleCards: CardExampleType<typeof initialValues>[] = [
+    {
+      title: exampleText('exampleUi.simpleTextReversal'),
+      description: exampleText(
+        'exampleUi.reversesEachCharacterInTheTextPerfectFor'
+      ),
+      sampleText: 'Hello World',
+      sampleResult: 'dlroW olleH',
+      sampleOptions: {
+        ...initialValues,
+        multiLine: false
+      }
+    },
+    {
+      title: exampleText('exampleUi.multiLineReversal'),
+      description: exampleText(
+        'exampleUi.reversesEachLineIndependentlyWhilePreservingTheLine'
+      ),
+      sampleText: 'First line\nSecond line\nThird line',
+      sampleResult: 'enil tsriF\nenil dnoceS\nenil drihT',
+      sampleOptions: {
+        ...initialValues,
+        multiLine: true
+      }
+    },
+    {
+      title: exampleText('exampleUi.cleanReversedText'),
+      description: exampleText(
+        'exampleUi.trimsWhitespaceAndSkipsEmptyLinesBeforeReversing'
+      ),
+      sampleText: '  Spaces removed  \n\nEmpty line skipped',
+      sampleResult: 'devomer secapS\ndeppiks enil ytpmE',
+      sampleOptions: {
+        ...initialValues,
+        multiLine: true,
+        emptyItems: true,
+        trim: true
+      }
+    }
+  ];
+
   const { t } = useTranslation('string');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');

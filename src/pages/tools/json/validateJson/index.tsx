@@ -1,3 +1,4 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import ToolCodeInput from '@components/input/ToolCodeInput';
 import ToolTextResult from '@components/result/ToolTextResult';
@@ -8,46 +9,51 @@ import ToolContent from '@components/ToolContent';
 import { useTranslation } from 'react-i18next';
 import { JsonFormat } from '@utils/json';
 
-const exampleCards: CardExampleType<{}>[] = [
-  {
-    title: 'Valid JSON Object',
-    description:
-      'This example shows a correctly formatted JSON object. All property names and string values are enclosed in double quotes, and the overall structure is properly balanced with opening and closing braces.',
-    sampleText: `{
+export default function ValidateJson({ title }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('json');
+  const exampleCards: CardExampleType<{}>[] = [
+    {
+      title: exampleText('exampleUi.validJsonObject'),
+      description: exampleText(
+        'exampleUi.thisExampleShowsACorrectlyFormattedJsonObject'
+      ),
+      sampleText: `{
   "name": "John",
   "age": 30,
   "city": "New York"
 }`,
-    sampleResult: '✅ Valid JSON',
-    sampleOptions: {}
-  },
-  {
-    title: 'Invalid JSON Missing Quotes',
-    description:
-      'This example demonstrates an invalid JSON object where the property names are not enclosed in double quotes. According to the JSON standard, property names must always be enclosed in double quotes. Omitting the quotes will result in a syntax error.',
-    sampleText: `{
+      sampleResult: '✅ Valid JSON',
+      sampleOptions: {}
+    },
+    {
+      title: exampleText('exampleUi.invalidJsonMissingQuotes'),
+      description: exampleText(
+        'exampleUi.thisExampleDemonstratesAnInvalidJsonObjectWhere'
+      ),
+      sampleText: `{
   name: "John",
   age: 30,
   city: "New York"
 }`,
-    sampleResult: "❌ Error: Expected property name or '}' in JSON",
-    sampleOptions: {}
-  },
-  {
-    title: 'Invalid JSON with Trailing Comma',
-    description:
-      'This example shows an invalid JSON object with a trailing comma after the last key-value pair. In JSON, trailing commas are not allowed because they create ambiguity when parsing the data structure.',
-    sampleText: `{
+      sampleResult: "❌ Error: Expected property name or '}' in JSON",
+      sampleOptions: {}
+    },
+    {
+      title: exampleText('exampleUi.invalidJsonWithTrailingComma'),
+      description: exampleText(
+        'exampleUi.thisExampleShowsAnInvalidJsonObjectWith'
+      ),
+      sampleText: `{
   "name": "John",
   "age": 30,
   "city": "New York",
 }`,
-    sampleResult: '❌ Error: Expected double-quoted property name',
-    sampleOptions: {}
-  }
-];
+      sampleResult: '❌ Error: Expected double-quoted property name',
+      sampleOptions: {}
+    }
+  ];
 
-export default function ValidateJson({ title }: ToolComponentProps) {
   const { t } = useTranslation('json');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');

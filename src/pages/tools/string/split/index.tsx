@@ -1,3 +1,4 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import React, { useRef, useState } from 'react';
 import ToolTextInput from '@components/input/ToolTextInput';
@@ -69,13 +70,15 @@ const outputOptions: {
   }
 ];
 
-const exampleCards: CardExampleType<typeof initialValues>[] = [
-  {
-    title: 'Split German Numbers',
-    description:
-      'In this example, we break the text into pieces by two characters – a comma and space. As a result, we get a column of numbers from 1 to 10 in German.',
-    sampleText: `1 - eins, 2 - zwei, 3 - drei, 4 - vier, 5 - fünf, 6 - sechs, 7 - sieben, 8 - acht, 9 - neun, 10 - zehn`,
-    sampleResult: `1 - eins
+export default function SplitText({ title }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('string');
+  const exampleCards: CardExampleType<typeof initialValues>[] = [
+    {
+      title: exampleText('exampleUi.splitGermanNumbers'),
+      description: exampleText('exampleUi.inThisExampleWeBreakTheTextInto'),
+      sampleText: `1 - eins, 2 - zwei, 3 - drei, 4 - vier, 5 - fünf, 6 - sechs, 7 - sieben, 8 - acht, 9 - neun, 10 - zehn`,
+      sampleResult: `1 - eins
 2 - zwei
 3 - drei
 4 - vier
@@ -85,45 +88,42 @@ const exampleCards: CardExampleType<typeof initialValues>[] = [
 8 - acht
 9 - neun
 10 - zehn`,
-    sampleOptions: {
-      ...initialValues,
-      symbolValue: ',',
-      splitSeparatorType: 'symbol',
-      outputSeparator: '\n'
-    }
-  },
-  {
-    title: 'Text Cleanup via a Regular Expression',
-    description:
-      'In this example, we use a super smart regular expression trick to clean-up the text. This regexp finds all non-alphabetic characters and splits the text into pieces by these non-alphabetic chars. As a result, we extract only those parts of the text that contain Latin letters and words.',
-    sampleText: `Finding%№1.65*;?words()is'12#easy_`,
-    sampleResult: `Finding
+      sampleOptions: {
+        ...initialValues,
+        symbolValue: ',',
+        splitSeparatorType: 'symbol',
+        outputSeparator: '\n'
+      }
+    },
+    {
+      title: exampleText('exampleUi.textCleanupViaARegularExpression'),
+      description: exampleText('exampleUi.inThisExampleWeUseASuperSmart'),
+      sampleText: `Finding%№1.65*;?words()is'12#easy_`,
+      sampleResult: `Finding
 words
 is
 easy`,
-    sampleOptions: {
-      ...initialValues,
-      regexValue: '[^a-zA-Z]+',
-      splitSeparatorType: 'regex',
-      outputSeparator: '\n'
+      sampleOptions: {
+        ...initialValues,
+        regexValue: '[^a-zA-Z]+',
+        splitSeparatorType: 'regex',
+        outputSeparator: '\n'
+      }
+    },
+    {
+      title: exampleText('exampleUi.threeDotOutputSeparator'),
+      description: exampleText('exampleUi.thisExampleSplitsTheTextBySpacesAnd'),
+      sampleText: `If you started with $0.01 and doubled your money every day, it would take 27 days to become a millionaire.`,
+      sampleResult: `If...you...started...with...$0.01...and...doubled...your...money...every...day,...it...would...take...27...days...to...become...a...millionaire.!`,
+      sampleOptions: {
+        ...initialValues,
+        symbolValue: '',
+        splitSeparatorType: 'symbol',
+        outputSeparator: '...'
+      }
     }
-  },
-  {
-    title: 'Three-dot Output Separator',
-    description:
-      'This example splits the text by spaces and then places three dots between the words.',
-    sampleText: `If you started with $0.01 and doubled your money every day, it would take 27 days to become a millionaire.`,
-    sampleResult: `If...you...started...with...$0.01...and...doubled...your...money...every...day,...it...would...take...27...days...to...become...a...millionaire.!`,
-    sampleOptions: {
-      ...initialValues,
-      symbolValue: '',
-      splitSeparatorType: 'symbol',
-      outputSeparator: '...'
-    }
-  }
-];
+  ];
 
-export default function SplitText({ title }: ToolComponentProps) {
   const { t } = useTranslation('string');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');

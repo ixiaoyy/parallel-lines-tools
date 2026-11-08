@@ -1,3 +1,5 @@
+import i18n from '../../../../i18n';
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 import * as Yup from 'yup';
@@ -12,22 +14,27 @@ import SimpleRadio from '@components/options/SimpleRadio';
 import { useTranslation } from 'react-i18next';
 import { InitialValuesType, RotationAngle } from './types';
 
+// 导出的校验器保留原有入口；校验发生时再按当前语言生成提示。
+export const validationSchema = Yup.object({
+  rotation: Yup.number()
+    .oneOf([90, 180, 270], () => i18n.t('video:inline.rotationValues'))
+    .required(() => i18n.t('video:inline.rotationIsRequired'))
+});
+
 export const initialValues: InitialValuesType = {
   rotation: 90
 };
 
-export const validationSchema = Yup.object({
-  rotation: Yup.number()
-    .oneOf([90, 180, 270], 'Rotation must be 90, 180, or 270 degrees')
-    .required('Rotation is required')
-});
-
-const angleOptions: { value: RotationAngle; label: string }[] = [
-  { value: 90, label: '90° Clockwise' },
-  { value: 180, label: '180° (Upside down)' },
-  { value: 270, label: '270° (90° Counter-clockwise)' }
-];
 export default function RotateVideo({ title }: ToolComponentProps) {
+  // 仅本地化界面展示与校验提示；格式参数和处理流程保持原样。
+  const { t: inlineText } = useInlineTranslation('video');
+
+  const angleOptions: { value: RotationAngle; label: string }[] = [
+    { value: 90, label: inlineText('rotate.90Degrees') },
+    { value: 180, label: inlineText('rotate.180Degrees') },
+    { value: 270, label: inlineText('rotate.270Degrees') }
+  ];
+
   const { t } = useTranslation('video');
   const [input, setInput] = useState<File | null>(null);
   const [result, setResult] = useState<File | null>(null);

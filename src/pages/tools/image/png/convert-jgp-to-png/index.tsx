@@ -1,3 +1,4 @@
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import ToolImageInput from 'components/input/ToolImageInput';
 import CheckboxWithDesc from 'components/options/CheckboxWithDesc';
@@ -17,6 +18,9 @@ const initialValues = {
 };
 
 export default function ConvertJgpToPng({ title }: ToolComponentProps) {
+  // 仅本地化界面展示与校验提示；格式参数和处理流程保持原样。
+  const { t: inlineText } = useInlineTranslation('image');
+
   const [input, setInput] = useState<File | null>(null);
   const [result, setResult] = useState<File | null>(null);
 
@@ -102,37 +106,43 @@ export default function ConvertJgpToPng({ title }: ToolComponentProps) {
           value={input}
           onChange={setInput}
           accept={['image/jpeg']}
-          title={'Input JPG'}
+          title={inlineText('inline.inputJpg')}
         />
       }
       resultComponent={
-        <ToolFileResult title={'Output PNG'} value={result} extension={'png'} />
+        <ToolFileResult
+          title={inlineText('inline.outputPng')}
+          value={result}
+          extension={'png'}
+        />
       }
       initialValues={initialValues}
       getGroups={({ values, updateField }) => [
         {
-          title: 'PNG Transparency Color',
+          title: inlineText('inline.pngTransparencyColor'),
           component: (
             <Box>
               <CheckboxWithDesc
                 key="enableTransparency"
-                title="Enable PNG Transparency"
+                title={inlineText('inline.enablePngTransparency')}
                 checked={!!values.enableTransparency}
                 onChange={(value) => updateField('enableTransparency', value)}
-                description="Make the color below transparent."
+                description={inlineText('inline.makeTheColorBelowTransparent')}
               />
               <ColorSelector
                 value={values.color}
                 onColorChange={(val) => updateField('color', val)}
-                description={'With this color (to color)'}
+                description={inlineText(
+                  'changeColors.toColor.selectorDescription'
+                )}
                 inputProps={{ 'data-testid': 'color-input' }}
               />
               <TextFieldWithDesc
                 value={values.similarity}
                 onOwnChange={(val) => updateField('similarity', val)}
-                description={
-                  'Match this % of similar. For example, 10% white will match white and a little bit of gray.'
-                }
+                description={inlineText(
+                  'inline.matchThisOfSimilarForExample10'
+                )}
               />
             </Box>
           )

@@ -1,3 +1,5 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import ToolContent from '@components/ToolContent';
@@ -18,36 +20,43 @@ const initialValues = {
   emptyLines: true
 };
 type InitialValuesType = typeof initialValues;
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Convert Game Data from the CSV Format to the TSV Format',
-    description:
-      'In this example, we transform a Comma Separated Values (CSV) file containing a leaderboard of gaming data into a Tab Separated Values (TSV) file. The input data shows the players\' names, scores, times, and goals. We preserve the CSV column headers by enabling the "Preserve Headers" option and convert all data rows into TSV format. The resulting data is easier to work with as it\'s organized in neat columns',
-    sampleText: `player_name,score,time,goals
+
+export default function CsvToTsv({
+  title,
+  longDescription
+}: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('csv');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.convertGameDataFromTheCsvFormatTo'),
+      description: exampleText(
+        'exampleUi.inThisExampleWeTransformACommaSeparated'
+      ),
+      sampleText: `player_name,score,time,goals
 ToniJackson,2500,30:00,15
 HenryDalton,1800,25:00,12
 DavidLee,3200,40:00,20
 EmmaJones,2100,35:00,17
 KrisDavis,1500,20:00,10`,
-    sampleResult: `player_name	score	time	goals
+      sampleResult: `player_name	score	time	goals
 ToniJackson	2500	30:00	15
 HenryDalton	1800	25:00	12
 DavidLee	3200	40:00	20
 EmmaJones	2100	35:00	17
 KrisDavis	1500	20:00	10`,
-    sampleOptions: {
-      delimiter: ',',
-      quoteCharacter: '"',
-      commentCharacter: '#',
-      header: true,
-      emptyLines: true
-    }
-  },
-  {
-    title: 'Mythical Creatures',
-    description:
-      'In this example, we load a CSV file containing coffee varieties and their origins. The file is quite messy, with numerous empty lines and comments, and it is hard to work with. To clean up the file, we specify the comment pattern // in the options, and the program automatically removes the comment lines from the input. Also, the empty lines are automatically removed. Once the file is cleaned up, we transform the five clean rows into five columns, each having a height of two fields.',
-    sampleText: `creature;origin;habitat;powers
+      sampleOptions: {
+        delimiter: ',',
+        quoteCharacter: '"',
+        commentCharacter: '#',
+        header: true,
+        emptyLines: true
+      }
+    },
+    {
+      title: exampleText('exampleUi.mythicalCreatures'),
+      description: exampleText('exampleUi.inThisExampleWeLoadACsvFile'),
+      sampleText: `creature;origin;habitat;powers
 Unicorn;Mythology;Forest;Magic horn
 Mermaid;Mythology;Ocean;Hypnotic singing
 Vampire;Mythology;Castles;Immortality
@@ -55,23 +64,22 @@ Phoenix;Mythology;Desert;Rebirth from ashes
 
 #Dragon;Mythology;Mountains;Fire breathing
 #Werewolf;Mythology;Forests;Shape shifting`,
-    sampleResult: `Unicorn	Mythology	Forest	Magic horn
+      sampleResult: `Unicorn	Mythology	Forest	Magic horn
 Mermaid	Mythology	Ocean	Hypnotic singing
 Vampire	Mythology	Castles	Immortality
 Phoenix	Mythology	Desert	Rebirth from ashes`,
-    sampleOptions: {
-      delimiter: ';',
-      quoteCharacter: '"',
-      commentCharacter: '#',
-      header: false,
-      emptyLines: true
-    }
-  },
-  {
-    title: 'Convert Fitness Tracker Data from CSV to TSV',
-    description:
-      'In this example, we swap rows and columns in CSV data about team sports, the equipment used, and the number of players. The input has 5 rows and 3 columns and once rows and columns have been swapped, the output has 3 rows and 5 columns. Also notice that in the last data record, for the "Baseball" game, the number of players is missing. To create a fully-filled CSV, we use a custom message "NA", specified in the options, and fill the missing CSV field with this value.',
-    sampleText: `day,steps,distance,calories
+      sampleOptions: {
+        delimiter: ';',
+        quoteCharacter: '"',
+        commentCharacter: '#',
+        header: false,
+        emptyLines: true
+      }
+    },
+    {
+      title: exampleText('exampleUi.convertFitnessTrackerDataFromCsvToTsv'),
+      description: exampleText('exampleUi.inThisExampleWeSwapRowsAndColumns'),
+      sampleText: `day,steps,distance,calories
 
 Mon,7500,3.75,270
 Tue,12000,6.00,420
@@ -79,26 +87,25 @@ Tue,12000,6.00,420
 Wed,8000,4.00,300
 Thu,9500,4.75,330
 Fri,10000,5.00,350`,
-    sampleResult: `day	steps	distance	calories
+      sampleResult: `day	steps	distance	calories
 Mon	7500	3.75	270
 Tue	12000	6.00	420
 Wed	8000	4.00	300
 Thu	9500	4.75	330
 Fri	10000	5.00	350`,
-    sampleOptions: {
-      delimiter: ',',
-      quoteCharacter: '"',
-      commentCharacter: '#',
-      header: true,
-      emptyLines: true
+      sampleOptions: {
+        delimiter: ',',
+        quoteCharacter: '"',
+        commentCharacter: '#',
+        header: true,
+        emptyLines: true
+      }
     }
-  }
-];
+  ];
 
-export default function CsvToTsv({
-  title,
-  longDescription
-}: ToolComponentProps) {
+  // 本工具的展示文案随语言切换更新；示例原始数据与计算参数保持不变。
+  const { t: inlineText } = useInlineTranslation('csv');
+
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');
 
@@ -120,48 +127,50 @@ export default function CsvToTsv({
     updateField
   }) => [
     {
-      title: 'CSV Format Options',
+      title: inlineText('inline.csvFormatOptions'),
       component: (
         <Box>
           <TextFieldWithDesc
             value={values.delimiter}
             onOwnChange={(val) => updateField('delimiter', val)}
-            description={
-              'Enter the character used to delimit columns in the CSV file.'
-            }
+            description={inlineText(
+              'inline.enterTheCharacterUsedToDelimitColumns2'
+            )}
           />
           <TextFieldWithDesc
             value={values.quoteCharacter}
             onOwnChange={(val) => updateField('quoteCharacter', val)}
-            description={
-              'Enter the quote character used to quote the CSV fields.'
-            }
+            description={inlineText(
+              'inline.enterTheQuoteCharacterUsedToQuote2'
+            )}
           />
           <TextFieldWithDesc
             value={values.commentCharacter}
             onOwnChange={(val) => updateField('commentCharacter', val)}
-            description={
-              'Enter the character indicating the start of a comment line. Lines starting with this symbol will be skipped.'
-            }
+            description={inlineText(
+              'findIncompleteCsvRecords.commentCharacterDescription'
+            )}
           />
         </Box>
       )
     },
     {
-      title: 'Conversion Options',
+      title: inlineText('csvToJson.conversionOptions'),
       component: (
         <Box>
           <CheckboxWithDesc
             checked={values.header}
             onChange={(value) => updateField('header', value)}
-            title="Use Headers"
-            description="Keep the first row as column names."
+            title={inlineText('csvToJson.useHeaders')}
+            description={inlineText('inline.keepTheFirstRowAsColumnNames')}
           />
           <CheckboxWithDesc
             checked={values.emptyLines}
             onChange={(value) => updateField('emptyLines', value)}
-            title="Ignore Lines with No Data"
-            description="Enable to prevent the conversion of empty lines in the input CSV file."
+            title={inlineText('inline.ignoreLinesWithNoData')}
+            description={inlineText(
+              'inline.enableToPreventTheConversionOfEmpty'
+            )}
           />
         </Box>
       )

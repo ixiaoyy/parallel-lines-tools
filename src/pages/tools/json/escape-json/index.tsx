@@ -1,3 +1,4 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -16,22 +17,25 @@ const initialValues = {
 
 type InitialValuesType = typeof initialValues;
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Escape a Simple JSON Object',
-    description:
-      'In this example, we escape all double quotes in a JSON object. This makes the JSON safe to use as a string inside another JSON object or in source code.',
-    sampleText: `{"country": "Spain", "capital": "Madrid"}`,
-    sampleResult: `{\\"country\\": \\"Spain\\", \\"capital\\": \\"Madrid\\"}`,
-    sampleOptions: {
-      wrapInQuotesFlag: false
-    }
-  },
-  {
-    title: 'Escape a Complex JSON Object',
-    description:
-      'In this example, we escape quotes and line breaks from a formatted JSON object. The output is wrapped in double quotes to create a JSON string value.',
-    sampleText: `{
+export default function EscapeJsonTool({ title }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('json');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.escapeASimpleJsonObject'),
+      description: exampleText(
+        'exampleUi.inThisExampleWeEscapeAllDoubleQuotes'
+      ),
+      sampleText: `{"country": "Spain", "capital": "Madrid"}`,
+      sampleResult: `{\\"country\\": \\"Spain\\", \\"capital\\": \\"Madrid\\"}`,
+      sampleOptions: {
+        wrapInQuotesFlag: false
+      }
+    },
+    {
+      title: exampleText('exampleUi.escapeAComplexJsonObject'),
+      description: exampleText('exampleUi.inThisExampleWeEscapeQuotesAndLine'),
+      sampleText: `{
   "name": "Pizza Margherita",
   "ingredients": [
     "tomato sauce",
@@ -41,24 +45,24 @@ const exampleCards: CardExampleType<InitialValuesType>[] = [
   "price": 12.50,
   "vegetarian": true
 }`,
-    sampleResult: `"{\\n  \\"name\\": \\"Pizza Margherita\\",\\n  \\"ingredients\\": [\\n    \\"tomato sauce\\",\\n    \\"mozzarella cheese\\",\\n    \\"fresh basil\\"\\n  ],\\n  \\"price\\": 12.50,\\n  \\"vegetarian\\": true\\n}"`,
-    sampleOptions: {
-      wrapInQuotesFlag: true
+      sampleResult: `"{\\n  \\"name\\": \\"Pizza Margherita\\",\\n  \\"ingredients\\": [\\n    \\"tomato sauce\\",\\n    \\"mozzarella cheese\\",\\n    \\"fresh basil\\"\\n  ],\\n  \\"price\\": 12.50,\\n  \\"vegetarian\\": true\\n}"`,
+      sampleOptions: {
+        wrapInQuotesFlag: true
+      }
+    },
+    {
+      title: exampleText('exampleUi.escapeAJsonArray'),
+      description: exampleText(
+        'exampleUi.thisExampleShowsThatJsonArraysContainingOnly'
+      ),
+      sampleText: `[1, 2, 3]`,
+      sampleResult: `[1, 2, 3]`,
+      sampleOptions: {
+        wrapInQuotesFlag: false
+      }
     }
-  },
-  {
-    title: 'Escape a JSON Array',
-    description:
-      'This example shows that JSON arrays containing only numbers do not require escaping because they do not contain characters that need special handling.',
-    sampleText: `[1, 2, 3]`,
-    sampleResult: `[1, 2, 3]`,
-    sampleOptions: {
-      wrapInQuotesFlag: false
-    }
-  }
-];
+  ];
 
-export default function EscapeJsonTool({ title }: ToolComponentProps) {
   const { t } = useTranslation('json');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');

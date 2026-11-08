@@ -1,3 +1,4 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
 import { Box, Typography } from '@mui/material';
 import React, { useState, useEffect, useContext } from 'react';
 import ToolContent from '@components/ToolContent';
@@ -17,40 +18,44 @@ const initialValues: InitialValuesType = {
   compressionLevel: 'low'
 };
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Low Compression',
-    description: 'Minimal quality loss with slight file size reduction',
-    sampleText: '',
-    sampleResult: '',
-    sampleOptions: {
-      compressionLevel: 'low'
-    }
-  },
-  {
-    title: 'Medium Compression',
-    description: 'Balance between file size and quality',
-    sampleText: '',
-    sampleResult: '',
-    sampleOptions: {
-      compressionLevel: 'medium'
-    }
-  },
-  {
-    title: 'High Compression',
-    description: 'Maximum file size reduction with some quality loss',
-    sampleText: '',
-    sampleResult: '',
-    sampleOptions: {
-      compressionLevel: 'high'
-    }
-  }
-];
-
 export default function CompressPdf({
   title,
   longDescription
 }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('pdf');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('compressPdf.lowCompression'),
+      description: exampleText(
+        'exampleUi.minimalQualityLossWithSlightFileSizeReduction'
+      ),
+      sampleText: '',
+      sampleResult: '',
+      sampleOptions: {
+        compressionLevel: 'low'
+      }
+    },
+    {
+      title: exampleText('compressPdf.mediumCompression'),
+      description: exampleText('compressPdf.mediumCompressionDescription'),
+      sampleText: '',
+      sampleResult: '',
+      sampleOptions: {
+        compressionLevel: 'medium'
+      }
+    },
+    {
+      title: exampleText('compressPdf.highCompression'),
+      description: exampleText('compressPdf.highCompressionDescription'),
+      sampleText: '',
+      sampleResult: '',
+      sampleOptions: {
+        compressionLevel: 'high'
+      }
+    }
+  ];
+
   const { t } = useTranslation('pdf');
   const [input, setInput] = useState<File | null>(null);
   const [result, setResult] = useState<File | null>(null);

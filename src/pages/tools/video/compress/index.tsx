@@ -1,3 +1,4 @@
+import i18n from '../../../../i18n';
 import { Box } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 import * as Yup from 'yup';
@@ -14,23 +15,23 @@ import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 import { useTranslation } from 'react-i18next';
 
+// 导出的校验器保留原有入口；校验发生时再按当前语言生成提示。
+export const validationSchema = Yup.object({
+  width: Yup.number()
+    .oneOf([240, 360, 480, 720, 1080], () =>
+      i18n.t('video:inline.standardResolutionsOnly')
+    )
+    .required(() => i18n.t('video:inline.widthIsRequired')),
+  crf: Yup.number()
+    .min(0, () => i18n.t('video:inline.crfMustBeAtLeast0'))
+    .max(51, () => i18n.t('video:inline.crfMustBeAtMost51'))
+    .required(() => i18n.t('video:inline.crfIsRequired'))
+});
+
 export const initialValues: InitialValuesType = {
   width: 480,
   crf: 23
 };
-
-export const validationSchema = Yup.object({
-  width: Yup.number()
-    .oneOf(
-      [240, 360, 480, 720, 1080],
-      'Width must be one of the standard resolutions'
-    )
-    .required('Width is required'),
-  crf: Yup.number()
-    .min(0, 'CRF must be at least 0')
-    .max(51, 'CRF must be at most 51')
-    .required('CRF is required')
-});
 
 const resolutionOptions: {
   value: InitialValuesType['width'];

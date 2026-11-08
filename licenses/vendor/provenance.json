@@ -1,0 +1,38 @@
+{
+  "@ffmpeg/ffmpeg@0.12.15": [
+    {
+      "file": "ffmpeg--ffmpeg--LICENSE",
+      "source": "https://raw.githubusercontent.com/ffmpegwasm/ffmpeg.wasm/71aa99d37c02a7b4c435275ca9ef50e612f6efa1/LICENSE",
+      "commit": "71aa99d37c02a7b4c435275ca9ef50e612f6efa1"
+    }
+  ],
+  "@ffmpeg/util@0.12.2": [
+    {
+      "file": "ffmpeg--util--LICENSE",
+      "source": "https://raw.githubusercontent.com/ffmpegwasm/ffmpeg.wasm/71aa99d37c02a7b4c435275ca9ef50e612f6efa1/LICENSE",
+      "commit": "71aa99d37c02a7b4c435275ca9ef50e612f6efa1"
+    }
+  ],
+  "@nodable/entities@3.1.0": [
+    {
+      "file": "nodable--entities--LICENSE",
+      "source": "https://raw.githubusercontent.com/nodable/val-parsers/ac48e7ea591da372be023a481875c747535812b3/LICENSE",
+      "commit": "ac48e7ea591da372be023a481875c747535812b3"
+    }
+  ],
+  "formik@2.4.9": [
+    {
+      "file": "formik--LICENSE",
+      "source": "https://raw.githubusercontent.com/jaredpalmer/formik/91475adbf33579561e580eceea0c031f4ec2e992/LICENSE",
+      "commit": "91475adbf33579561e580eceea0c031f4ec2e992"
+    }
+  ],
+  "tiny-case@1.0.3": [
+    {
+      "file": "tiny-case--NOTICE.txt",
+      "source": "https://github.com/jquense/tiny-case/tree/5685dec5b69ced78766d12561a4e7a0ae6d4b75d",
+      "commit": "5685dec5b69ced78766d12561a4e7a0ae6d4b75d",
+      "note": "Author MIT declaration retained; upstream ships no separate notice."
+    }
+  ]
+}

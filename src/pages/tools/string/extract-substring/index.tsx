@@ -1,3 +1,5 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import ToolTextInput from '@components/input/ToolTextInput';
 import ToolTextResult from '@components/result/ToolTextResult';
@@ -16,46 +18,54 @@ const initialValues = {
   reverse: false
 };
 
-const exampleCards: CardExampleType<typeof initialValues>[] = [
-  {
-    title: 'Extract First 5 Characters',
-    description: 'This example extracts the first 5 characters from the text.',
-    sampleText: 'The quick brown fox jumps over the lazy dog.',
-    sampleResult: 'The q',
-    sampleOptions: {
-      ...initialValues,
-      start: '1',
-      length: '5'
-    }
-  },
-  {
-    title: 'Extract Words from the Middle',
-    description:
-      'Extract a substring starting from position 11 with a length of 10 characters.',
-    sampleText: 'The quick brown fox jumps over the lazy dog.',
-    sampleResult: 'brown fox',
-    sampleOptions: {
-      ...initialValues,
-      start: '11',
-      length: '10'
-    }
-  },
-  {
-    title: 'Multi-line Extraction with Reversal',
-    description: 'Extract characters 1-3 from each line and reverse them.',
-    sampleText: 'First line\nSecond line\nThird line',
-    sampleResult: 'riF\nceS\nihT',
-    sampleOptions: {
-      ...initialValues,
-      start: '1',
-      length: '3',
-      multiLine: true,
-      reverse: true
-    }
-  }
-];
-
 export default function ExtractSubstring({ title }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('string');
+  const exampleCards: CardExampleType<typeof initialValues>[] = [
+    {
+      title: exampleText('exampleUi.extractFirst5Characters'),
+      description: exampleText(
+        'exampleUi.thisExampleExtractsTheFirst5CharactersFrom'
+      ),
+      sampleText: 'The quick brown fox jumps over the lazy dog.',
+      sampleResult: 'The q',
+      sampleOptions: {
+        ...initialValues,
+        start: '1',
+        length: '5'
+      }
+    },
+    {
+      title: exampleText('exampleUi.extractWordsFromTheMiddle'),
+      description: exampleText(
+        'exampleUi.extractASubstringStartingFromPosition11With'
+      ),
+      sampleText: 'The quick brown fox jumps over the lazy dog.',
+      sampleResult: 'brown fox',
+      sampleOptions: {
+        ...initialValues,
+        start: '11',
+        length: '10'
+      }
+    },
+    {
+      title: exampleText('exampleUi.multiLineExtractionWithReversal'),
+      description: exampleText('exampleUi.extractCharacters13FromEachLineAnd'),
+      sampleText: 'First line\nSecond line\nThird line',
+      sampleResult: 'riF\nceS\nihT',
+      sampleOptions: {
+        ...initialValues,
+        start: '1',
+        length: '3',
+        multiLine: true,
+        reverse: true
+      }
+    }
+  ];
+
+  // 本工具的展示文案随语言切换更新；示例原始数据与计算参数保持不变。
+  const { t: inlineText } = useInlineTranslation(['string', 'translation']);
+
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');
 
@@ -76,9 +86,13 @@ export default function ExtractSubstring({ title }: ToolComponentProps) {
       );
     } catch (error) {
       if (error instanceof Error) {
-        setResult(`Error: ${error.message}`);
+        setResult(
+          inlineText('translation:common.error', {
+            error: String(error.message)
+          })
+        );
       } else {
-        setResult('An unknown error occurred');
+        setResult(inlineText('inline.anUnknownErrorOccurred'));
       }
     }
   };
@@ -88,34 +102,34 @@ export default function ExtractSubstring({ title }: ToolComponentProps) {
     updateField
   }) => [
     {
-      title: 'Extraction options',
+      title: inlineText('emailExtractor.options.title'),
       component: [
         <TextFieldWithDesc
           key="start"
           value={values.start}
           onOwnChange={(value) => updateField('start', value)}
-          description="Start position (1-based index)"
+          description={inlineText('inline.startPosition1BasedIndex')}
           type="number"
         />,
         <TextFieldWithDesc
           key="length"
           value={values.length}
           onOwnChange={(value) => updateField('length', value)}
-          description="Number of characters to extract"
+          description={inlineText('inline.numberOfCharactersToExtract')}
           type="number"
         />,
         <CheckboxWithDesc
           key="multiLine"
           checked={values.multiLine}
-          title="Process multi-line text"
-          description="Extract from each line independently"
+          title={inlineText('reverse.processMultiLine')}
+          description={inlineText('inline.extractFromEachLineIndependently')}
           onChange={(val) => updateField('multiLine', val)}
         />,
         <CheckboxWithDesc
           key="reverse"
           checked={values.reverse}
-          title="Reverse output"
-          description="Reverse the extracted substring"
+          title={inlineText('inline.reverseOutput')}
+          description={inlineText('inline.reverseTheExtractedSubstring')}
           onChange={(val) => updateField('reverse', val)}
         />
       ]
@@ -131,10 +145,17 @@ export default function ExtractSubstring({ title }: ToolComponentProps) {
       input={input}
       setInput={setInput}
       inputComponent={
-        <ToolTextInput title={'Input text'} value={input} onChange={setInput} />
+        <ToolTextInput
+          title={inlineText('quote.inputTitle')}
+          value={input}
+          onChange={setInput}
+        />
       }
       resultComponent={
-        <ToolTextResult title={'Extracted text'} value={result} />
+        <ToolTextResult
+          title={inlineText('inline.extractedText')}
+          value={result}
+        />
       }
       exampleCards={exampleCards}
     />

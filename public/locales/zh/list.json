@@ -21,7 +21,7 @@
       },
       "interweave": {
         "description": "此示例显示如何交织项目而不是连接它们。",
-        "title": "交织物品"
+        "title": "交错重复列表项"
       },
       "reverse": {
         "description": "此示例显示如何以相反的顺序复制列表。",
@@ -42,7 +42,7 @@
     "splitBySymbol": "按符号拆分",
     "splitOptions": "拆分选项",
     "splitSeparatorDescription": "用于分割列表的分隔符",
-    "title": "复制",
+    "title": "重复列表项",
     "toolInfo": {
       "description": "此工具允许您复制列表中的项目。您可以指定副本数量（包括小数），控制项目是连接还是交织，甚至可以反转重复的项目。它非常适合创建重复模式、生成测试数据或扩展具有可预测内容的列表。",
       "title": "列表重复"
@@ -90,7 +90,7 @@
       }
     },
     "splitSeparatorDescription": "设置分隔符号或正则表达式。",
-    "title": "查找最受欢迎的",
+    "title": "查找高频项",
     "trimItems": "修剪顶部列表项",
     "trimItemsDescription": "在比较项目之前删除前导空格和尾随空格"
   },
@@ -108,7 +108,7 @@
     "shortDescription": "在列表中查找唯一项",
     "skipEmptyItems": "跳过空项目",
     "skipEmptyItemsDescription": "不要在输出中包含空列表项。",
-    "title": "寻找独特的",
+    "title": "查找唯一项",
     "trimItems": "修剪列表项",
     "trimItemsDescription": "比较项目之前删除前导和尾随空格。",
     "uniqueItemOptions": "独特物品选项"
@@ -133,7 +133,7 @@
       }
     },
     "splitterMode": "分离器模式",
-    "title": "撤销",
+    "title": "反转列表",
     "toolInfo": {
       "description": "使用此实用程序，您可以反转列表中项目的顺序。该实用程序首先将输入列表拆分成单个项目，然后从最后一个项目到第一个项目进行迭代，并在迭代过程中将每个项目打印到输出中。输入列表可以包含任何可以表示为文本数据的内容，包括数字、数值、字符串、单词、句子等。输入项分隔符也可以是正则表达式。例如，正则表达式 /[;,]/ 允许您使用逗号或分号分隔的项目。输入和输出列表项分隔符可以在选项中自定义。默认情况下，输入和输出列表均以逗号分隔。Listabulous！",
       "title": "什么是列表反转器？"
@@ -142,7 +142,7 @@
   "rotate": {
     "description": "世界上最简单的基于浏览器的列表项旋转工具。输入您的列表并指定旋转量，即可将列表项移动指定的位置。非常适合数据操作、循环移动或列表重新排序。",
     "shortDescription": "按指定位置旋转列表项",
-    "title": "旋转"
+    "title": "循环移动列表"
   },
   "shuffle": {
     "delimiterDescription": "设置分隔符号或正则表达式。",
@@ -155,7 +155,7 @@
     "shortDescription": "随机化列表项的顺序",
     "shuffledListLength": "打乱列表长度",
     "shuffledListSeparator": "随机列表分隔符",
-    "title": "随机播放"
+    "title": "随机排列列表"
   },
   "sort": {
     "caseSensitive": "区分大小写排序",
@@ -192,17 +192,17 @@
       }
     },
     "splitSeparatorDescription": "设置分隔符号或正则表达式。",
-    "title": "种类"
+    "title": "列表排序"
   },
   "truncate": {
     "description": "世界上最简单的基于浏览器的列表截断工具。输入您的列表并指定要保留的最大项目数。非常适合数据处理、列表管理或限制内容长度。",
     "shortDescription": "将列表截断为指定数量的项目",
-    "title": "截短"
+    "title": "截取列表"
   },
   "unwrap": {
     "description": "世界上最简单的基于浏览器的列表项展开工具。输入已展开的列表，并指定展开条件以展平有序的列表项。非常适合数据处理、文本操作或从结构化列表中提取内容。",
     "shortDescription": "从结构化格式中解开列表项",
-    "title": "展开"
+    "title": "去除列表包裹字符"
   },
   "wrap": {
     "description": "在每个列表项之前和之后添加文本。",
@@ -217,11 +217,112 @@
     "splitBySymbol": "按符号拆分",
     "splitOptions": "拆分选项",
     "splitSeparatorDescription": "用于分割列表的分隔符",
-    "title": "裹",
+    "title": "包裹列表项",
     "toolInfo": {
       "description": "此工具允许您在列表中每个项目前后添加文本。您可以为左右两侧指定不同的文本，并控制列表的处理方式。它适用于为列表项添加引号、括号或其他格式，准备不同格式的数据，或创建结构化文本。",
       "title": "列表包装"
     },
     "wrapOptions": "包装选项"
+  },
+  "chunk": {
+    "deleteEmptyItems": "删除空项目",
+    "deleteEmptyItemsDescription": "忽略空项目，不将其计入结果。",
+    "description": "将列表按固定数量依次分组，可补齐最后一个不足数量的分组，并设置组内、组间分隔符及包裹符号。",
+    "emptyItemsAndPadding": "空项目与补齐",
+    "groupNumberDescription": "每组包含的项目数量。",
+    "groupSeparatorDescription": "各组之间使用的分隔符。",
+    "groupSizeAndSeparators": "分组数量与输出格式",
+    "inputItemSeparator": "输入项目分隔符",
+    "inputTitle": "输入列表",
+    "itemSeparatorDescription": "组内项目之间使用的分隔符。",
+    "leftWrapDescription": "添加在每组开头的符号。",
+    "padNonFullGroups": "补齐不足数量的分组",
+    "padNonFullGroupsDescription": "最后一组不足指定数量时，用填充值补齐。",
+    "paddingCharDescription": "用于补齐分组的字符或内容。",
+    "resultTitle": "分组结果",
+    "rightWrapDescription": "添加在每组末尾的符号。",
+    "shortDescription": "将列表按固定数量分组",
+    "splitOperators": {
+      "regex": {
+        "description": "使用正则表达式分隔输入项目。",
+        "title": "按正则表达式分隔"
+      },
+      "symbol": {
+        "description": "使用单个字符分隔输入项目。",
+        "title": "按字符分隔"
+      }
+    },
+    "splitSeparatorDescription": "用于分隔输入项目的字符或正则表达式。",
+    "title": "列表分组"
+  },
+  "inline": {
+    "rotateForward": "向后循环移动",
+    "rotateListItemsToTheRightDown": "将列表项向右移动；竖排列表则向下移动。",
+    "rotateBackward": "向前循环移动",
+    "rotateListItemsToTheLeftUp": "将列表项向左移动；竖排列表则向上移动。",
+    "rotatedList": "循环移动后的列表",
+    "itemSplitMode": "列表分隔方式",
+    "rotationDirectionAndCount": "移动方向与数量",
+    "numberOfItemsToRotate": "需要移动的项目数。",
+    "rotatedListJoiningSymbol": "结果列表分隔符",
+    "enterTheCharacterThatGoesBetweenItems": "循环移动后的列表项之间使用的字符。",
+    "separatorToJoinTheTruncatedList": "截取后的列表项之间使用的分隔符。",
+    "truncationOptions": "截取选项",
+    "numberOfItemsToKeep": "保留的项目数。",
+    "keepItemsFromTheBeginning": "从列表开头保留",
+    "keepItemsFromTheEnd": "从列表末尾保留",
+    "truncatedList": "截取后的列表",
+    "listTruncation": "列表截取",
+    "thisToolAllowsYouToTruncateA": "按指定数量截取列表，可从开头或末尾保留，并自定义输入和输出分隔符，适用于限制列表长度、预览或提取部分数据。",
+    "separatorToJoinTheUnwrappedList": "去除包裹后的列表项之间使用的分隔符。",
+    "unwrapOptions": "去除包裹选项",
+    "charactersToRemoveFromTheLeftSide": "从每个项目左侧移除的字符。",
+    "charactersToRemoveFromTheRightSide": "从每个项目右侧移除的字符。",
+    "removeMultipleLevelsOfWrapping": "移除多层包裹字符",
+    "trimWhitespaceFromItems": "去除项目首尾空白",
+    "unwrappedList": "去除包裹后的列表",
+    "listUnwrapping": "去除列表包裹字符",
+    "thisToolAllowsYouToRemoveWrapping": "去除列表项两侧的包裹字符，可分别指定左侧和右侧字符，支持移除多层包裹，并设置空白处理，适用于清除引号或括号及整理列表。",
+    "theSeparatorIsRequired": "请填写输入分隔符。",
+    "theJoinSeparatorIsRequired": "请填写输出分隔符。",
+    "numberOfCopiesMustBeANumber": "重复次数必须是数字。",
+    "numberOfCopiesMustBePositive": "重复次数必须大于 0。",
+    "numberOfCopiesIsRequired": "请填写重复次数。",
+    "lengthMustBeANumber": "长度必须是数字。",
+    "lengthMustBeAPositiveNumber": "长度必须大于 0。",
+    "lengthIsRequired": "请填写长度。",
+    "anUnknownErrorOccurred": "发生未知错误。"
+  },
+  "exampleUi": {
+    "groupHexagonCoordinates": "将六边形坐标成对分组",
+    "inThisExampleWeGroupTheCoordinatesOf": "将正六边形的坐标按两项一组整理。输入为用空格分隔的 x1 y1 x2 y2 x3 y3…，输出为 (x1, y1); (x2, y2); (x3, y3); …。用空格拆分输入，将 x、y 成对放入圆括号，组内用逗号分隔，组间用分号分隔。",
+    "chunksOfSize3": "每 3 项一组",
+    "thisExampleDemonstratesGroupingOfListItemsAnd": "将用分号分隔的 26 个英文字母每 3 项分成一组，得到 9 组。最后一组缺少一个字母，因此启用补齐，并用下划线填充空缺。",
+    "convertAListToATsv": "将列表转换为 TSV",
+    "inThisExampleWeUseOurListItem": "将食品列表转换为制表符分隔的 TSV。输入项目之间的空格数量不一，因此使用正则表达式 \\s+ 拆分；输出为 3 列，用制表符分隔各列，用换行分隔各组。",
+    "reverseAListOfDigits": "将数字列表倒序",
+    "inThisExampleWeLoadAListOf": "输入数字混用点、逗号和分号分隔，因此启用正则拆分，匹配这些字符作为输入分隔符。将列表倒序后，统一用分号分隔输出。",
+    "reverseAColumnOfWords": "将一列单词倒序",
+    "thisExampleReversesAColumnOfTwentyThree": "将竖排的 20 个三音节名词从下往上排列；输入按换行分隔，每个单词各占一行。",
+    "reverseARandomList": "将混合内容列表倒序",
+    "inThisExampleTheListElementsAreRandom": "将包含城市、邮政编码和天气情况的列表倒序。先识别并拆分项目，再把输入中使用的短横线分隔符改为输出中的逗号。",
+    "keepFirst3ItemsInAList": "保留列表前 3 项",
+    "thisExampleShowsHowToKeepOnlyThe": "只保留逗号分隔列表中的前 3 项。",
+    "keepLast2ItemsInAList": "保留列表后 2 项",
+    "thisExampleShowsHowToKeepOnlyThe2": "只保留逗号分隔列表中的后 2 项。",
+    "truncateAListWithCustomSeparators": "使用自定义分隔符截短列表",
+    "thisExampleShowsHowToTruncateAList": "使用自定义分隔符拆分并截短列表。",
+    "unwrapQuotesFromListItems": "去除列表项两侧的引号",
+    "thisExampleShowsHowToRemoveQuotesFrom": "移除列表中每一项两侧的引号。",
+    "unwrapMultipleLevelsOfCharacters": "去除多层包裹字符",
+    "thisExampleShowsHowToRemoveMultipleLevels": "移除每一项两侧重复包裹的同一字符，支持去除多层。",
+    "unwrapAndJoinWithCustomSeparator": "去除包裹字符后自定义连接",
+    "thisExampleShowsHowToUnwrapItemsAnd": "去除各项两侧的包裹字符，再用自定义分隔符连接。",
+    "wrapListItemsWithQuotes": "用引号包裹列表项",
+    "thisExampleShowsHowToWrapEachItem": "为列表中的每一项加上引号。",
+    "wrapListItemsWithBrackets": "用括号包裹列表项",
+    "thisExampleShowsHowToWrapEachItem2": "为列表中的每一项加上括号。",
+    "wrapListItemsWithCustomText": "用自定义文本包裹列表项",
+    "thisExampleShowsHowToWrapEachItem3": "在每一项的左右两侧分别添加不同的自定义文本。"
   }
 }

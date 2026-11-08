@@ -15,7 +15,25 @@
     "copyFailed": "Failed to copy: {{error}}",
     "dropFileHere": "Drop your {{type}} here",
     "fileCopied": "File copied",
-    "selectFileDescription": "Click here to select a {{type}} from your device, press Ctrl+V to use a {{type}} from your clipboard, or drag and drop a file from desktop"
+    "selectFileDescription": "Click here to select a {{type}} from your device, press Ctrl+V to use a {{type}} from your clipboard, or drag and drop a file from desktop",
+    "inputTitle": "Input {{type}}",
+    "invalidFileType": "Unsupported file type. Please use {{formats}}.",
+    "fileTypes": {
+      "image": "image",
+      "audio": "audio",
+      "video": "video",
+      "pdf": "PDF"
+    },
+    "preview": "Image preview",
+    "cropArea": "Crop area",
+    "nwDragHandle": "Resize from top left",
+    "nDragHandle": "Resize from top",
+    "neDragHandle": "Resize from top right",
+    "eDragHandle": "Resize from right",
+    "seDragHandle": "Resize from bottom right",
+    "sDragHandle": "Resize from bottom",
+    "swDragHandle": "Resize from bottom left",
+    "wDragHandle": "Resize from left"
   },
   "categories": {
     "audio": {
@@ -93,8 +111,8 @@
     }
   },
   "hero": {
-    "brand": "OmniTools",
-    "description": "Boost your productivity with OmniTools, the ultimate toolkit for getting things done quickly! Access thousands of user-friendly utilities for editing images, text, lists, and data, all directly from your browser.",
+    "brand": "Parallel Lines Toolbox",
+    "description": "Find image, document, text and data utilities. No sign-up required. Check each tool for supported formats and limits.",
     "examples": {
       "calculateNumberSum": "Calculate number sum",
       "changeGifSpeed": "Change GIF speed",
@@ -104,13 +122,16 @@
       "sortList": "Sort a list",
       "splitPdf": "Split PDF",
       "splitText": "Split a text",
-      "trimVideo": "Trim video"
+      "trimVideo": "Trim video",
+      "markdownToDocx": "Markdown to Word",
+      "compressImage": "Compress images"
     },
     "search": {
       "noResult": "No results found, Try adjusting your search or filter criteria",
       "placeholder": "Search all tools"
     },
-    "title": "Get Things Done Quickly with"
+    "title": "Everyday tasks, made simpler",
+    "removeBookmark": "Remove bookmark: {{title}}"
   },
   "inputFooter": {
     "clear": "Clear",
@@ -138,7 +159,15 @@
     "buyMeACoffee": "Buy me a coffee",
     "helpTranslate": "Help translate",
     "home": "Home",
-    "tools": "Tools"
+    "tools": "Tools",
+    "language": "Interface language",
+    "menu": "Open menu",
+    "theme": "Change display mode: {{mode}}",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystem": "System",
+    "mainTools": "Tool directory",
+    "source": "Upstream source"
   },
   "number": {
     "generate": {
@@ -153,7 +182,8 @@
     }
   },
   "numericInputWithUnit": {
-    "unit": "Unit"
+    "unit": "Unit",
+    "defaultPrefix": "No prefix"
   },
   "pdf": {
     "compressPdf": {
@@ -226,10 +256,16 @@
     "copied": "File copied",
     "copyFailed": "Failed to copy: {{error}}",
     "loading": "Loading... This may take a moment.",
-    "result": "Result"
+    "result": "Result",
+    "processed": "File processed successfully. Download the result to save it.",
+    "preview": "Result preview"
   },
   "toolHeader": {
-    "seeExamples": "See Examples"
+    "seeExamples": "See Examples",
+    "useTool": "Use this tool",
+    "allTools": "All tools",
+    "bookmark": "Bookmark tool",
+    "unbookmark": "Remove bookmark"
   },
   "toolLayout": {
     "allToolsTitle": "All {{type}}"
@@ -238,7 +274,11 @@
     "copied": "File copied",
     "copyFailed": "Failed to copy: {{error}}",
     "loading": "Loading... This may take a moment.",
-    "result": "Result"
+    "result": "Result",
+    "ready": "File ready. Download it below.",
+    "downloadFile": "Download {{name}}",
+    "downloadZip": "Download All as ZIP",
+    "preview": "Preview {{number}}"
   },
   "toolMultipleInput": {
     "deleteFile": "Delete file",
@@ -266,5 +306,63 @@
   "userTypes": {
     "developers": "Developers",
     "generalUsers": "General users"
+  },
+  "footer": {
+    "attribution": "Built on OmniTools. Original copyright and open-source licenses are retained.",
+    "privacy": "Files and input are used only for the current operation and are not saved in bookmarks.",
+    "licenses": "Open-source licenses",
+    "modifiedSource": "Modified source (ZIP)"
+  },
+  "toolsByCategory": {
+    "back": "Back to all tools",
+    "noResultsTitle": "No tools found",
+    "noResultsDescription": "Try another search term or adjust your filters."
+  },
+  "release": {
+    "title": "Temporarily unavailable",
+    "intro": "These tools are deferred until their local runtime resources and processing quality are verified.",
+    "back": "All tools",
+    "resources": "This feature still depends on external runtime resources.",
+    "binary": "The engine binary and corresponding source are not pinned.",
+    "link": "Deferred tools",
+    "notFound": "Page not found"
+  },
+  "loading": {
+    "label": "Loading…"
+  },
+  "navigation": {
+    "scrollTop": "Scroll to top"
+  },
+  "validation": {
+    "invalid": "{{path}} is invalid",
+    "required": "{{path}} is a required field",
+    "defined": "{{path}} must be defined",
+    "notNull": "{{path}} cannot be null",
+    "oneOf": "{{path}} must be one of: {{values}}",
+    "notOneOf": "{{path}} must not be one of: {{values}}",
+    "notType": "{{path}} has an invalid type",
+    "stringLength": "{{path}} must be exactly {{length}} characters",
+    "stringMin": "{{path}} must have at least {{min}} characters",
+    "stringMax": "{{path}} must have at most {{max}} characters",
+    "email": "Enter a valid email address.",
+    "url": "Enter a valid URL.",
+    "matches": "The input does not match the required format.",
+    "numberMin": "{{path}} must be at least {{min}}",
+    "numberMax": "{{path}} must be at most {{max}}",
+    "numberLess": "{{path}} must be less than {{less}}",
+    "numberMore": "{{path}} must be greater than {{more}}",
+    "numberPositive": "{{path}} must be positive",
+    "numberNegative": "{{path}} must be negative",
+    "numberInteger": "{{path}} must be an integer",
+    "arrayMin": "Select at least {{min}} items.",
+    "arrayMax": "Select at most {{max}} items.",
+    "arrayLength": "Select exactly {{length}} items."
+  },
+  "common": {
+    "error": "Error: {{error}}",
+    "pdfProtectionFailed": "Failed to protect PDF: {{error}}"
+  },
+  "toolCodeInput": {
+    "languageHint": "Editor menus use the language selected at first load. Save your input before refreshing to update the menus after changing language."
   }
 }

@@ -1,27 +1,23 @@
-import React, { ReactNode, useState } from 'react';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import { Link, useNavigate } from 'react-router-dom';
-import logo from 'assets/logo.png';
-import logoWhite from 'assets/logo-white.png';
+import React, { useState } from 'react';
 import {
+  AppBar,
+  Box,
+  Button,
   Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  Stack,
-  Select,
-  MenuItem,
   FormControl,
+  IconButton,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Stack,
+  Toolbar,
   Typography
 } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import Brightness6Icon from '@mui/icons-material/Brightness6';
+import { Link } from 'react-router-dom';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import { Icon } from '@iconify/react';
 import { Mode } from 'components/App';
 import { useTranslation } from 'react-i18next';
 
@@ -29,7 +25,9 @@ interface NavbarProps {
   mode: Mode;
   onChangeMode: () => void;
 }
+
 const languages = [
+  { code: 'zh', label: '简体中文' },
   { code: 'en', label: 'English' },
   { code: 'de', label: 'Deutsch' },
   { code: 'es', label: 'Español' },
@@ -39,131 +37,67 @@ const languages = [
   { code: 'hi', label: 'हिंदी' },
   { code: 'nl', label: 'Nederlands' },
   { code: 'ru', label: 'Русский' },
-  { code: 'uk', label: 'Українська' },
-  { code: 'zh', label: '中文' }
+  { code: 'uk', label: 'Українська' }
 ];
 
-const Navbar: React.FC<NavbarProps> = ({
-  mode,
-  onChangeMode: onChangeMode
-}) => {
+/** 提供工具箱品牌、语言及主题入口；外部归属仅以普通链接呈现，不自动请求第三方。 */
+const Navbar: React.FC<NavbarProps> = ({ mode, onChangeMode }) => {
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const toggleDrawer = (open: boolean) => () => {
-    setDrawerOpen(open);
-  };
-
-  const handleLanguageChange = (event: any) => {
-    const newLanguage = event.target.value;
-    i18n.changeLanguage(newLanguage);
-    localStorage.setItem('lang', newLanguage);
-  };
-
-  const navItems: { label: string; path: string }[] = [
-    // { label: 'Features', path: '/features' }
-    // { label: 'About Us', path: '/about-us' }
-  ];
-
-  const languageSelector = (
-    <FormControl size="small" sx={{ minWidth: 120 }}>
-      <Select
-        value={i18n.language}
-        onChange={handleLanguageChange}
-        displayEmpty
-        sx={{
-          color: 'inherit',
-          '& .MuiSelect-icon': {
-            color: 'inherit'
-          },
-          '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'transparent'
-          },
-          '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'transparent'
-          },
-          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'transparent'
-          }
-        }}
-      >
-        {languages.map((lang) => (
-          <MenuItem key={lang.code} value={lang.code}>
-            {lang.label}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
+  const modeLabel = t(
+    mode === 'light'
+      ? 'navbar.themeLight'
+      : mode === 'dark'
+        ? 'navbar.themeDark'
+        : 'navbar.themeSystem'
   );
 
-  const buttons: ReactNode[] = [
-    languageSelector,
-    <Icon
-      key={mode}
-      onClick={onChangeMode}
-      style={{ cursor: 'pointer' }}
-      fontSize={30}
-      icon={
-        mode === 'dark'
-          ? 'ic:round-dark-mode'
-          : mode === 'light'
-            ? 'ic:round-light-mode'
-            : 'ic:round-contrast'
-      }
-    />,
-    <Icon
-      key="discord"
-      onClick={() => window.open('https://discord.gg/SDbbn3hT4b', '_blank')}
-      style={{ cursor: 'pointer' }}
-      fontSize={30}
-      icon={'ic:baseline-discord'}
-    />,
-    <iframe
-      key="github-star"
-      src="https://ghbtns.com/github-btn.html?user=iib0011&repo=omni-tools&type=star&count=true&size=large"
-      frameBorder="0"
-      scrolling="0"
-      width="150"
-      height="30"
-      title="GitHub"
-    ></iframe>,
-    <Button
-      key="translate"
-      onClick={() => {
-        window.open(
-          'https://www.locize.app/register?invitation=YOIH0Dyz3KHh3uQFCGYe9v1QOUoq8W5ySgmlwjX9cSypeJmt8F40brDtVbXb71fK',
-          '_blank'
-        );
-      }}
-      sx={{ borderRadius: '100px' }}
-      variant={'contained'}
-      startIcon={
-        <Icon
-          style={{ cursor: 'pointer' }}
-          fontSize={25}
-          icon={'ix:language-filled'}
-        />
-      }
-    >
-      {t('navbar.helpTranslate')}
-    </Button>
-  ];
-  const drawerList = (
-    <List>
-      {navItems.map((navItem) => (
-        <ListItemButton
-          key={navItem.path}
-          onClick={() => navigate(navItem.path)}
+  // i18next 的本地语言缓存只保存语言代码，不保存工具输入。
+  const handleLanguageChange = (event: SelectChangeEvent) => {
+    void i18n.changeLanguage(event.target.value);
+  };
+  const controls = (
+    <>
+      <FormControl size="small" sx={{ minWidth: 120 }}>
+        <Select
+          value={i18n.resolvedLanguage || 'zh'}
+          onChange={handleLanguageChange}
+          inputProps={{ 'aria-label': t('navbar.language') }}
         >
-          <ListItemText primary={navItem.label} />
-        </ListItemButton>
-      ))}
-      {buttons.map((button, index) => (
-        <ListItem key={index}>{button}</ListItem>
-      ))}
-    </List>
+          {languages.map((language) => (
+            <MenuItem key={language.code} value={language.code}>
+              {language.label}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <IconButton
+        aria-label={t('navbar.theme', { mode: modeLabel })}
+        title={t('navbar.theme', { mode: modeLabel })}
+        onClick={onChangeMode}
+        sx={{ minWidth: 44, minHeight: 44 }}
+      >
+        <Brightness6Icon />
+      </IconButton>
+      <Button
+        component="a"
+        href="https://pingxingxian.space/tools"
+        color="inherit"
+      >
+        {t('navbar.mainTools')}
+      </Button>
+      <Button
+        component="a"
+        href="https://github.com/iib0011/omni-tools"
+        target="_blank"
+        rel="noopener noreferrer"
+        color="inherit"
+      >
+        {t('navbar.source')}
+      </Button>
+    </>
   );
 
   return (
@@ -179,82 +113,55 @@ const Navbar: React.FC<NavbarProps> = ({
       <Toolbar
         sx={{
           justifyContent: 'space-between',
-          alignItems: 'center',
-          mx: { md: '50px', lg: '150px' }
+          gap: 2,
+          width: '100%',
+          maxWidth: 1280,
+          mx: 'auto'
         }}
       >
-        <Stack direction="row" spacing={1.5} alignItems="center">
-          <Link to="/">
-            <img
-              src={theme.palette.mode === 'light' ? logo : logoWhite}
-              width={isMobile ? '120px' : '200px'}
-            />
-          </Link>
+        <Box>
           <Typography
-            component="span"
-            variant="caption"
+            component={Link}
+            to="/"
             sx={{
-              color: 'text.secondary',
-              fontWeight: 600,
-              whiteSpace: 'nowrap'
+              color: 'text.primary',
+              fontSize: { xs: 20, md: 24 },
+              fontWeight: 700,
+              textDecoration: 'none'
             }}
           >
-            v{__APP_VERSION__} (
-            <a
-              href={`https://github.com/iib0011/omni-tools/tree/${__COMMIT_HASH__}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: 'inherit' }}
-            >
-              {__COMMIT_HASH__}
-            </a>
-            )
+            {t('hero.brand')}
           </Typography>
-        </Stack>
+          <Typography variant="caption" display="block" color="text.secondary">
+            OmniTools · v{__APP_VERSION__}
+          </Typography>
+        </Box>
         {isMobile ? (
           <>
             <IconButton
-              color="inherit"
-              onClick={toggleDrawer(true)}
-              sx={{
-                '&:hover': {
-                  backgroundColor: theme.palette.primary.main
-                }
-              }}
+              aria-label={t('navbar.menu')}
+              onClick={() => setDrawerOpen(true)}
+              sx={{ minWidth: 44, minHeight: 44 }}
             >
               <MenuIcon />
             </IconButton>
             <Drawer
               anchor="right"
               open={drawerOpen}
-              onClose={toggleDrawer(false)}
+              onClose={() => setDrawerOpen(false)}
             >
-              {drawerList}
+              <Stack
+                spacing={2}
+                alignItems="stretch"
+                sx={{ p: 3, minWidth: 240 }}
+              >
+                {controls}
+              </Stack>
             </Drawer>
           </>
         ) : (
-          <Stack direction={'row'} spacing={3} alignItems={'center'}>
-            {navItems.map((item) => (
-              <Button
-                key={item.label}
-                color="inherit"
-                sx={{
-                  '&:hover': {
-                    color: theme.palette.primary.main,
-                    transition: 'color 0.3s ease',
-                    backgroundColor: 'white'
-                  }
-                }}
-              >
-                <Link
-                  to={item.path}
-                  style={{ textDecoration: 'none', color: 'inherit' }}
-                >
-                  {item.label}
-                </Link>
-              </Button>
-            ))}
-            {buttons}
+          <Stack direction="row" spacing={1.5} alignItems="center">
+            {controls}
           </Stack>
         )}
       </Toolbar>

@@ -1,3 +1,4 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import ToolContent from '@components/ToolContent';
 import ToolTextInput from '@components/input/ToolTextInput';
@@ -32,12 +33,15 @@ const initialValues: InitialValuesType = {
   spacesCount: 2
 };
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Basic CSV to JSON Array',
-    description: 'Convert a simple CSV file into a JSON array structure.',
-    sampleText: 'name,age,city\nJohn,30,New York\nAlice,25,London',
-    sampleResult: `[
+export default function CsvToJson({ title }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('csv');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.basicCsvToJsonArray'),
+      description: exampleText('exampleUi.convertASimpleCsvFileIntoAJson'),
+      sampleText: 'name,age,city\nJohn,30,New York\nAlice,25,London',
+      sampleResult: `[
   {
     "name": "John",
     "age": 30,
@@ -49,17 +53,17 @@ const exampleCards: CardExampleType<InitialValuesType>[] = [
     "city": "London"
   }
 ]`,
-    sampleOptions: {
-      ...initialValues,
-      useHeaders: true,
-      dynamicTypes: true
-    }
-  },
-  {
-    title: 'CSV with Custom Delimiter',
-    description: 'Convert a CSV file that uses semicolons as separators.',
-    sampleText: 'product;price;quantity\nApple;1.99;50\nBanana;0.99;100',
-    sampleResult: `[
+      sampleOptions: {
+        ...initialValues,
+        useHeaders: true,
+        dynamicTypes: true
+      }
+    },
+    {
+      title: exampleText('exampleUi.csvWithCustomDelimiter'),
+      description: exampleText('exampleUi.convertACsvFileThatUsesSemicolonsAs'),
+      sampleText: 'product;price;quantity\nApple;1.99;50\nBanana;0.99;100',
+      sampleResult: `[
   {
     "product": "Apple",
     "price": 1.99,
@@ -71,15 +75,17 @@ const exampleCards: CardExampleType<InitialValuesType>[] = [
     "quantity": 100
   }
 ]`,
-    sampleOptions: {
-      ...initialValues,
-      delimiter: ';'
-    }
-  },
-  {
-    title: 'CSV with Comments and Empty Lines',
-    description: 'Process CSV data while handling comments and empty lines.',
-    sampleText: `# This is a comment
+      sampleOptions: {
+        ...initialValues,
+        delimiter: ';'
+      }
+    },
+    {
+      title: exampleText('exampleUi.csvWithCommentsAndEmptyLines'),
+      description: exampleText(
+        'exampleUi.processCsvDataWhileHandlingCommentsAndEmpty'
+      ),
+      sampleText: `# This is a comment
 id,name,active
 1,John,true
 
@@ -87,7 +93,7 @@ id,name,active
 2,Jane,false
 
 3,Bob,true`,
-    sampleResult: `[
+      sampleResult: `[
   {
     "id": 1,
     "name": "John",
@@ -104,15 +110,14 @@ id,name,active
     "active": true
   }
 ]`,
-    sampleOptions: {
-      ...initialValues,
-      skipEmptyLines: true,
-      comment: '#'
+      sampleOptions: {
+        ...initialValues,
+        skipEmptyLines: true,
+        comment: '#'
+      }
     }
-  }
-];
+  ];
 
-export default function CsvToJson({ title }: ToolComponentProps) {
   const { t } = useTranslation('csv');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');

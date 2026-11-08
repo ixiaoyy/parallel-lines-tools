@@ -1,3 +1,4 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import { useState } from 'react';
 import ToolTextResult from '@components/result/ToolTextResult';
@@ -20,28 +21,36 @@ const initialValues: InitialValuesType = {
   wordCount: false
 };
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Text Statistics without any Flag',
-    description:
-      'This example shows basic text statistics without any additional flags.',
-    sampleText:
-      'Giraffes have long necks that can be up to 6 feet (1.8 meters) long, but they only have 7 neck vertebrae, the same as humans.',
-    sampleResult: `Text Statistics
+export default function Truncate({
+  title,
+  longDescription
+}: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('string');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.textStatisticsWithoutAnyFlag'),
+      description: exampleText(
+        'exampleUi.thisExampleShowsBasicTextStatisticsWithoutAny'
+      ),
+      sampleText:
+        'Giraffes have long necks that can be up to 6 feet (1.8 meters) long, but they only have 7 neck vertebrae, the same as humans.',
+      sampleResult: `Text Statistics
 ==================
 Characters: 125
 Words: 26
 Lines: 1
 Sentences: 1
 Paragraphs: 1`,
-    sampleOptions: initialValues
-  },
-  {
-    title: 'Text Statistics with Characters Frequency',
-    description:
-      'This example shows basic text statistics with characters frequency.',
-    sampleText: `The Great Barrier Reef is the world's largest coral reef system, located off the coast of Australia. It consists of over 2,900 individual reefs and 900 islands. The reef is home to thousands of species of marine life, including fish, sea turtles, sharks, and dolphins. It is also a popular tourist destination, attracting millions of visitors every year. However, the reef is facing many threats, including climate change, pollution, and overfishing. Conservation efforts are being made to protect this unique and valuable ecosystem for future generations.`,
-    sampleResult: `Text Statistics
+      sampleOptions: initialValues
+    },
+    {
+      title: exampleText('exampleUi.textStatisticsWithCharactersFrequency'),
+      description: exampleText(
+        'exampleUi.thisExampleShowsBasicTextStatisticsWithCharacters'
+      ),
+      sampleText: `The Great Barrier Reef is the world's largest coral reef system, located off the coast of Australia. It consists of over 2,900 individual reefs and 900 islands. The reef is home to thousands of species of marine life, including fish, sea turtles, sharks, and dolphins. It is also a popular tourist destination, attracting millions of visitors every year. However, the reef is facing many threats, including climate change, pollution, and overfishing. Conservation efforts are being made to protect this unique and valuable ecosystem for future generations.`,
+      sampleResult: `Text Statistics
 ==================
 Characters: 556
 Words: 87
@@ -81,20 +90,23 @@ w: 2 (0.36%)
 ': 1 (0.18%)
 k: 1 (0.18%)
 q: 1 (0.18%)`,
-    sampleOptions: {
-      emptyLines: false,
-      sentenceDelimiters: '',
-      wordDelimiters: '',
-      characterCount: true,
-      wordCount: false
-    }
-  },
-  {
-    title: 'Text Statistics with Characters and Words Frequencies',
-    description:
-      'This example shows basic text statistics with characters and words frequencies.',
-    sampleText: `The Great Barrier Reef is the world's largest coral reef system, located off the coast of Australia. It consists of over 2,900 individual reefs and 900 islands. The reef is home to thousands of species of marine life, including fish, sea turtles, sharks, and dolphins. It is also a popular tourist destination, attracting millions of visitors every year. However, the reef is facing many threats, including climate change, pollution, and overfishing. Conservation efforts are being made to protect this unique and valuable ecosystem for future generations.`,
-    sampleResult: `Text Statistics
+      sampleOptions: {
+        emptyLines: false,
+        sentenceDelimiters: '',
+        wordDelimiters: '',
+        characterCount: true,
+        wordCount: false
+      }
+    },
+    {
+      title: exampleText(
+        'exampleUi.textStatisticsWithCharactersAndWordsFrequencies'
+      ),
+      description: exampleText(
+        'exampleUi.thisExampleShowsBasicTextStatisticsWithCharacters2'
+      ),
+      sampleText: `The Great Barrier Reef is the world's largest coral reef system, located off the coast of Australia. It consists of over 2,900 individual reefs and 900 islands. The reef is home to thousands of species of marine life, including fish, sea turtles, sharks, and dolphins. It is also a popular tourist destination, attracting millions of visitors every year. However, the reef is facing many threats, including climate change, pollution, and overfishing. Conservation efforts are being made to protect this unique and valuable ecosystem for future generations.`,
+      sampleResult: `Text Statistics
 ==================
 Characters: 556
 Words: 87
@@ -203,20 +215,16 @@ w: 2 (0.36%)
 ': 1 (0.18%)
 k: 1 (0.18%)
 q: 1 (0.18%)`,
-    sampleOptions: {
-      emptyLines: false,
-      sentenceDelimiters: '',
-      wordDelimiters: '',
-      characterCount: true,
-      wordCount: true
+      sampleOptions: {
+        emptyLines: false,
+        sentenceDelimiters: '',
+        wordDelimiters: '',
+        characterCount: true,
+        wordCount: true
+      }
     }
-  }
-];
+  ];
 
-export default function Truncate({
-  title,
-  longDescription
-}: ToolComponentProps) {
   const { t } = useTranslation('string');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');

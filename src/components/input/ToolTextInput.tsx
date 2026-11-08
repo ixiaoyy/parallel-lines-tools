@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 export default function ToolTextInput({
   value,
   onChange,
-  title = 'Input text',
+  title,
   placeholder
 }: {
   title?: string;
@@ -61,7 +61,8 @@ export default function ToolTextInput({
           }
         }}
         inputProps={{
-          'data-testid': 'text-input'
+          'data-testid': 'text-input',
+          'aria-label': title || t('toolTextInput.input')
         }}
       />
       <InputFooter handleCopy={handleCopy} handleImport={handleImportClick} />

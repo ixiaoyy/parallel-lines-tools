@@ -24,7 +24,11 @@ const ToolBreadcrumb: React.FC<BreadcrumbComponentProps> = ({ items }) => {
           );
         }
         return (
-          <Link color={theme.palette.primary.main} to={item.link} key={index}>
+          <Link
+            style={{ color: theme.palette.primary.main }}
+            to={item.link}
+            key={index}
+          >
             {item.title}
           </Link>
         );

@@ -1,3 +1,4 @@
+import { useTranslation as useExampleTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import ToolContent from '@components/ToolContent';
@@ -27,50 +28,51 @@ const initialValues: InitialValuesType = {
   multiLine: true
 };
 
-const exampleCards: CardExampleType<InitialValuesType>[] = [
-  {
-    title: 'Quote text with double quotes',
-    description: 'This example shows how to quote text with double quotes.',
-    sampleText: 'Hello World',
-    sampleResult: '"Hello World"',
-    sampleOptions: {
-      leftQuote: '"',
-      rightQuote: '"',
-      doubleQuotation: false,
-      emptyQuoting: true,
-      multiLine: false
-    }
-  },
-  {
-    title: 'Quote multi-line text with single quotes',
-    description:
-      'This example shows how to quote multi-line text with single quotes.',
-    sampleText: 'Hello\nWorld',
-    sampleResult: "'Hello'\n'World'",
-    sampleOptions: {
-      leftQuote: "'",
-      rightQuote: "'",
-      doubleQuotation: false,
-      emptyQuoting: true,
-      multiLine: true
-    }
-  },
-  {
-    title: 'Quote with custom quotes',
-    description: 'This example shows how to quote text with custom quotes.',
-    sampleText: 'Hello World',
-    sampleResult: '<<Hello World>>',
-    sampleOptions: {
-      leftQuote: '<<',
-      rightQuote: '>>',
-      doubleQuotation: false,
-      emptyQuoting: true,
-      multiLine: false
-    }
-  }
-];
-
 export default function Quote({ title }: ToolComponentProps) {
+  // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
+  const { t: exampleText } = useExampleTranslation('string');
+  const exampleCards: CardExampleType<InitialValuesType>[] = [
+    {
+      title: exampleText('exampleUi.quoteTextWithDoubleQuotes'),
+      description: exampleText('exampleUi.thisExampleShowsHowToQuoteTextWith'),
+      sampleText: 'Hello World',
+      sampleResult: '"Hello World"',
+      sampleOptions: {
+        leftQuote: '"',
+        rightQuote: '"',
+        doubleQuotation: false,
+        emptyQuoting: true,
+        multiLine: false
+      }
+    },
+    {
+      title: exampleText('exampleUi.quoteMultiLineTextWithSingleQuotes'),
+      description: exampleText('exampleUi.thisExampleShowsHowToQuoteMultiLine'),
+      sampleText: 'Hello\nWorld',
+      sampleResult: "'Hello'\n'World'",
+      sampleOptions: {
+        leftQuote: "'",
+        rightQuote: "'",
+        doubleQuotation: false,
+        emptyQuoting: true,
+        multiLine: true
+      }
+    },
+    {
+      title: exampleText('exampleUi.quoteWithCustomQuotes'),
+      description: exampleText('exampleUi.thisExampleShowsHowToQuoteTextWith2'),
+      sampleText: 'Hello World',
+      sampleResult: '<<Hello World>>',
+      sampleOptions: {
+        leftQuote: '<<',
+        rightQuote: '>>',
+        doubleQuotation: false,
+        emptyQuoting: true,
+        multiLine: false
+      }
+    }
+  ];
+
   const { t } = useTranslation('string');
   const [input, setInput] = useState<string>('');
   const [result, setResult] = useState<string>('');

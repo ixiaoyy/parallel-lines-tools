@@ -1,3 +1,4 @@
+import { useTranslation as useInlineTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import React, { useState } from 'react';
 import * as Yup from 'yup';
@@ -17,22 +18,25 @@ const initialValues = {
   cropShape: 'rectangular' as 'rectangular' | 'circular'
 };
 type InitialValuesType = typeof initialValues;
-const validationSchema = Yup.object({
-  xPosition: Yup.number()
-    .min(0, 'X position must be positive')
-    .required('X position is required'),
-  yPosition: Yup.number()
-    .min(0, 'Y position must be positive')
-    .required('Y position is required'),
-  cropWidth: Yup.number()
-    .min(1, 'Width must be at least 1px')
-    .required('Width is required'),
-  cropHeight: Yup.number()
-    .min(1, 'Height must be at least 1px')
-    .required('Height is required')
-});
 
 export default function CropImage({ title }: ToolComponentProps) {
+  // 仅本地化界面展示与校验提示；格式参数和处理流程保持原样。
+  const { t: inlineText } = useInlineTranslation('image');
+  const validationSchema = Yup.object({
+    xPosition: Yup.number()
+      .min(0, inlineText('inline.xPositionMustBePositive'))
+      .required(inlineText('inline.xPositionIsRequired')),
+    yPosition: Yup.number()
+      .min(0, inlineText('inline.yPositionMustBePositive'))
+      .required(inlineText('inline.yPositionIsRequired')),
+    cropWidth: Yup.number()
+      .min(1, inlineText('inline.widthMustBeAtLeast1px'))
+      .required(inlineText('inline.widthIsRequired')),
+    cropHeight: Yup.number()
+      .min(1, inlineText('inline.heightMustBeAtLeast1px'))
+      .required(inlineText('inline.heightIsRequired'))
+  });
+
   const [input, setInput] = useState<File | null>(null);
   const [result, setResult] = useState<File | null>(null);
 
@@ -127,13 +131,13 @@ export default function CropImage({ title }: ToolComponentProps) {
     updateField
   }) => [
     {
-      title: 'Crop Position and Size',
+      title: inlineText('inline.cropPositionAndSize'),
       component: (
         <Box>
           <TextFieldWithDesc
             value={values.xPosition}
             onOwnChange={(val) => updateField('xPosition', val)}
-            description={'X position (in pixels)'}
+            description={inlineText('inline.xPositionInPixels')}
             inputProps={{
               'data-testid': 'x-position-input',
               type: 'number',
@@ -143,7 +147,7 @@ export default function CropImage({ title }: ToolComponentProps) {
           <TextFieldWithDesc
             value={values.yPosition}
             onOwnChange={(val) => updateField('yPosition', val)}
-            description={'Y position (in pixels)'}
+            description={inlineText('inline.yPositionInPixels')}
             inputProps={{
               'data-testid': 'y-position-input',
               type: 'number',
@@ -153,7 +157,7 @@ export default function CropImage({ title }: ToolComponentProps) {
           <TextFieldWithDesc
             value={values.cropWidth}
             onOwnChange={(val) => updateField('cropWidth', val)}
-            description={'Crop width (in pixels)'}
+            description={inlineText('inline.cropWidthInPixels')}
             inputProps={{
               'data-testid': 'crop-width-input',
               type: 'number',
@@ -163,7 +167,7 @@ export default function CropImage({ title }: ToolComponentProps) {
           <TextFieldWithDesc
             value={values.cropHeight}
             onOwnChange={(val) => updateField('cropHeight', val)}
-            description={'Crop height (in pixels)'}
+            description={inlineText('inline.cropHeightInPixels')}
             inputProps={{
               'data-testid': 'crop-height-input',
               type: 'number',
@@ -174,20 +178,22 @@ export default function CropImage({ title }: ToolComponentProps) {
       )
     },
     {
-      title: 'Crop Shape',
+      title: inlineText('inline.cropShape'),
       component: (
         <Box>
           <SimpleRadio
             onClick={() => updateField('cropShape', 'rectangular')}
             checked={values.cropShape == 'rectangular'}
-            description={'Crop a rectangular fragment from an image.'}
-            title={'Rectangular Crop Shape'}
+            description={inlineText(
+              'inline.cropARectangularFragmentFromAnImage'
+            )}
+            title={inlineText('inline.rectangularCropShape')}
           />
           <SimpleRadio
             onClick={() => updateField('cropShape', 'circular')}
             checked={values.cropShape == 'circular'}
-            description={'Crop a circular fragment from an image.'}
-            title={'Circular Crop Shape'}
+            description={inlineText('inline.cropACircularFragmentFromAnImage')}
+            title={inlineText('inline.circularCropShape')}
           />
         </Box>
       )
@@ -201,7 +207,7 @@ export default function CropImage({ title }: ToolComponentProps) {
       value={input}
       onChange={setInput}
       accept={['image/*']}
-      title={'Input image'}
+      title={inlineText('changeColors.inputTitle')}
       showCropOverlay={!!input}
       cropShape={values.cropShape as 'rectangular' | 'circular'}
       cropPosition={{
@@ -225,12 +231,11 @@ export default function CropImage({ title }: ToolComponentProps) {
       validationSchema={validationSchema}
       renderCustomInput={renderCustomInput}
       resultComponent={
-        <ToolFileResult title={'Cropped image'} value={result} />
+        <ToolFileResult title={inlineText('crop.resultTitle')} value={result} />
       }
       toolInfo={{
-        title: 'Crop Image',
-        description:
-          'This tool allows you to crop an image by specifying the position, size, and shape of the crop area. You can choose between rectangular or circular cropping.'
+        title: inlineText('crop.title'),
+        description: inlineText('inline.thisToolAllowsYouToCropAn')
       }}
     />
   );
