@@ -31,7 +31,7 @@ async function sandbox(status = 'passed', badHash = false, badUrl = false): Prom
 }
 
 function run(root: string, cached = false, options: string[] = [], prepared = false) {
-  return spawnSync(process.execPath, ['--import', pathToFileURL(path.join(root, 'mock.mjs')).href, path.join(root, 'scripts/install-media-core.mjs'), ...options], { cwd: root, env: { ...process.env, FAIL_ON_FETCH: cached ? '1' : '0', ...(prepared ? { TOOLBOX_MEDIA_CORE_DIR: 'prepared-core' } : {}) }, encoding: 'utf8', timeout: 15000 });
+  return spawnSync(process.execPath, ['--import', pathToFileURL(path.join(root, 'mock.mjs')).href, path.join(root, 'scripts/install-media-core.mjs'), ...options], { cwd: root, env: { ...process.env, FAIL_ON_FETCH: cached ? '1' : '0', ...(prepared ? { TOOLBOX_MEDIA_CORE_DIR: 'prepared-core' } : {}) }, encoding: 'utf8', timeout: 20000 });
 }
 
 afterEach(async () => {
@@ -62,6 +62,26 @@ describe('locked media installation', () => {
     expect(result.status).not.toBe(0); expect(result.stderr).toContain('integrity mismatch');
     await expect(fs.stat(path.join(root, '.media-core/runtime/ffmpeg-core.wasm'))).rejects.toMatchObject({ code: 'ENOENT' });
   });
+  it('retries a transient 504 once and still verifies the same locked bytes', async () => {
+    const root = await sandbox();
+    await fs.appendFile(
+      path.join(root, 'mock.mjs'),
+      `const successful=globalThis.fetch; const calls=[]; globalThis.fetch=async(url)=>{ calls.push(new URL(url).pathname.split('/').pop()); if(calls.length===1)return new Response('temporary',{status:504}); return successful(url); }; process.on('exit',()=>fs.writeFileSync(new URL('./calls.json',import.meta.url),JSON.stringify(calls)));\n`
+    );
+    const result = run(root);
+    expect(result.status, result.stderr).toBe(0);
+    expect(JSON.parse(result.stdout).verifiedAssets).toBe(4);
+    expect(result.stderr).toContain('core-receipt.json');
+    expect(
+      JSON.parse(await fs.readFile(path.join(root, 'calls.json'), 'utf8'))
+    ).toEqual([
+      'core-receipt.json',
+      'core-receipt.json',
+      'ffmpeg-core.js',
+      'ffmpeg-core.wasm',
+      'media-core-NOTICES.txt'
+    ]);
+  }, 15000);
   it('rejects a core not verified by the real browser job', async () => {
     const result = run(await sandbox('awaiting-real-browser-verification'));
     expect(result.status).not.toBe(0); expect(result.stderr).toContain('verified source release');

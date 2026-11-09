@@ -54,7 +54,7 @@ async function directory() {
   return current;
 }
 
-/** GET 资产有首响应15秒、响应空闲30秒及单次180秒上限；只重试一次可重试网络/HTTP错误。 */
+/** GET 首响应/空闲30秒、单次180秒、全程8分钟；只重试一次瞬时网络/HTTP错误。 */
 async function download(info, target) {
   const temporary = `${target}.download-${process.pid}`;
   for (let attempt = 0; attempt < 2; attempt++) {
@@ -62,13 +62,23 @@ async function download(info, target) {
       throw new Error('Media installation exceeded eight minutes');
     const controller = new AbortController();
     const total = setTimeout(
-      () => controller.abort(new Error('Media total timeout')),
+      () =>
+        controller.abort(
+          Object.assign(new Error(`Media total timeout: ${info.file}`), {
+            retryable: true
+          })
+        ),
       Math.min(180000, deadline - Date.now())
     );
     let phase = setTimeout(
       () =>
-        controller.abort(new Error('Media connection/response-header timeout')),
-      15000
+        controller.abort(
+          Object.assign(
+            new Error(`Media connection/response-header timeout: ${info.file}`),
+            { retryable: true }
+          )
+        ),
+      30000
     );
     let file;
     try {
@@ -78,7 +88,9 @@ async function download(info, target) {
       });
       clearTimeout(phase);
       if (!response.ok) {
-        const error = new Error(`Media download HTTP ${response.status}`);
+        const error = new Error(
+          `Media download HTTP ${response.status}: ${info.file}`
+        );
         error.retryable = transient.has(response.status);
         await response.body?.cancel();
         throw error;
@@ -87,7 +99,13 @@ async function download(info, target) {
       let count = 0;
       const hash = createHash('sha256');
       phase = setTimeout(
-        () => controller.abort(new Error('Media response-body timeout')),
+        () =>
+          controller.abort(
+            Object.assign(
+              new Error(`Media response-body timeout: ${info.file}`),
+              { retryable: true }
+            )
+          ),
         30000
       );
       for await (const chunk of response.body) {
@@ -98,7 +116,13 @@ async function download(info, target) {
         hash.update(chunk);
         await file.writeFile(chunk);
         phase = setTimeout(
-          () => controller.abort(new Error('Media response-body timeout')),
+          () =>
+            controller.abort(
+              Object.assign(
+                new Error(`Media response-body timeout: ${info.file}`),
+                { retryable: true }
+              )
+            ),
           30000
         );
       }
@@ -122,9 +146,17 @@ async function download(info, target) {
           'UND_ERR_HEADERS_TIMEOUT',
           'UND_ERR_BODY_TIMEOUT'
         ].includes(error.cause?.code);
-      if (!retryable || attempt === 1 || Date.now() + 3000 >= deadline)
+      if (!retryable || attempt === 1 || Date.now() + 10000 >= deadline)
         throw error;
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+      console.error(
+        JSON.stringify({
+          operation: 'media-download-retry',
+          asset: info.file,
+          attempt: 2,
+          reason: error.message
+        })
+      );
+      await new Promise((resolve) => setTimeout(resolve, 10000));
     } finally {
       clearTimeout(total);
       clearTimeout(phase);

@@ -16,12 +16,19 @@ const mediaLock = fs.existsSync('media-core.lock.json')
   ? JSON.parse(fs.readFileSync('media-core.lock.json', 'utf8'))
   : null;
 const preparedCoreDirectory = process.env.TOOLBOX_MEDIA_CORE_DIR;
-const mediaCore = readMediaCoreInfo(
-  preparedCoreDirectory || (mediaLock ? '.media-core/runtime' : undefined)
-);
+// 单元测试使用已有的模块替身，不新增下载生产 WASM 的前置；正式构建仍必须核对锁定核心。
+const unitTestsOnly =
+  process.env.VITEST === 'true' &&
+  process.env.TOOLBOX_REQUIRE_MEDIA_CORE !== '1';
+const mediaCore = unitTestsOnly
+  ? null
+  : readMediaCoreInfo(
+      preparedCoreDirectory || (mediaLock ? '.media-core/runtime' : undefined)
+    );
 const requireVerifiedCore =
-  process.env.TOOLBOX_REQUIRE_MEDIA_CORE === '1' ||
-  (mediaLock && !preparedCoreDirectory);
+  !unitTestsOnly &&
+  (process.env.TOOLBOX_REQUIRE_MEDIA_CORE === '1' ||
+    (mediaLock && !preparedCoreDirectory));
 if (requireVerifiedCore && (!mediaCore || !mediaCore.validated))
   throw new Error(
     'Public deployment requires the prepared media core and corresponding source receipt'

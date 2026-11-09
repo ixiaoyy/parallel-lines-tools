@@ -43,6 +43,8 @@ npm run build
 
 安装仍需要取得锁文件中的 npm 发布物；源码 ZIP 不附带 npm 或媒体二进制缓存，也不是完全离线构建包；首次重建还需取得锁定 Release 的 JS/WASM/回执。`--ignore-scripts` 避免在没有 `.git` 的源码解压目录安装提交钩子。`npm run build` 的 prebuild 在存在自建锁时自动校验/取得对应核心，实际 JS/WASM 来源与回执不一致会停止；没有旧二进制兜底。当前 Vite 通过 `upstream-base.json` 取得候选版本标识，不要求归档包含 `.git`。
 
+已有 `HTTP_PROXY`/`HTTPS_PROXY` 的网络环境，可在 Node 22.21+ 设置 `NODE_USE_ENV_PROXY=1`，让 Node 内建 fetch 沿用现有代理；不需要把代理地址或凭据写进源码。正式 CI 使用该开关。下载保留 30 秒首响应/空闲、单次 180 秒、全程 8 分钟上限，瞬时网络/504 等最多重试一次，完整性不符不重试；错误明确指出资产名。单元测试不使用生产二进制，不因选定发行锁而新增下载 WASM 的前置。
+
 构建产物是 `dist` 静态目录。仅本机预览可以执行：
 
 ```powershell

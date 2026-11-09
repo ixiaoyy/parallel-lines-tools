@@ -23,6 +23,8 @@ jobs:
       APPLICATION_REVISION: ${{ github.sha }}
       SITE_TAG: site-${{ github.sha }}
       NO_PROXY: localhost,127.0.0.1,::1
+      # Node 22.21+ 的 fetch 才会在此开关下沿用 runner 既有代理；不读取或输出代理值。
+      NODE_USE_ENV_PROXY: '1'
       TOOLBOX_MEDIA_CORE_DIR: .media-core/runtime
       TOOLBOX_REQUIRE_MEDIA_CORE: '1'
     steps:
