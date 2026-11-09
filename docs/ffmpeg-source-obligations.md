@@ -29,18 +29,19 @@
 - [Makefile](https://github.com/ffmpegwasm/ffmpeg.wasm/blob/71aa99d37c02a7b4c435275ca9ef50e612f6efa1/Makefile) 的 `make prd` 走单线程 `build-st`，生产编译标志为 `-O3 -msimd128`；`prd-mt` 是另一种构建，不能混用。
 - [build/ffmpeg-wasm.sh](https://github.com/ffmpegwasm/ffmpeg.wasm/blob/71aa99d37c02a7b4c435275ca9ef50e612f6efa1/build/ffmpeg-wasm.sh) 负责最终 Emscripten 链接和 ES 模块输出。
 
-上述文件已查阅，但没有执行 Docker 构建，也没有验证重新构建产物与 npm 二进制一致。配方中 `x264=4-cores`、`LAME=master` 等仍是可移动分支，不能凭当前分支 HEAD 猜测发布包当时的全部构建输入。
+上游基线审计时尚未执行 Docker 构建；后续自建 CI 已实际完成依赖和核心链接，但没有验证自建产物与 npm 二进制逐字节一致。上游配方中 `x264=4-cores`、`LAME=master` 等仍是可移动分支，不能凭当前分支 HEAD 猜测发布包当时的全部构建输入。
 
 ## 已批准的自建与共同源码发布路径
 
 官方 release 没有提供已核验的旧 npm 二进制完整输入快照，因此当前采用新自建核心闭合，不追随移动分支猜测旧包来源。
 
 - `core-build.lock.json`：固定官方配方提交、16 个源码 commit、zimg 的 googletest 子模块、SDL2 port 版本/官方 SHA512、SDK 镜像、Dockerfile frontend 和 BuildKit 镜像 digest。这些是 2026-11-09 选择的新构建输入。
-- `scripts/media-core/prepare.py`：取得固定源码并校验子模块清单，预填 SHA512 验证的 SDL2 源码。保留全部 codec configure/link 标志，将所有 `make -j`（含 install）限制为 2，并移除 FriBidi 安装的盲目 `|| true`。实际编译错误需依据日志修复，不删功能或伪装通过。
+- `scripts/media-core/prepare.py`：取得固定源码并校验子模块清单，预填 SHA512 验证的 SDL2 源码。保留全部 codec configure/link 标志，将 `make -j`（含 install）上限限制为 2，zlib 因已核同名归档竞态单独串行；FriBidi 仅绕过失败的 c2man 手册安装，完整库/头文件/pkg-config 必须存在，不盲目 `|| true`。实际编译错误需依据日志修复，不删功能或伪装通过。
+- x265 明确取得与基线 commit 相同的 3.4 tag，使上游版本脚本生成 x265.pc；另对 `primitives.cpp` 无 ASM fallback 应用一行真实源码 ABI 修复：定义从三参数 void 改为与 cpu.cpp 声明一致的一参数 uint64_t 并返回 0。原始 commit 只是基线，实际差异和 Git patch 随源码归档，不能声称源码完全未改。
 - 生成的 Dockerfile 用本地 COPY 代替 16 个 Git ADD/clone；所有编译 RUN 都是 `--network=none`。只有基础镜像和系统构建工具准备阶段可联网。系统工具的实际包版本、Emscripten 版本与实际 SDK 源码从编译环境导出保存。
-- `.github/workflows/build-media-core.yml`：只手动触发，目标为用户批准的公开 `ixiaoyy/parallel-lines-tools`，标准 `ubuntu-24.04` runner。作业总时限 180 分钟，编译上限 130 分钟，BuildKit 并发 2、CPU 配额 2、内存上限 6 GiB；不买新服务器/付费 runner，不使用 Actions artifact 保存大源码。
+- `.github/workflows/build-media-core.yml`：只手动触发，目标为用户批准的公开 `ixiaoyy/parallel-lines-tools`，标准 `ubuntu-24.04` runner。作业总时限 180 分钟，编译上限 130 分钟，BuildKit 并发 2、CPU 配额 2、内存上限 6 GiB；不买新服务器/付费 runner，不使用 Actions artifact 保存大源码。`sdk_only` 默认 true，先只跑已锁镜像的短身份预检；确认后以 false 执行编译/验收/发布。
 - `scripts/media-core/finalize.py`：将全部实际源代码、port 原包、SDK 源码、构建脚本/修改、输入锁与构建记录共同归档，产生 `core-receipt.json`，关联实际 JS/WASM 的大小/SHA256、源码包的大小/SHA256/公开 URL，以及工具箱提交/运行编号。
-- 产物先放 `.media-core/runtime/`，使用 `TOOLBOX_MEDIA_CORE_DIR` 构建工具箱并跑已有真实 WAV 转码浏览器用例；只有实际测试成功才发布 `media-core-pl.1` Release 的二进制、源码、许可与收据。不把模拟单测或 Docker 编译成功当作真实转码通过。
+- 产物先放 `.media-core/runtime/`，先在 Chromium 运行 HEVC 8/10/12-bit 两帧无损编码/逐字节解码及 MP3/AAC 实际编码/非静音 PCM 解码，再使用 `TOOLBOX_MEDIA_CORE_DIR` 构建工具箱并跑已有真实 WAV 页面用例；每次 exec 检查返回码，同一二进制身份和全部探针成功后才发布 `media-core-pl.1` Release 的二进制、源码、许可与收据。不把模拟单测或 Docker 编译成功当作真实转码通过。
 
 `media-core-NOTICES.txt` 会按实际源码组件与固定 SHA 汇入原始顶层 COPYING/LICENSE/LICENCE/NOTICE/AUTHORS/COPYRIGHT/PATENTS 等正文，另含 zlib 的许可原文及 FreeType 的 FTL/GPL 双许可材料；SDL2 原文、实际 SDK 源码中的许可正文也纳入。不会仅列仓库 URL，不将所有组件统一标为 MIT。完整原文件和其子目录版权始终随 preferred source 提供。
 
@@ -48,9 +49,13 @@
 
 ### 当前证据与剩余验收
 
-本地只执行了锁格式验证、Python 语法、工作流 YAML、实际官方 Dockerfile 转换检查及 SDL2 原包校验；实际原包 9039988 字节，官方 SHA512 匹配。未启动本机 Docker，也没有在本机编译。Windows 本机未找到预设路径下的 Bash，因此没有取得 Bash 语法检查通过证据，工作流的 Linux shell 执行仍待 CI。
+本地只做锁、语法和配方/实际源码补丁准备检查，没有启动本机 Docker。此前真实 CI 依次暴露并修复 zlib 同名归档竞态、FriBidi 手册安装问题、x265 缺 tag 导致 pc 不生成的问题。
 
-工作流可启动不代表这些发布项已经完成：16 仓库/子模块实际取得、完整 Docker 编译、完整 preferred source 归档、独立许可正文实际汇总、真实 WASM 转码、Release 资产完整/公开可访问及后续部署所用核心身份。以上必须根据 CI 和发布收据逐项验收。当前没有声称完整源码义务已闭合。
+第 4 次完整 run `42549935072` 已完成依赖、FFmpeg configure/编译及 UMD/ESM 最终链接，失败发生在末尾 SDK 版本文件的错误字符串断言，因此没有已发布的核心产物。该 run 还暴露 x265 三位深的 xgetbv 函数签名错配；常规无 ASM 路径是否早退不能代替正确 ABI，未取得该版本产物做反汇编，也不能断言它必然在正常 H265 路径 trap。
+
+短预检 [42558773964](https://github.com/ixiaoyy/parallel-lines-tools/actions/runs/42558773964) 实测通过：原始版本文件含双引号，按官方 `tools/shared.py` 的 `strip().strip('"')` 和三段数字解析后是 3.1.40；实际 emcc 3.1.40、返回 0，与锁定 image digest 一致。完整身份原文保存在 `scripts/media-core/sdk-identity-verified.json` 并随源码交付。身份检查已前移，尾部导出只记录实际版本/源码，不再重复错误的未解析字符串断言。
+
+新的实际源码 ABI 补丁、无签名警告门槛及 HEVC/MP3/AAC 探针已准备，但尚待下一次完整 CI 执行。仍未完成：完整 preferred source 导出、实际独立许可汇总、修正后 WASM 的真实编解码、Release 资产完整/公开可访问，以及最终部署所用核心身份。不能用准备通过、SDK-only 成功或单纯链接成功冒充这些验收。
 
 ## 运行边界与恢复
 

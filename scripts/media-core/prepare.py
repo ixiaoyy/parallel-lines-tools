@@ -109,6 +109,18 @@ def sdl_port(port, output):
 def recipe(lock, source):
     """保留全部上游编解码器，限制并发并移除盲目吞错；所有编译 RUN 均禁止网络。"""
     upstream = source / 'upstream'
+    # 原始 commit 保持为基线；将已确认的无 ASM ABI 定义差异作为实际源码补丁共同交付。
+    primitive_path = source / 'vendor' / 'x265' / 'source' / 'common' / 'primitives.cpp'
+    primitive = primitive_path.read_text(encoding='utf-8')
+    incorrect = 'void PFX(cpu_xgetbv)(uint32_t, uint32_t *, uint32_t *) {}'
+    corrected = 'uint64_t PFX(cpu_xgetbv)(int) { return 0; }'
+    if primitive.count(incorrect) != 1: raise RuntimeError('Pinned x265 fallback definition changed')
+    primitive_path.write_text(primitive.replace(incorrect, corrected), encoding='utf-8', newline='\n')
+    patch_dir = source / 'patches'
+    patch_dir.mkdir(exist_ok=True)
+    patch = subprocess.check_output(['git', 'diff', '--no-ext-diff', '--', 'source/common/primitives.cpp'], cwd=source / 'vendor' / 'x265', timeout=30)
+    if not patch: raise RuntimeError('x265 ABI source delta was not recorded')
+    (patch_dir / 'x265-xgetbv-abi.patch').write_bytes(patch)
     modifications = []
     for path in (upstream / 'build').glob('*.sh'):
         original = path.read_text(encoding='utf-8')
@@ -179,7 +191,7 @@ fi'''
         if line.startswith('RUN ') and 'apt-get' not in line: line = line.replace('RUN ', 'RUN --network=none ', 1)
         if line == 'FROM scratch AS exportor':
             lines.extend([
-                'RUN --network=none mkdir -p /build-records /toolchain && dpkg-query -W > /build-records/os-packages.tsv && emcc --version > /build-records/emcc-version.txt && python3 -c "import pathlib; assert pathlib.Path(\'/emsdk/upstream/emscripten/emscripten-version.txt\').read_text().strip() in (\'3.1.40\', \'3.1.40-git\')" && tar --exclude=./cache --exclude=./.git -czf /toolchain/emscripten-source.tar.gz -C /emsdk/upstream/emscripten .',
+                'RUN --network=none mkdir -p /build-records /toolchain && dpkg-query -W > /build-records/os-packages.tsv && emcc --version > /build-records/emcc-version.txt && cp /emsdk/upstream/emscripten/emscripten-version.txt /build-records/emscripten-version.raw && tar --exclude=./cache --exclude=./.git -czf /toolchain/emscripten-source.tar.gz -C /emsdk/upstream/emscripten .',
                 line,
                 'COPY --from=ffmpeg-wasm-builder /build-records /build-records',
                 'COPY --from=ffmpeg-wasm-builder /toolchain /toolchain'
@@ -192,7 +204,7 @@ fi'''
     assert result.count('--enable-lib') == (upstream / 'Dockerfile').read_text().count('--enable-lib')
     (source / 'Dockerfile').write_text(result, encoding='utf-8', newline='\n')
     (source / '.dockerignore').write_text('archives/\ntoolchain/\n*.tar.gz\n', encoding='utf-8')
-    (source / 'MODIFICATIONS.json').write_text(json.dumps({'build_jobs': 2, 'library_jobs': {'zlib': 1}, 'zlib': {'reason': 'Both zlib and zlibstatic map to libz.a under the Emscripten CMake configuration; parallel install produced an llvm-ranlib missing archive failure. Only this library is serialized; no target or codec is removed.', 'failure_evidence': 'https://github.com/ixiaoyy/parallel-lines-tools/actions/runs/42508247233'}, 'x265': {'change': 'Fetch and verify locked refs/tags/3.4 identifying the unchanged source commit; original version.cmake then generates x265.pc. Assert non-empty installed pc; do not fabricate metadata or drop x265.', 'failure_evidence': 'https://github.com/ixiaoyy/parallel-lines-tools/actions/runs/42510809406'}, 'ffmpeg_diagnostics': 'On configure failure emit only last 200 compiler-probe log lines and first 40 x265.pc lines, then preserve original nonzero status. No environment dump.', 'patched_scripts': modifications, 'fribidi': {'change': 'Removed blind install || true. Install gen.tab and the complete lib subdirectory plus root pkg-config data; omit only c2man manuals/CLI/tests not linked into FFmpeg. Assert static library, headers and pkg-config are non-empty.', 'failure_evidence': 'https://github.com/ixiaoyy/parallel-lines-tools/actions/runs/42509219935'}, 'dockerfile': 'pinned tools; COPY vendored commits and verified SDL port; network disabled for compile; source/export records; no codec removed'}, indent=2) + '\n', encoding='utf-8')
+    (source / 'MODIFICATIONS.json').write_text(json.dumps({'build_jobs': 2, 'library_jobs': {'zlib': 1}, 'zlib': {'reason': 'Both zlib and zlibstatic map to libz.a under the Emscripten CMake configuration; parallel install produced an llvm-ranlib missing archive failure. Only this library is serialized; no target or codec is removed.', 'failure_evidence': 'https://github.com/ixiaoyy/parallel-lines-tools/actions/runs/42508247233'}, 'x265': {'change': 'Fetch and verify locked refs/tags/3.4 at the baseline commit so original version.cmake generates x265.pc; also apply the separately recorded no-assembly fallback ABI source patch.', 'baseline_commit': next(d['commit'] for d in lock['dependencies'] if d['name'] == 'x265'), 'source_patch': {'file': 'vendor/x265/source/common/primitives.cpp', 'patch': 'patches/x265-xgetbv-abi.patch', 'sha256': hashlib.sha256(patch).hexdigest(), 'reason': 'Match cpu.cpp declaration: uint64_t cpu_xgetbv(int), returning zero in the no-assembly fallback. Shared source covers 8/10/12-bit builds; no codec or CPU feature flag removed.'}, 'failure_evidence': ['https://github.com/ixiaoyy/parallel-lines-tools/actions/runs/42510809406', 'https://github.com/ixiaoyy/parallel-lines-tools/actions/runs/42549935072']}, 'sdk_identity': 'Verified before compilation with official shared.py version parsing and pinned image digest; final export only records actual identity/source.', 'ffmpeg_diagnostics': 'On configure failure emit only last 200 compiler-probe log lines and first 40 x265.pc lines, then preserve original nonzero status. No environment dump.', 'patched_scripts': modifications, 'fribidi': {'change': 'Removed blind install || true. Install gen.tab and the complete lib subdirectory plus root pkg-config data; omit only c2man manuals/CLI/tests not linked into FFmpeg. Assert static library, headers and pkg-config are non-empty.', 'failure_evidence': 'https://github.com/ixiaoyy/parallel-lines-tools/actions/runs/42509219935'}, 'dockerfile': 'pinned tools; COPY vendored commits and verified SDL port; network disabled for compile; source/export records; no codec removed'}, indent=2) + '\n', encoding='utf-8')
 
 
 def main():

@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "sdk_image": "emscripten/emsdk:3.1.40@sha256:c1e807a6e03ac5bd5b37bae2ace3c46c08579e2ddeb951037a3b8dac7067f2cc",
+  "version_file_repr": "'\"3.1.40\"\\n'",
+  "version_file_raw": "\"3.1.40\"\n",
+  "emcc_version": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 3.1.40 (5c27e79dd0a9c4e27ef2326841698cdd4f6b5784)\nCopyright (C) 2014 the Emscripten authors (see AUTHORS.txt)\nThis is free and open source software under the MIT license.\nThere is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "emcc_returncode": 0,
+  "parser": "Emscripten 3.1.40 tools/shared.py:set_version_globals",
+  "validated": true,
+  "parsed_version": "3.1.40",
+  "semantic_version": "3.1.40",
+  "evidence_run": "https://github.com/ixiaoyy/parallel-lines-tools/actions/runs/42558773964"
+}

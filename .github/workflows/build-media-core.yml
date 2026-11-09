@@ -78,6 +78,10 @@ jobs:
             --output type=local,dest=.media-core/output \
             --file .media-core/source/Dockerfile .media-core/source \
             2>&1 | tee .media-core/build.log
+          if grep -Eq 'function signature mismatch: x265(_10bit|_12bit)?_cpu_xgetbv' .media-core/build.log; then
+            echo 'Known x265 ABI mismatch remains; refusing publication.' >&2
+            exit 1
+          fi
           python3 scripts/media-core/finalize.py --output .media-core
       - uses: actions/setup-node@v4
         if: ${{ !inputs.sdk_only }}
@@ -92,6 +96,7 @@ jobs:
           set -euo pipefail
           npm ci --ignore-scripts --no-audit --no-fund
           npx playwright install --with-deps chromium
+          node scripts/media-core/probe-media.mjs
           npm run build
           npx playwright test --config scripts/media-core/playwright.config.ts --grep 'FFmpeg本地核心实际处理音频'
           python3 scripts/media-core/finalize.py --output .media-core --record-browser

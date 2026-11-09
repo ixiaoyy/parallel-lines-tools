@@ -69,7 +69,13 @@ def record_browser(base):
     assert stats['expected'] >= 1 and stats['unexpected'] == 0 and stats.get('skipped', 0) == 0 and stats.get('flaky', 0) == 0, 'Actual media browser verification did not pass'
     receipt_path = base / 'runtime' / 'core-receipt.json'
     receipt = json.loads(receipt_path.read_text(encoding='utf-8'))
-    receipt['validation'] = {'status': 'passed', 'browser': 'chromium', 'actual_media_tests': stats['expected'], 'report': descriptor(report_path), 'scope': 'Existing real-WAV FFmpeg browser case; not all codecs individually exercised.'}
+    probe_path = base / 'codec-probes.json'
+    probe = json.loads(probe_path.read_text(encoding='utf-8'))
+    assert probe['status'] == 'passed' and not probe['externalRequests']
+    assert probe['core_binaries'] == receipt['binaries'], 'Codec probes used a different core'
+    assert {p['id'] for p in probe['probes']} == {'hevc-8', 'hevc-10', 'hevc-12', 'mp3', 'aac'}
+    assert all(p['status'] == 'passed' and p['encodeReturnCode'] == 0 and p['decodeReturnCode'] == 0 for p in probe['probes'])
+    receipt['validation'] = {'status': 'passed', 'browser': 'chromium', 'actual_media_tests': stats['expected'], 'codec_probes': len(probe['probes']), 'report': descriptor(report_path), 'codec_report': descriptor(probe_path), 'scope': 'Real-WAV toolbox UI case plus HEVC 8/10/12-bit lossless encode/decode and MP3/AAC encode/decode; not all codecs individually exercised.'}
     receipt_path.write_text(json.dumps(receipt, indent=2) + '\n', encoding='utf-8')
     shutil.copy2(receipt_path, base / 'release' / receipt_path.name)
     shutil.copy2(report_path, base / 'release' / 'media-core-browser-results.json')
@@ -86,6 +92,11 @@ def finalize(base):
     release.mkdir(exist_ok=False)
     for directory in ('toolchain', 'build-records'):
         shutil.copytree(output / directory, source / directory)
+    identity_path = base / 'sdk-identity.json'
+    identity = json.loads(identity_path.read_text(encoding='utf-8'))
+    if not identity['validated'] or identity['sdk_image'] != lock['sdk']['image'] or identity['semantic_version'] != lock['sdk']['version']:
+        raise RuntimeError('SDK identity was not verified before compilation')
+    shutil.copy2(identity_path, source / 'build-records' / 'sdk-identity.json')
     for name in ('prepare.py', 'finalize.py', 'playwright.config.ts', 'buildkitd.toml'):
         shutil.copy2(ROOT / 'scripts' / 'media-core' / name, source / 'recipe' / name)
     shutil.copy2(ROOT / '.github' / 'workflows' / 'build-media-core.yml', source / 'recipe' / 'build-media-core.yml')
@@ -113,7 +124,7 @@ def finalize(base):
     notices_path.write_text('\n'.join(notice), encoding='utf-8')
     shutil.copy2(notices_path, release / notices_path.name)
     input_info = descriptor(ROOT / 'core-build.lock.json')
-    receipt = {'schema': 1, 'version': lock['release_tag'], 'license': 'GPL-2.0-or-later', 'binaries': binaries, 'source': source_info, 'notices': descriptor(notices_path), 'inputs': input_info, 'build': {'repository': os.environ.get('GITHUB_REPOSITORY', 'local-unpublished'), 'revision': os.environ.get('GITHUB_SHA', 'local-uncommitted'), 'run_url': f'https://github.com/{os.environ.get("GITHUB_REPOSITORY", "ixiaoyy/parallel-lines-tools")}/actions/runs/{os.environ.get("GITHUB_RUN_ID", "local")}', 'sdk': lock['sdk'], 'frontend': lock['frontend'], 'builder': lock['builder'], 'parallelism': 2, 'single_thread': True, 'compiler_flags': '-O3 -msimd128'}, 'validation': {'status': 'awaiting-real-browser-verification'}}
+    receipt = {'schema': 1, 'version': lock['release_tag'], 'license': 'GPL-2.0-or-later', 'binaries': binaries, 'source': source_info, 'notices': descriptor(notices_path), 'inputs': input_info, 'build': {'repository': os.environ.get('GITHUB_REPOSITORY', 'local-unpublished'), 'revision': os.environ.get('GITHUB_SHA', 'local-uncommitted'), 'run_url': f'https://github.com/{os.environ.get("GITHUB_REPOSITORY", "ixiaoyy/parallel-lines-tools")}/actions/runs/{os.environ.get("GITHUB_RUN_ID", "local")}', 'sdk': lock['sdk'], 'sdk_identity': identity, 'source_modifications': json.loads((source / 'MODIFICATIONS.json').read_text(encoding='utf-8')), 'frontend': lock['frontend'], 'builder': lock['builder'], 'parallelism': 2, 'single_thread': True, 'compiler_flags': '-O3 -msimd128'}, 'validation': {'status': 'awaiting-real-browser-verification'}}
     (runtime / 'core-receipt.json').write_text(json.dumps(receipt, indent=2) + '\n', encoding='utf-8')
     shutil.copy2(runtime / 'core-receipt.json', release / 'core-receipt.json')
     shutil.copy2(ROOT / 'core-build.lock.json', release / 'core-build.lock.json')
