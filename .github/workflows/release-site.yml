@@ -77,6 +77,23 @@ jobs:
         timeout-minutes: 6
         run: npm run build
 
+      - name: Rebuild the delivered source ZIP without Git or shared dependencies
+        timeout-minutes: 6
+        shell: bash
+        run: |
+          set -euo pipefail
+          SOURCE_CHECK="$RUNNER_TEMP/toolbox-source-rebuild"
+          test ! -e "$SOURCE_CHECK"
+          mkdir "$SOURCE_CHECK"
+          unzip -q dist/toolbox-source-local-20261109.zip -d "$SOURCE_CHECK"
+          test ! -e "$SOURCE_CHECK/.git"
+          test ! -e "$SOURCE_CHECK/node_modules"
+          cd "$SOURCE_CHECK"
+          npm ci --ignore-scripts --no-audit --no-fund
+          # 使用源码包自己的锁和默认 prebuild，不能沿用工作区的显式核心目录。
+          unset TOOLBOX_MEDIA_CORE_DIR
+          npm run build
+
       - name: Resolve official Nginx base to its actual immutable digest
         timeout-minutes: 4
         shell: bash

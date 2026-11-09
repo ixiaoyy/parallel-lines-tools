@@ -58,7 +58,10 @@ def original_notices(source, lock):
 
 def descriptor(path):
     """返回发布物的实际字节数与 SHA256，用于收据和部署时身份校验。"""
-    return {'file': path.name, 'sha256': hashlib.sha256(path.read_bytes()).hexdigest(), 'bytes': path.stat().st_size}
+    digest = hashlib.sha256()
+    with path.open('rb') as file:
+        while chunk := file.read(1024 * 1024): digest.update(chunk)
+    return {'file': path.name, 'sha256': digest.hexdigest(), 'bytes': path.stat().st_size}
 
 
 def record_browser(base):
@@ -71,14 +74,17 @@ def record_browser(base):
     receipt = json.loads(receipt_path.read_text(encoding='utf-8'))
     probe_path = base / 'codec-probes.json'
     probe = json.loads(probe_path.read_text(encoding='utf-8'))
-    assert probe['status'] == 'passed' and not probe['externalRequests']
+    assert probe['status'] == 'passed' and not probe['externalRequests'] and probe.get('diagnostic') is False
     assert probe['core_binaries'] == receipt['binaries'], 'Codec probes used a different core'
-    assert {p['id'] for p in probe['probes']} == {'hevc-8', 'hevc-10', 'hevc-12', 'mp3', 'aac'}
+    assert {p['id'] for p in probe['probes']} == {'h264', 'mp3', 'aac'}
     assert all(p['status'] == 'passed' and p['encodeReturnCode'] == 0 and p['decodeReturnCode'] == 0 for p in probe['probes'])
-    receipt['validation'] = {'status': 'passed', 'browser': 'chromium', 'actual_media_tests': stats['expected'], 'codec_probes': len(probe['probes']), 'report': descriptor(report_path), 'codec_report': descriptor(probe_path), 'scope': 'Real-WAV toolbox UI case plus HEVC 8/10/12-bit lossless encode/decode and MP3/AAC encode/decode; not all codecs individually exercised.'}
+    limitations = probe.get('knownLimitations', [])
+    assert any(item.get('id') == 'hevc-single-thread-encoding' and item.get('status') == 'unsupported' for item in limitations)
+    receipt['validation'] = {'status': 'passed', 'browser': 'chromium', 'actual_media_tests': stats['expected'], 'codec_probes': len(probe['probes']), 'report': descriptor(report_path), 'codec_report': descriptor(probe_path), 'qa_revision': os.environ.get('GITHUB_SHA', 'local-uncommitted'), 'probe_script': descriptor(ROOT / 'scripts' / 'media-core' / 'probe-media.mjs'), 'known_limitations': limitations, 'scope': 'Original UI scope: H264/libx264 two-frame lossy encode/decode with explicit quality threshold, real MP3/AAC encode/decode, and existing WAV page case. HEVC-ST encoding is a known unsupported path, not a passed test; no compiled codec was removed.'}
     receipt_path.write_text(json.dumps(receipt, indent=2) + '\n', encoding='utf-8')
     shutil.copy2(receipt_path, base / 'release' / receipt_path.name)
     shutil.copy2(report_path, base / 'release' / 'media-core-browser-results.json')
+    shutil.copy2(ROOT / 'scripts' / 'media-core' / 'probe-media.mjs', base / 'release' / 'media-core-probe-source.mjs')
 
 
 def finalize(base):

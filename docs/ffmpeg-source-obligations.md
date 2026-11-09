@@ -41,7 +41,7 @@
 - 生成的 Dockerfile 用本地 COPY 代替 16 个 Git ADD/clone；所有编译 RUN 都是 `--network=none`。只有基础镜像和系统构建工具准备阶段可联网。系统工具的实际包版本、Emscripten 版本与实际 SDK 源码从编译环境导出保存。
 - `.github/workflows/build-media-core.yml`：只手动触发，目标为用户批准的公开 `ixiaoyy/parallel-lines-tools`，标准 `ubuntu-24.04` runner。作业总时限 180 分钟，编译上限 130 分钟，BuildKit 并发 2、CPU 配额 2、内存上限 6 GiB；不买新服务器/付费 runner，不使用 Actions artifact 保存大源码。`sdk_only` 默认 true，先只跑已锁镜像的短身份预检；确认后以 false 执行编译/验收/发布。
 - `scripts/media-core/finalize.py`：将全部实际源代码、port 原包、SDK 源码、构建脚本/修改、输入锁与构建记录共同归档，产生 `core-receipt.json`，关联实际 JS/WASM 的大小/SHA256、源码包的大小/SHA256/公开 URL，以及工具箱提交/运行编号。
-- 产物先放 `.media-core/runtime/`，先在 Chromium 运行 HEVC 8/10/12-bit 两帧无损编码/逐字节解码及 MP3/AAC 实际编码/非静音 PCM 解码，再使用 `TOOLBOX_MEDIA_CORE_DIR` 构建工具箱并跑已有真实 WAV 页面用例；每次 exec 检查返回码，同一二进制身份和全部探针成功后才发布 `media-core-pl.1` Release 的二进制、源码、许可与收据。不把模拟单测或 Docker 编译成功当作真实转码通过。
+- 产物先放 `.media-core/runtime/`，先在 Chromium 运行实际 UI 使用的 H264/libx264 两帧有损编码/解码（像素 MAE≤8、PSNR≥30dB，核对帧尺寸）及 MP3/AAC 实际编码/非静音 PCM 解码，再使用 `TOOLBOX_MEDIA_CORE_DIR` 构建工具箱并跑已有真实 WAV 页面用例；每次 exec 检查返回码，同一二进制身份和全部探针成功后才发布 `media-core-pl.1` Release 的二进制、源码、许可与收据。不把模拟单测或 Docker 编译成功当作真实转码通过。
 
 `media-core-NOTICES.txt` 会按实际源码组件与固定 SHA 汇入原始顶层 COPYING/LICENSE/LICENCE/NOTICE/AUTHORS/COPYRIGHT/PATENTS 等正文，另含 zlib 的许可原文及 FreeType 的 FTL/GPL 双许可材料；SDL2 原文、实际 SDK 源码中的许可正文也纳入。不会仅列仓库 URL，不将所有组件统一标为 MIT。完整原文件和其子目录版权始终随 preferred source 提供。
 
@@ -55,7 +55,17 @@
 
 短预检 [42558773964](https://github.com/ixiaoyy/parallel-lines-tools/actions/runs/42558773964) 实测通过：原始版本文件含双引号，按官方 `tools/shared.py` 的 `strip().strip('"')` 和三段数字解析后是 3.1.40；实际 emcc 3.1.40、返回 0，与锁定 image digest 一致。完整身份原文保存在 `scripts/media-core/sdk-identity-verified.json` 并随源码交付。身份检查已前移，尾部导出只记录实际版本/源码，不再重复错误的未解析字符串断言。
 
-新的实际源码 ABI 补丁、无签名警告门槛及 HEVC/MP3/AAC 探针已准备，但尚待下一次完整 CI 执行。仍未完成：完整 preferred source 导出、实际独立许可汇总、修正后 WASM 的真实编解码、Release 资产完整/公开可访问，以及最终部署所用核心身份。不能用准备通过、SDK-only 成功或单纯链接成功冒充这些验收。
+完整 CI `42560282613` 已成功编译、导出并建立 preferred source/许可/pending 收据，且三项 xgetbv 签名告警消失；随后新增 HEVC 探针 180 秒总截止失败，没有发布。就近阶段复现证明：现有 npm core 也在 HEVC 8-bit FrameEncoder 初始化后卡住；显式滤镜线程 1/输出线程 1 仍在 35 秒宿主截止失败。加载、FS、FFmpeg 流映射和 x265 的 frame threads=1/pool=none 均已实际执行，不是脚本加载或新增 ABI 修复专属回归。
+
+锁定 x265 会无条件创建至少一个 FrameEncoder 线程并等待 m_done；Emscripten 单线程 pthread_create stub 返回 EAGAIN，返回值被创建路径忽略，而唯一 trigger 在未运行的 threadMain 中。普通 pools/frame-threads 参数无法提供同步执行模型。当前活动 UI 没有选择 libx265，视频工具实际使用 libx264/copy/GIF；本任务不扩大为 x265 同步模型移植，也不改变 MT/COOP。
+
+据原始汉化/MD/图片和现有 UI 媒体范围，负责人撤销额外强加的 HEVC 编码发布前置，改验 H264/MP3/AAC 与 WAV 页面。这不删除编译 codec，也不把 HEVC 编码标成 passed。报告/收据保留 `hevc-single-thread-encoding: unsupported` 的实际负结果；不据此否定 HEVC 解码或输入素材转码能力。
+
+当前 `--diagnostic-npm` 夹具实际快跑 H264/MP3/AAC 全部通过：H264 解码 12288 字节、MAE 0.734、PSNR 47.92dB；MP3/AAC 实际编码及非静音 PCM 解码均返回 0。此报告带 diagnostic=true，不能拿来更新自建核心的生产 passed。`--diagnostic-npm-hevc` 保留旧负结果复现入口，不列为本范围发布前置。
+
+工作流现在编译完成后先在同仓建立未公开 draft，保存原二进制、完整源码和 pending 收据，再运行同一核心的当前 QA；成功时核对草稿身份，只更新 QA 收据/报告后公开。失败则留下确切产物供有界诊断，不从一次探针失败推导重新编译要求；没有新增通用恢复平台或付费存储。
+
+仍未完成：自建核心的这套新 UI 范围 QA、Release 资产完整/公开可访问及最终部署核心身份。不能用 npm 对照组、SDK-only 成功或单纯链接成功冒充这些验收。
 
 ## 运行边界与恢复
 

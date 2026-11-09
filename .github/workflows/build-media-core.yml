@@ -24,6 +24,7 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
       NO_PROXY: localhost,127.0.0.1,::1
+      SDK_ONLY: ${{ inputs.sdk_only }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -37,12 +38,16 @@ jobs:
           TAG=$(python3 -c 'import json; print(json.load(open("core-build.lock.json"))["release_tag"])')
           echo "CORE_TAG=$TAG" >> "$GITHUB_ENV"
           mkdir -p .media-core
-          if gh api "repos/$GH_REPO/releases/tags/$TAG" --silent 2>.media-core/release-preflight.log; then
-            echo 'Refusing to overwrite existing core release.' >&2
-            exit 1
-          elif ! grep -q 'HTTP 404' .media-core/release-preflight.log; then
-            cat .media-core/release-preflight.log >&2
-            exit 1
+          if [ "$SDK_ONLY" = false ]; then
+            for endpoint in "git/ref/tags/$TAG" "releases/tags/$TAG"; do
+              if gh api "repos/$GH_REPO/$endpoint" --silent 2>.media-core/release-preflight.log; then
+                echo 'Refusing to overwrite existing core tag or release.' >&2
+                exit 1
+              elif ! grep -q 'HTTP 404' .media-core/release-preflight.log; then
+                cat .media-core/release-preflight.log >&2
+                exit 1
+              fi
+            done
           fi
       - name: Inspect pinned SDK before any compilation
         shell: bash
@@ -83,6 +88,16 @@ jobs:
             exit 1
           fi
           python3 scripts/media-core/finalize.py --output .media-core
+      - name: Save source and pending receipt in an unpublished draft before QA
+        timeout-minutes: 10
+        if: ${{ !inputs.sdk_only }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh release create "$CORE_TAG" --draft --target "$GITHUB_SHA" \
+            --title "Pending QA media core $CORE_TAG" \
+            --notes 'Unpublished build checkpoint: complete source and pending receipt. Not approved for public deployment.'
+          gh release upload "$CORE_TAG" .media-core/release/*
       - uses: actions/setup-node@v4
         if: ${{ !inputs.sdk_only }}
         with:
@@ -100,16 +115,27 @@ jobs:
           npm run build
           npx playwright test --config scripts/media-core/playwright.config.ts --grep 'FFmpeg本地核心实际处理音频'
           python3 scripts/media-core/finalize.py --output .media-core --record-browser
-      - name: Publish binary and corresponding source together
+      - name: Publish only after fresh UI and codec QA passes
+        timeout-minutes: 5
         if: ${{ !inputs.sdk_only }}
         shell: bash
         run: |
           set -euo pipefail
-          gh release create "$CORE_TAG" --draft --target "$GITHUB_SHA" \
-            --title "ParallelLines media core $CORE_TAG" \
-            --notes 'Single-thread core, complete corresponding source, input lock and actual-media verification receipt. This is a new self-built core, not the original npm binary.'
-          gh release upload "$CORE_TAG" .media-core/release/*
-          gh release edit "$CORE_TAG" --draft=false
+          # REST by-tag 只找已发布版本；CLI 同时支持按 pending tag 查未公开草稿。
+          gh release view "$CORE_TAG" --json isDraft,tagName,targetCommitish \
+            --jq '{draft:.isDraft,tag_name:.tagName,target_commitish:.targetCommitish}' > .media-core/draft-release-current.json
+          python3 -c 'import json; d=json.load(open(".media-core/draft-release-current.json")); r=json.load(open(".media-core/release/core-receipt.json")); assert d["draft"] is True and d["tag_name"]==r["version"] and d["target_commitish"]==r["build"]["revision"], "Draft build identity changed"; assert r["validation"]["status"]=="passed", "Current QA must pass before publication"'
+          gh release download "$CORE_TAG" --pattern core-receipt.json --dir .media-core/draft-identity
+          python3 -c 'import json; before=json.load(open(".media-core/draft-identity/core-receipt.json")); after=json.load(open(".media-core/release/core-receipt.json")); assert before["validation"]["status"]=="awaiting-real-browser-verification"; assert all(before[k]==after[k] for k in ["version","binaries","source","notices","inputs","build"]), "Draft artifact identity differs from tested binary/source"'
+          # 仅更新尚未公开草稿的 QA 收据/证据；原 JS/WASM/源码/输入锁不覆盖，已公开版本永不复用。
+          gh release upload "$CORE_TAG" --clobber \
+            .media-core/release/core-receipt.json \
+            .media-core/release/media-core-codec-probes.json \
+            .media-core/release/media-core-browser-results.json \
+            .media-core/release/media-core-probe-source.mjs \
+            .media-core/release/probe-h264.h264 .media-core/release/probe-mp3.mp3 .media-core/release/probe-aac.aac
+          gh release edit "$CORE_TAG" --title "ParallelLines media core $CORE_TAG" \
+            --notes 'Validated active-UI H264/MP3/AAC/WAV paths with complete corresponding source. HEVC single-thread encoding is a documented pre-existing unsupported path; no compiled codec was removed.' --draft=false
       - name: Close this job-owned builder
         if: always()
         shell: bash

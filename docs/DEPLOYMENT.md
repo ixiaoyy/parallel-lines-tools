@@ -1,6 +1,6 @@
 # 独立静态工具箱部署
 
-更新日期：2026-11-09。授权目标为 `tools.pingxingxian.space`，生产目录为 `/opt/parallellines-tools`。本文准备交付接口，不代表已公开 release、上传、签发证书、reload 或上线。本工具静态服务不修改主站 `/tools`、数据库、数据卷、Chat、OIDC 或其他应用。
+更新日期：2026-11-09。授权目标为 `tools.pingxingxian.space`，生产目录为 `/opt/parallellines-tools`。本文定义交付接口；实际 Release、证书和部署结果见 `deployment-status.md`，不能从配置存在推断已上线。本工具静态服务不修改主站 `/tools`、数据库、数据卷、Chat、OIDC 或其他应用。
 
 ## 交付方式
 
@@ -53,6 +53,8 @@ node scripts/package-deployment.mjs --application-revision <40位小写Git提交
 
 集成 CI 至少检查以下真实容器响应，不用纯字符串断言或 healthz 冒充：
 
+构建后先将实际交付源码 ZIP 解压到无 `.git`、无 `node_modules` 的新目录，独立 `npm ci` 并使用源码包默认 prebuild/build；不复用工作区显式媒体目录或依赖链接，失败则不发布。
+
 1. 使用回执固定的基础 digest 和同一份 dist/config 封装临时测试镜像，运行 `nginx -t`，以实际目标架构启动容器并等待健康。
 2. 首页及 `/converters/markdown-to-docx`、`/image-generic/compress` 深链接为 200，标题正确且入口 HTML 的 CSP 保留；入口 Cache-Control 为 no-store。
 3. 从该 index 实际引用中选取 JS/MJS、CSS 和 WASM，检查 200、正确 MIME；指纹资源为 immutable。WASM 另以 Range 请求验证 206 与正确内容类型。
@@ -65,7 +67,7 @@ node scripts/package-deployment.mjs --application-revision <40位小写Git提交
 ## 生产接入顺序
 
 1. 核实目标服务器、架构、Docker/Compose 能力、网关容器及其外部网络，确认唯一容器/网络别名没有冲突。先记录现有 tools 状态和旧 image ID。
-2. 将本次回执与静态包取得到独立 `/opt/parallellines-tools`，核对应用 SHA、发布 URL、SHA-256 和字节数，检查核心回执及源码下载已成立。不要覆盖 `/opt/parallellines` 的文件、卷或 Compose。
+2. 将本次回执与静态包取得到独立 `/opt/parallellines-tools`，核对应用 SHA、发布 URL、SHA-256 和字节数，检查核心回执及源码下载已成立。不覆盖 `/opt/parallellines` 整仓、数据或 Compose；网关配置仅允许后续受控新增工具标记段。
 3. 检查 tar 清单只含允许的相对路径、没有链接或路径穿越，再解压到独立版本目录。使用该版本的预构建 Dockerfile和回执 Nginx digest，仅 COPY 封装静态应用；留存完整构建命令、镜像标签及实际 image ID。
 4. 传入真实 TOOLS_IMAGE、TOOLS_PROXY_NETWORK，先做本 Compose 的 config 和镜像内 `nginx -t`，再以无构建方式启动本工具服务。Compose 无 build 字段，不会隐式重新编译。
 5. 容器 healthy 后，从网关网络检查首页、深链接、运行资源、源码材料和缓存；新服务未健康时不切换网关。容器重建可能换 IP，应沿用主站已核实的 Docker DNS 解析方式，不把某次容器 IP 写死。
@@ -96,4 +98,4 @@ node scripts/package-deployment.mjs --application-revision <40位小写Git提交
 
 本打包脚本的 9 项隔离合成 fixtures 检查通过：显式参数、成功 tar/回执 SHA-256 与字节数、未通过媒体验证、缺应用源码 ZIP、缺 WASM、核心版本不匹配、混入真实环境文件名、符号链接、带 token 查询参数的源码 URL。临时 fixture 均位于独立系统临时目录并已清理，没有伪造仓库实际媒体回执或生成正式发布包。体积上限没有通过制造超限大文件压测，GNU tar 分支和真实最终包由 CI 验证。
 
-镜像和 HTTP 由 CI/生产集成验收。本机不启动 Docker daemon，不构建整个应用，也不进行远程执行或公开 release。
+镜像和 HTTP 由 CI/生产集成验收；本地替身/配置检查不证明远程执行或公开 Release 成功。本机不启动 Docker daemon，实际执行由发布负责人按本次授权完成并记录。
