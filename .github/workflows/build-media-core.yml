@@ -2,6 +2,11 @@ name: Build pinned media core
 
 on:
   workflow_dispatch:
+    inputs:
+      sdk_only:
+        description: "Only inspect pinned SDK identity; do not compile or publish"
+        type: boolean
+        default: true
 
 permissions:
   contents: write
@@ -39,10 +44,25 @@ jobs:
             cat .media-core/release-preflight.log >&2
             exit 1
           fi
+      - name: Inspect pinned SDK before any compilation
+        shell: bash
+        run: |
+          set -euo pipefail
+          SDK=$(python3 -c 'import json; print(json.load(open("core-build.lock.json"))["sdk"]["image"])')
+          status=0
+          timeout 5m docker run --rm --platform linux/amd64 --network none --cpus=2 \
+            --entrypoint python3 \
+            -v "$PWD/scripts/media-core/sdk-identity.py:/sdk-identity.py:ro" \
+            -v "$PWD/core-build.lock.json:/input-lock.json:ro" \
+            "$SDK" /sdk-identity.py > .media-core/sdk-identity.json || status=$?
+          cat .media-core/sdk-identity.json
+          exit "$status"
       - name: Prepare pinned preferred source and offline build context
+        if: ${{ !inputs.sdk_only }}
         shell: bash
         run: timeout 30m python3 scripts/media-core/prepare.py --output .media-core
       - name: Build single-thread core with two-job bounds
+        if: ${{ !inputs.sdk_only }}
         shell: bash
         run: |
           set -euo pipefail
@@ -60,9 +80,11 @@ jobs:
             2>&1 | tee .media-core/build.log
           python3 scripts/media-core/finalize.py --output .media-core
       - uses: actions/setup-node@v4
+        if: ${{ !inputs.sdk_only }}
         with:
           node-version: '22'
       - name: Build toolbox with this core and verify real media output
+        if: ${{ !inputs.sdk_only }}
         shell: bash
         env:
           TOOLBOX_MEDIA_CORE_DIR: .media-core/runtime
@@ -74,6 +96,7 @@ jobs:
           npx playwright test --config scripts/media-core/playwright.config.ts --grep 'FFmpeg本地核心实际处理音频'
           python3 scripts/media-core/finalize.py --output .media-core --record-browser
       - name: Publish binary and corresponding source together
+        if: ${{ !inputs.sdk_only }}
         shell: bash
         run: |
           set -euo pipefail
