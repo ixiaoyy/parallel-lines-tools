@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "version": "media-core-pl.1",
+  "source": {
+    "file": "media-core-source.tar.gz",
+    "sha256": "c4cfd44e28b7f08196fbbaf594f3462449bc7eca63e1a4a05992c4d21e1da0c1",
+    "bytes": 272837112,
+    "url": "https://github.com/ixiaoyy/parallel-lines-tools/releases/download/media-core-pl.1/media-core-source.tar.gz"
+  },
+  "assets": {
+    "core-receipt.json": {
+      "file": "core-receipt.json",
+      "url": "https://github.com/ixiaoyy/parallel-lines-tools/releases/download/media-core-pl.1/core-receipt.json",
+      "sha256": "303f7803a7478086118c26723e083c8754215cb2933593feba119f61e5b62a7f",
+      "bytes": 6998
+    },
+    "ffmpeg-core.js": {
+      "file": "ffmpeg-core.js",
+      "url": "https://github.com/ixiaoyy/parallel-lines-tools/releases/download/media-core-pl.1/ffmpeg-core.js",
+      "sha256": "439e74e5ed5e8b733f0a0f52e686377f5e64c45abc54a14166fbecfd9d6a42fc",
+      "bytes": 111804
+    },
+    "ffmpeg-core.wasm": {
+      "file": "ffmpeg-core.wasm",
+      "url": "https://github.com/ixiaoyy/parallel-lines-tools/releases/download/media-core-pl.1/ffmpeg-core.wasm",
+      "sha256": "fe1411e18ecc3fa7418f19a2e7223646542351266562daddffd0f1cf34d0ed7f",
+      "bytes": 32232424
+    },
+    "media-core-NOTICES.txt": {
+      "file": "media-core-NOTICES.txt",
+      "url": "https://github.com/ixiaoyy/parallel-lines-tools/releases/download/media-core-pl.1/media-core-NOTICES.txt",
+      "sha256": "0339b1dd64e03091191036de08f4d69a482f14b4a59dd72721557cd621cc8736",
+      "bytes": 389336
+    }
+  }
+}
