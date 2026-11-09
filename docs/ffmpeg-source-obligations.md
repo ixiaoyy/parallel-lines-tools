@@ -2,7 +2,9 @@
 
 更新：2026-11-09。任务 `TOOLS-009`、`DEPLOY-CORE`。用户已批准新公开仓库的标准 Linux runner 自建核心和保存对应源码/产物；本记录不将工作流准备完成当作构建或发布验收。
 
-## 实际采用的二进制与来源
+## 历史 npm 基线与新自建来源
+
+正式应用已由 `media-core.lock.json` 选择新自建 `media-core-pl.1`，构建提交 `d249b36e1d14ba435bb52e52a97371a4ee5bfe2f`；[完整 CI 42567344709](https://github.com/ixiaoyy/parallel-lines-tools/actions/runs/42567344709) 已通过实际 H264、MP3、AAC 和 WAV 页面检查，[Release](https://github.com/ixiaoyy/parallel-lines-tools/releases/tag/media-core-pl.1) 已公开提供二进制、完整源码、许可、输入锁和 QA 回执。以下 npm 信息是取代前的开发基线，不是正式应用失败时的回退来源。
 
 | 项目 | 已检查事实 |
 |---|---|
@@ -17,7 +19,7 @@
 
 上游版本号有易混点：`v0.12.10` release 对应的是 JS wrapper 0.12.10 与 core 0.12.6，不是本轮选用的 core 0.12.10。与本地核心包版本相符的官方 release 为 [v12.15](https://github.com/ffmpegwasm/ffmpeg.wasm/releases/tag/v12.15)，其固定提交是 `71aa99d37c02a7b4c435275ca9ef50e612f6efa1`；该提交的 [core/package.json](https://github.com/ffmpegwasm/ffmpeg.wasm/blob/71aa99d37c02a7b4c435275ca9ef50e612f6efa1/packages/core/package.json) 确认 core 0.12.10。
 
-官方 [FAQ](https://ffmpegwasm.netlify.app/docs/faq/) 区分 wrapper 与 core：wrapper 的 MIT 不能代替 FFmpeg C 核心及外部库的许可。默认本地核心仍由 npm 发布物取得；自建核心使用可选 `TOOLBOX_MEDIA_CORE_DIR` 对接，不把新产物假称为原 npm 二进制。
+官方 [FAQ](https://ffmpegwasm.netlify.app/docs/faq/) 区分 wrapper 与 core：wrapper 的 MIT 不能代替 FFmpeg C 核心及外部库的许可。默认构建由 prebuild 安装并校验自建锁的实际资产；`TOOLBOX_MEDIA_CORE_DIR` 供核心自身 QA 使用，不把新产物假称为原 npm 二进制，也不在下载失败时用旧 npm 核心兜底。
 
 ## 已核构建配方
 
@@ -65,7 +67,7 @@
 
 工作流现在编译完成后先在同仓建立未公开 draft，保存原二进制、完整源码和 pending 收据，再运行同一核心的当前 QA；成功时核对草稿身份，只更新 QA 收据/报告后公开。失败则留下确切产物供有界诊断，不从一次探针失败推导重新编译要求；没有新增通用恢复平台或付费存储。
 
-仍未完成：自建核心的这套新 UI 范围 QA、Release 资产完整/公开可访问及最终部署核心身份。不能用 npm 对照组、SDK-only 成功或单纯链接成功冒充这些验收。
+后续完整 CI `42567344709` 已实际完成这套自建核心 QA，并公开 `media-core-pl.1`。JS 为 111804 字节，WASM 为 32232424 字节，对应源码为 272837112 字节；真实摘要和公开 URL 记录在应用 `media-core.lock.json` 与 Release `core-receipt.json`，不是占位值。应用静态包和生产部署仍分别验收，不能将核心 Release 成功当作工具站已上线；当前实际部署回执见 `deployment-status.md`。
 
 ## 运行边界与恢复
 
