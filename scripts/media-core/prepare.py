@@ -27,6 +27,9 @@ def load_lock():
     def check(entry):
         assert re.fullmatch(r'https://github.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+', entry['repository'])
         assert re.fullmatch(r'[0-9a-f]{40}', entry['commit'])
+        if tag := entry.get('build_tag'):
+            assert re.fullmatch(r'refs/tags/[A-Za-z0-9._/-]+', tag['ref'])
+            assert tag['commit'] == entry['commit'], 'Build tag must identify the same pinned source commit'
         for child in entry.get('submodules', []):
             parts = Path(child['path']).parts
             assert not Path(child['path']).is_absolute() and '..' not in parts
@@ -53,6 +56,11 @@ def checkout(entry, destination, receipts):
     run(['git', 'remote', 'add', 'origin', entry['repository'] + '.git'], destination)
     run(['git', '-c', 'protocol.file.allow=never', 'fetch', '--quiet', '--depth=1', 'origin', entry['commit']], destination)
     run(['git', '-c', 'advice.detachedHead=false', 'checkout', '--quiet', '--detach', 'FETCH_HEAD'], destination)
+    if tag := entry.get('build_tag'):
+        # x265 的原版版本脚本依赖 tag 才生成 pkg-config；补取被明确锁定的元数据，不移动 HEAD。
+        run(['git', '-c', 'protocol.file.allow=never', 'fetch', '--quiet', '--depth=1', 'origin', tag['ref'] + ':' + tag['ref']], destination)
+        tagged = subprocess.check_output(['git', 'rev-parse', tag['ref'] + '^{commit}'], cwd=destination, text=True, timeout=30).strip()
+        if tagged != tag['commit']: raise RuntimeError('Build tag no longer identifies the pinned source commit')
     head = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=destination, text=True, timeout=30).strip()
     assert head == entry['commit'], 'Source commit mismatch'
     # .gitmodules 必须与锁中清单一致；不让 git 自动追随源码提供的 URL 或嵌套 ref。
@@ -62,7 +70,7 @@ def checkout(entry, destination, receipts):
     actual = {config[s]['path']: config[s]['url'].removesuffix('.git') for s in config.sections()}
     expected = {s['path']: s['repository'] for s in entry.get('submodules', [])}
     assert actual == expected, f'Unrecorded submodules in {entry["repository"]}: {actual}'
-    receipts.append({'repository': entry['repository'], 'commit': head, 'directory': str(destination.name)})
+    receipts.append({'repository': entry['repository'], 'commit': head, 'directory': str(destination.name), 'verified_build_tag': entry.get('build_tag')})
     for child in entry.get('submodules', []):
         if child.get('disposition') == 'excluded-not-a-core-build-input': continue
         target = destination / child['path']
@@ -109,6 +117,32 @@ def recipe(lock, source):
             # 锁定 zlib 的 CMake 同时生成同名 zlib/zlibstatic；CI 已出现并行归档/ranlib 竞态，仅该库串行。
             changed, count = re.subn(r'(?m)^(emmake make (?:clean|install))(?: -j[12])?$', r'\1 -j1', changed)
             if count != 2: raise RuntimeError('Pinned zlib clean/install recipe changed; refusing an unverified patch')
+        if path.name == 'x265.sh':
+            # 真实 CI 的 x265 目标安装成功但缺失 pc；先核 tag，再把必要产物作为安装成功条件。
+            changed += '\ntest -s "$INSTALL_DIR/lib/pkgconfig/x265.pc"\npkg-config --print-errors --modversion x265\n'
+        if path.name == 'ffmpeg.sh':
+            original_configure = 'emconfigure ./configure "${CONF_FLAGS[@]}" $@'
+            if changed.count(original_configure) != 1: raise RuntimeError('Pinned FFmpeg configure entry changed')
+            # 失败只打印受限的编译探测日志与库 pc，不打印环境，也不把诊断成功当成 configure 成功。
+            diagnostic_configure = '''if emconfigure ./configure "${CONF_FLAGS[@]}" "$@"; then
+    :
+else
+    configure_status=$?
+    echo "--- FFmpeg configure failed: bounded compiler probe log ---" >&2
+    if test -f ffbuild/config.log; then
+        tail -n 200 ffbuild/config.log >&2
+    else
+        echo "ffbuild/config.log was not created" >&2
+    fi
+    if test -f "$INSTALL_DIR/lib/pkgconfig/x265.pc"; then
+        echo "--- Installed x265.pc ---" >&2
+        head -n 40 "$INSTALL_DIR/lib/pkgconfig/x265.pc" >&2
+    else
+        echo "x265.pc is missing" >&2
+    fi
+    exit "$configure_status"
+fi'''
+            changed = changed.replace(original_configure, diagnostic_configure)
         if path.name == 'fribidi.sh':
             changed = changed.replace('emmake make install -j2 || true', 'emmake make install -j2')
             changed = changed.replace('# A hacky to fix "Too many symbolic links" error', '# 安装错误必须明确失败，不能用上游旧 workaround 掩盖缺失的库或头文件。')
@@ -158,7 +192,7 @@ def recipe(lock, source):
     assert result.count('--enable-lib') == (upstream / 'Dockerfile').read_text().count('--enable-lib')
     (source / 'Dockerfile').write_text(result, encoding='utf-8', newline='\n')
     (source / '.dockerignore').write_text('archives/\ntoolchain/\n*.tar.gz\n', encoding='utf-8')
-    (source / 'MODIFICATIONS.json').write_text(json.dumps({'build_jobs': 2, 'library_jobs': {'zlib': 1}, 'zlib': {'reason': 'Both zlib and zlibstatic map to libz.a under the Emscripten CMake configuration; parallel install produced an llvm-ranlib missing archive failure. Only this library is serialized; no target or codec is removed.', 'failure_evidence': 'https://github.com/ixiaoyy/parallel-lines-tools/actions/runs/42508247233'}, 'patched_scripts': modifications, 'fribidi': {'change': 'Removed blind install || true. Install gen.tab and the complete lib subdirectory plus root pkg-config data; omit only c2man manuals/CLI/tests not linked into FFmpeg. Assert static library, headers and pkg-config are non-empty.', 'failure_evidence': 'https://github.com/ixiaoyy/parallel-lines-tools/actions/runs/42509219935'}, 'dockerfile': 'pinned tools; COPY vendored commits and verified SDL port; network disabled for compile; source/export records; no codec removed'}, indent=2) + '\n', encoding='utf-8')
+    (source / 'MODIFICATIONS.json').write_text(json.dumps({'build_jobs': 2, 'library_jobs': {'zlib': 1}, 'zlib': {'reason': 'Both zlib and zlibstatic map to libz.a under the Emscripten CMake configuration; parallel install produced an llvm-ranlib missing archive failure. Only this library is serialized; no target or codec is removed.', 'failure_evidence': 'https://github.com/ixiaoyy/parallel-lines-tools/actions/runs/42508247233'}, 'x265': {'change': 'Fetch and verify locked refs/tags/3.4 identifying the unchanged source commit; original version.cmake then generates x265.pc. Assert non-empty installed pc; do not fabricate metadata or drop x265.', 'failure_evidence': 'https://github.com/ixiaoyy/parallel-lines-tools/actions/runs/42510809406'}, 'ffmpeg_diagnostics': 'On configure failure emit only last 200 compiler-probe log lines and first 40 x265.pc lines, then preserve original nonzero status. No environment dump.', 'patched_scripts': modifications, 'fribidi': {'change': 'Removed blind install || true. Install gen.tab and the complete lib subdirectory plus root pkg-config data; omit only c2man manuals/CLI/tests not linked into FFmpeg. Assert static library, headers and pkg-config are non-empty.', 'failure_evidence': 'https://github.com/ixiaoyy/parallel-lines-tools/actions/runs/42509219935'}, 'dockerfile': 'pinned tools; COPY vendored commits and verified SDL port; network disabled for compile; source/export records; no codec removed'}, indent=2) + '\n', encoding='utf-8')
 
 
 def main():

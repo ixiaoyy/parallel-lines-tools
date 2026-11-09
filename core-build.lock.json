@@ -44,7 +44,12 @@
       "repository": "https://github.com/ffmpegwasm/x265",
       "upstream_ref_observed": "3.4",
       "commit": "2bb5520e9596f361bf0ed81b3b8da0d7fd999069",
-      "submodules": []
+      "submodules": [],
+      "build_tag": {
+        "ref": "refs/tags/3.4",
+        "commit": "2bb5520e9596f361bf0ed81b3b8da0d7fd999069",
+        "reason": "Upstream version.cmake requires this exact tag to generate x265.pc; it does not change HEAD or source content."
+      }
     },
     {
       "name": "libvpx",
