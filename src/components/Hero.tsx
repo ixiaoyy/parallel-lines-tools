@@ -26,6 +26,8 @@ import {
 } from '@utils/bookmark';
 import IconButton from '@mui/material/IconButton';
 import { useUserTypeFilter } from '../providers/UserTypeFilterProvider';
+import { getToolHref, openTool } from '@tools/defineTool';
+import { mainSiteTools } from '@tools/mainSiteTools';
 
 const GroupHeader = styled('div')(({ theme }) => ({
   position: 'sticky',
@@ -45,6 +47,8 @@ const GroupItems = styled('ul')({
 type ToolInfo = {
   label: FullI18nKey;
   url: string;
+  external?: boolean;
+  bookmarkPath?: string;
 };
 
 export default function Hero() {
@@ -63,6 +67,11 @@ export default function Hero() {
   const navigate = useNavigate();
 
   const exampleTools: ToolInfo[] = [
+    ...mainSiteTools.map((tool) => ({
+      label: tool.name,
+      url: getToolHref(tool),
+      external: true
+    })),
     {
       label: 'translation:hero.examples.markdownToDocx',
       url: '/converters/markdown-to-docx'
@@ -113,7 +122,9 @@ export default function Hero() {
   for (const tool of filteredTools) {
     toolsMap.set(tool.path, {
       label: tool.name,
-      url: '/' + tool.path
+      url: getToolHref(tool),
+      external: !!tool.externalUrl,
+      bookmarkPath: tool.path
     });
   }
 
@@ -128,7 +139,7 @@ export default function Hero() {
         })
       : // 暂缓开放的工具不应留在首页快捷入口中；收藏记录本身保持不变。
         exampleTools.filter((example) =>
-          tools.some((tool) => `/${tool.path}` === example.url)
+          tools.some((tool) => getToolHref(tool) === example.url)
         );
 
   return (
@@ -199,7 +210,7 @@ export default function Hero() {
           <Box
             component="li"
             {...props}
-            onClick={() => navigate('/' + option.path)}
+            onClick={() => openTool(option, navigate)}
           >
             <Stack
               direction={'row'}
@@ -247,7 +258,7 @@ export default function Hero() {
         )}
         onChange={(_event, newValue) => {
           if (newValue) {
-            navigate('/' + newValue.path);
+            openTool(newValue, navigate);
           }
         }}
       />
@@ -274,8 +285,17 @@ export default function Hero() {
             >
               <Stack direction={'row'} spacing={1} alignItems={'center'}>
                 <Button
-                  component={Link}
-                  to={tool.url.startsWith('/') ? tool.url : `/${tool.url}`}
+                  {...(tool.external
+                    ? {
+                        component: 'a' as const,
+                        href: tool.url,
+                        target: '_blank',
+                        rel: 'noopener noreferrer'
+                      }
+                    : {
+                        component: Link,
+                        to: tool.url.startsWith('/') ? tool.url : `/${tool.url}`
+                      })}
                   color="inherit"
                   sx={{ minHeight: 44, flex: 1, fontWeight: 400 }}
                 >
@@ -288,7 +308,8 @@ export default function Hero() {
                     })}
                     onClick={(e) => {
                       e.stopPropagation();
-                      const path = tool.url.substring(1);
+                      // 收藏快捷项均来自 toolsMap，使用原稳定 ID，不从外链 URL 反推。
+                      const path = tool.bookmarkPath!;
                       toggleBookmarked(path);
                       setBookmarkedToolPaths(getBookmarkedToolPaths());
                     }}

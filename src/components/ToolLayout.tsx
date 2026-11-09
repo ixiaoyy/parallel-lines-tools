@@ -11,7 +11,7 @@ import {
 } from '../utils/string';
 import { IconifyIcon } from '@iconify/react';
 import { useTranslation } from 'react-i18next';
-import { ToolCategory } from '@tools/defineTool';
+import { ToolCategory, getToolHref } from '@tools/defineTool';
 import { FullI18nKey } from '../i18n';
 
 export default function ToolLayout({
@@ -46,7 +46,8 @@ export default function ToolLayout({
       .map((tool) => ({
         title: tool.name,
         description: tool.shortDescription,
-        link: '/' + tool.path,
+        link: getToolHref(tool),
+        external: !!tool.externalUrl,
         icon: tool.icon
       })) ?? [];
 

@@ -8,6 +8,7 @@ export interface ToolCardProps {
   title: FullI18nKey;
   description: FullI18nKey;
   link: string;
+  external?: boolean;
   icon: IconifyIcon | string;
 }
 
@@ -33,6 +34,7 @@ export default function AllTools({ title, toolCards }: AllToolsProps) {
                 //@ts-ignore
                 description={t(card.description)}
                 link={card.link}
+                external={card.external}
                 icon={card.icon}
               />
             </Grid>

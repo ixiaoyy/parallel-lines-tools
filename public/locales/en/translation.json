@@ -93,6 +93,10 @@
     "xml": {
       "description": "Tools for working with XML data structures - viewer, beautifier, validator and much more",
       "title": "XML Tools"
+    },
+    "office": {
+      "title": "Office Tools",
+      "description": "Everyday spreadsheet guides, comparison and cleaning tools."
     }
   },
   "converters": {
@@ -365,5 +369,17 @@
   },
   "toolCodeInput": {
     "languageHint": "Editor menus use the language selected at first load. Save your input before refreshing to update the menus after changing language."
+  },
+  "mainSiteTools": {
+    "excel": {
+      "title": "Excel Formula Guide and Tools",
+      "description": "Follow practical formula guides, compare columns, find duplicates and clean spreadsheets.",
+      "shortDescription": "50 guides, column comparison, duplicate checks and spreadsheet cleaning."
+    },
+    "bead": {
+      "title": "Bead Pattern Generator",
+      "description": "Convert images into bead patterns and view color codes and quantities.",
+      "shortDescription": "Image conversion, cell editing, bead counts and pattern export."
+    }
   }
 }

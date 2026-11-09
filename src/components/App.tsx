@@ -20,7 +20,8 @@ export type Mode = 'dark' | 'light' | 'system';
 const AppRoutes = () => {
   const updatedRoutesConfig = [...routesConfig];
   tools.forEach((tool) => {
-    updatedRoutesConfig.push({ path: tool.path, element: tool.component() });
+    if (tool.component)
+      updatedRoutesConfig.push({ path: tool.path, element: tool.component() });
   });
   return useRoutes(updatedRoutesConfig);
 };

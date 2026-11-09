@@ -99,7 +99,14 @@ const SingleCategory = function ({
                 <Button
                   sx={{ backgroundColor: 'background.default', height: '100%' }}
                   fullWidth
-                  onClick={() => navigate(category.example.path)}
+                  {...(category.example.externalUrl
+                    ? {
+                        component: 'a' as const,
+                        href: category.example.externalUrl,
+                        target: '_blank',
+                        rel: 'noopener noreferrer'
+                      }
+                    : { onClick: () => navigate(category.example.path) })}
                   variant={'outlined'}
                 >
                   {tryText}

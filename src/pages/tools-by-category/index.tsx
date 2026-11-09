@@ -23,6 +23,7 @@ import UserTypeFilter from '@components/UserTypeFilter';
 import { useTranslation } from 'react-i18next';
 import { validNamespaces } from '../../i18n';
 import { useUserTypeFilter } from '../../providers/UserTypeFilterProvider';
+import { getToolHref } from '@tools/defineTool';
 
 const StyledLink = styled(Link)(({ theme }) => ({
   '&:hover': {
@@ -143,13 +144,22 @@ export default function ToolsByCategory() {
                     backgroundColor: theme.palette.background.hover
                   }
                 }}
-                onClick={() => navigate('/' + tool.path)}
+                {...(tool.externalUrl
+                  ? {
+                      component: 'a' as const,
+                      href: getToolHref(tool),
+                      target: '_blank',
+                      rel: 'noopener noreferrer'
+                    }
+                  : { onClick: () => navigate('/' + tool.path) })}
                 direction={'row'}
                 alignItems={'center'}
                 spacing={2}
                 padding={2}
                 border={`1px solid ${theme.palette.background.default}`}
                 borderRadius={2}
+                color="inherit"
+                style={{ textDecoration: 'none' }}
               >
                 <Icon
                   icon={tool.icon ?? 'ph:compass-tool-thin'}
@@ -157,15 +167,21 @@ export default function ToolsByCategory() {
                   color={categoriesColors[index % categoriesColors.length]}
                 />
                 <Box>
-                  <StyledLink
-                    style={{
-                      fontSize: 20
-                    }}
-                    to={'/' + tool.path}
-                  >
-                    {/*@ts-ignore*/}
-                    {t(tool.name)}
-                  </StyledLink>
+                  {tool.externalUrl ? (
+                    <Typography component="span" fontSize={20}>
+                      {t(tool.name)}
+                    </Typography>
+                  ) : (
+                    <StyledLink
+                      style={{
+                        fontSize: 20
+                      }}
+                      to={'/' + tool.path}
+                    >
+                      {/*@ts-ignore*/}
+                      {t(tool.name)}
+                    </StyledLink>
+                  )}
                   <Typography sx={{ mt: 2 }}>
                     {/*@ts-ignore*/}
                     {t(tool.shortDescription)}

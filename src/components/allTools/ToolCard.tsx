@@ -16,13 +16,21 @@ export default function ToolCard({
   title,
   description,
   link,
+  external,
   icon
 }: ToolCardProps) {
   const theme = useTheme();
   const navigate = useNavigate();
   return (
     <Card
-      onClick={() => navigate(link)}
+      {...(external
+        ? {
+            component: 'a' as const,
+            href: link,
+            target: '_blank',
+            rel: 'noopener noreferrer'
+          }
+        : { onClick: () => navigate(link) })}
       raised
       sx={{
         borderRadius: 2,
@@ -34,6 +42,7 @@ export default function ToolCard({
             ? null
             : '6px 6px 12px #b8b9be, -6px -6px 12px #fff',
         cursor: 'pointer',
+        textDecoration: 'none',
         height: '100%',
         '&:hover': {
           transform: 'scale(1.05)'
@@ -56,9 +65,13 @@ export default function ToolCard({
               {title}
             </Typography>
           </Stack>
-          <Link href={link} underline="none" sx={{ color: '#fff' }}>
+          {external ? (
             <ChevronRightIcon />
-          </Link>
+          ) : (
+            <Link href={link} underline="none" sx={{ color: '#fff' }}>
+              <ChevronRightIcon />
+            </Link>
+          )}
         </Box>
         <Typography variant="body2" mt={2} color="#fff">
           {description}

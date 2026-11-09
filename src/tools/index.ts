@@ -16,8 +16,10 @@ import { xmlTools } from '../pages/tools/xml';
 import { convertersTools } from '../pages/tools/converters';
 import { TFunction } from 'i18next';
 import { FullI18nKey, I18nNamespaces } from '../i18n';
+import { mainSiteTools } from './mainSiteTools';
 
 const toolCategoriesOrder: ToolCategory[] = [
+  'office',
   'image-generic',
   'pdf',
   'string',
@@ -45,7 +47,8 @@ export const tools: DefinedTool[] = [
   ...timeTools,
   ...audioTools,
   ...xmlTools,
-  ...convertersTools
+  ...convertersTools,
+  ...mainSiteTools
 ];
 const categoriesConfig: {
   type: ToolCategory;
@@ -53,6 +56,12 @@ const categoriesConfig: {
   value: FullI18nKey;
   icon: IconifyIcon | string;
 }[] = [
+  {
+    type: 'office',
+    icon: 'fluent:document-landscape-data-24-filled',
+    value: 'translation:categories.office.description',
+    title: 'translation:categories.office.title'
+  },
   {
     type: 'string',
     icon: 'solar:text-bold-duotone',
@@ -365,7 +374,7 @@ export const getToolsByCategory = (
   description: string;
   icon: IconifyIcon | string;
   type: ToolCategory;
-  example: { title: string; path: string };
+  example: { title: string; path: string; externalUrl?: string };
   tools: DefinedTool[];
   userTypes: UserType[]; // <-- Add this line
 }[] => {
@@ -419,7 +428,13 @@ export const getToolsByCategory = (
         tools: filteredTools,
         example:
           filteredTools.length > 0
-            ? { title: filteredTools[0].name, path: filteredTools[0].path }
+            ? {
+                title: filteredTools[0].name,
+                path: filteredTools[0].path,
+                ...(filteredTools[0].externalUrl
+                  ? { externalUrl: filteredTools[0].externalUrl }
+                  : {})
+              }
             : { title: '', path: '' },
         userTypes: aggregatedUserTypes // <-- Add this line
       };

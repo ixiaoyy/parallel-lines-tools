@@ -84,6 +84,8 @@ const Navbar: React.FC<NavbarProps> = ({ mode, onChangeMode }) => {
       <Button
         component="a"
         href="https://pingxingxian.space/tools"
+        target="_blank"
+        rel="noopener noreferrer"
         color="inherit"
       >
         {t('navbar.mainTools')}

@@ -32,7 +32,13 @@ export default function SiteFooter() {
             {t('footer.mediaSource')}
           </Link>
         )}
-        <Link href="https://pingxingxian.space/tools">平行线</Link>
+        <Link
+          href="https://pingxingxian.space/tools"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          平行线
+        </Link>
       </Stack>
     </Box>
   );

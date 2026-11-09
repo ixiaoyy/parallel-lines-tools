@@ -93,6 +93,10 @@
     "xml": {
       "description": "处理 XML 数据结构的工具 - 查看器、美化器、验证器等等",
       "title": "XML 工具"
+    },
+    "office": {
+      "title": "办公工具",
+      "description": "Excel公式速查、表格核对与清洗等日常办公工具。"
     }
   },
   "csv": {
@@ -366,5 +370,17 @@
   },
   "toolCodeInput": {
     "languageHint": "编辑器内置菜单语言在首次加载时确定；切换语言后如需更新菜单，请先保存输入再刷新页面。"
+  },
+  "mainSiteTools": {
+    "excel": {
+      "title": "Excel 公式速查与操作",
+      "description": "文职常用公式速查、两列比对查重与表格清洗，按步骤照着做。",
+      "shortDescription": "50 篇教程、两列比对、查重和表格清洗。"
+    },
+    "bead": {
+      "title": "拼豆图纸生成器",
+      "description": "将图片转换为拼豆图纸，查看色号和用量。",
+      "shortDescription": "图片转换、手动改格、用量统计与图纸导出。"
+    }
   }
 }
