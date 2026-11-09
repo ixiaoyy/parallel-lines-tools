@@ -13,6 +13,7 @@ const rootFiles = [
   'upstream-base.json',
   'core-build.lock.json',
   'media-core.lock.json',
+  'library-sources.lock.json',
   'index.html',
   'vite.config.ts',
   'tsconfig.json',
@@ -21,6 +22,7 @@ const rootFiles = [
   'Dockerfile',
   '.dockerignore',
   '.gitignore',
+  '.gitattributes',
   '.env.example',
   '.eslintrc',
   '.prettierrc',
@@ -36,12 +38,14 @@ const buildScripts = new Set([
   'scripts/release-policy.ts',
   'scripts/media-core-info.ts',
   'scripts/install-media-core.mjs',
+  'scripts/package-library-sources.py',
   'scripts/vendor-icons.py',
   'scripts/create-tool.mjs'
 ]);
 const deliveryDocs = new Set([
   'docs/SOURCE-DELIVERY.md',
   'docs/DEPLOYMENT.md',
+  'docs/HEIC-SOURCE.md',
   'docs/ffmpeg-source-obligations.md'
 ]);
 const required = [
@@ -57,6 +61,7 @@ const required = [
   'scripts/release-policy.ts',
   'scripts/media-core-info.ts',
   'scripts/package-source.mjs',
+  'scripts/install-media-core.mjs',
   'deploy/nginx/default.conf',
   'licenses/icons/manifest.json',
   'LICENSE',
@@ -179,6 +184,14 @@ async function collect(excluded) {
     'docs'
   ])
     await walk(directory);
+  let librarySourcesPresent = true;
+  try {
+    await fs.access(path.join(root, 'vendor-sources/heic'));
+  } catch (error) {
+    if (error.code !== 'ENOENT') throw error;
+    librarySourcesPresent = false;
+  }
+  if (librarySourcesPresent) await walk('vendor-sources/heic');
   return files.sort((a, b) => a.path.localeCompare(b.path));
 }
 
@@ -236,6 +249,18 @@ async function verifyIconNotices() {
 /** 生成当前修改版的可重建工具箱源码包；该 ZIP 不声称包含 FFmpeg/codec 完整对应源码。 */
 async function packageSource() {
   await verifyIconNotices();
+  if (process.env.TOOLBOX_REQUIRE_MEDIA_CORE === '1') {
+    const libraryManifest = JSON.parse(
+      await fs.readFile(
+        path.join(root, 'vendor-sources/heic/manifest.json'),
+        'utf8'
+      )
+    );
+    if (libraryManifest.schema !== 1 || libraryManifest.sources.length !== 3)
+      throw new Error(
+        'Public application source must include the prepared LGPL library sources'
+      );
+  }
   const excluded = await excludedDirectories();
   const files = await collect(excluded);
   const names = new Set(files.map((file) => file.path));

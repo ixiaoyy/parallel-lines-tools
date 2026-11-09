@@ -6,6 +6,9 @@ services:
     container_name: parallellines-tools-static
     restart: unless-stopped
     init: true
+    cpus: 0.50
+    mem_limit: 256m
+    pids_limit: 64
     read_only: true
     security_opt:
       - no-new-privileges:true

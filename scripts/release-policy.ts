@@ -144,7 +144,11 @@ export function releasePolicy(
                   'utf8'
                 )}`
             )
-            .join('\n')
+            .join('\n') +
+          (fs.existsSync('vendor-sources/heic/HEIC-NOTICES.txt')
+            ? '\n\nHEIC linked library notices\n' +
+              fs.readFileSync('vendor-sources/heic/HEIC-NOTICES.txt', 'utf8')
+            : '')
       });
       this.emitFile({
         type: 'asset',

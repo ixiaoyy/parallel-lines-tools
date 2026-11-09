@@ -96,7 +96,7 @@ async function download(info, target) {
         if (count > info.bytes)
           throw new Error('Media asset exceeds locked size');
         hash.update(chunk);
-        await file.write(chunk);
+        await file.writeFile(chunk);
         phase = setTimeout(
           () => controller.abort(new Error('Media response-body timeout')),
           30000
@@ -191,4 +191,21 @@ async function install() {
   );
 }
 
-await install();
+const options = process.argv.slice(2);
+if (options.length && (options.length !== 1 || options[0] !== '--if-locked'))
+  throw new Error('Unsupported media installer arguments');
+if (options[0] === '--if-locked') {
+  let selected = true;
+  try {
+    await fs.access(path.join(root, 'media-core.lock.json'));
+  } catch (error) {
+    if (error.code !== 'ENOENT') throw error;
+    selected = false;
+  }
+  // 核心自身的 CI 使用刚编译的显式目录；尚未选自建锁的旧本地版本保持原构建条件。
+  if (process.env.TOOLBOX_MEDIA_CORE_DIR || !selected)
+    console.log(
+      'Media installer: explicit prepared core or bootstrap development build selected'
+    );
+  else await install();
+} else await install();

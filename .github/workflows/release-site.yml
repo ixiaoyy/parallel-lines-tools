@@ -1,0 +1,192 @@
+name: Release validated static toolbox
+
+# 仅手动执行；main 的普通更新不发布站点，更不会自动连接生产。
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: site-release-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  release-site:
+    if: github.repository == 'ixiaoyy/parallel-lines-tools' && github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    permissions:
+      contents: write
+    env:
+      GH_REPO: ${{ github.repository }}
+      APPLICATION_REVISION: ${{ github.sha }}
+      SITE_TAG: site-${{ github.sha }}
+      NO_PROXY: localhost,127.0.0.1,::1
+      TOOLBOX_MEDIA_CORE_DIR: .media-core/runtime
+      TOOLBOX_REQUIRE_MEDIA_CORE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Verify public target, lock and new immutable release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test "$GH_REPO" = ixiaoyy/parallel-lines-tools
+          test "$(gh api "repos/$GH_REPO" --jq '.private')" = false
+          [[ "$APPLICATION_REVISION" =~ ^[a-f0-9]{40}$ ]]
+          test -s media-core.lock.json
+          for ENDPOINT in "git/ref/tags/$SITE_TAG" "releases/tags/$SITE_TAG"; do
+            if gh api "repos/$GH_REPO/$ENDPOINT" --silent 2>"$RUNNER_TEMP/site-preflight-error.log"; then
+              echo 'Refusing to overwrite an existing site tag or release.' >&2
+              exit 1
+            elif ! grep -q 'HTTP 404' "$RUNNER_TEMP/site-preflight-error.log"; then
+              cat "$RUNNER_TEMP/site-preflight-error.log" >&2
+              exit 1
+            fi
+          done
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install locked application dependencies
+        timeout-minutes: 5
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Prepare locked LGPL corresponding sources for public delivery
+        timeout-minutes: 5
+        run: python3 scripts/package-library-sources.py
+
+      - name: Install the verified self-built core without a legacy fallback
+        timeout-minutes: 9
+        run: node scripts/install-media-core.mjs
+
+      - name: Install lockfile-matched Chromium
+        timeout-minutes: 5
+        run: node node_modules/playwright/cli.js install --with-deps chromium
+
+      - name: Build the exact application revision with the required core
+        timeout-minutes: 6
+        run: npm run build
+
+      - name: Resolve official Nginx base to its actual immutable digest
+        timeout-minutes: 4
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 180s docker pull nginx:1.30.6-alpine
+          NGINX_IMAGE=$(docker image inspect nginx:1.30.6-alpine --format '{{json .RepoDigests}}' | python3 -c 'import json,re,sys; values=json.load(sys.stdin); found=[v for v in values if re.fullmatch(r"(?:docker\.io/library/)?nginx@sha256:[a-f0-9]{64}",v)]; assert found, "No verified official Nginx RepoDigest"; assert len({v.rsplit(":",1)[1] for v in found})==1, "Ambiguous Nginx RepoDigest"; print(sorted(found)[0])')
+          printf 'NGINX_IMAGE=%s\n' "$NGINX_IMAGE" >> "$GITHUB_ENV"
+
+      - name: Package a CI-only static image from the built dist
+        timeout-minutes: 4
+        shell: bash
+        run: |
+          set -euo pipefail
+          CI_IMAGE="parallel-lines-tools-ci:$APPLICATION_REVISION-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+          printf 'CI_IMAGE=%s\n' "$CI_IMAGE" >> "$GITHUB_ENV"
+          timeout 180s docker build --file deploy/Dockerfile.prebuilt \
+            --build-arg "NGINX_IMAGE=$NGINX_IMAGE" \
+            --build-arg "APP_REVISION=$APPLICATION_REVISION" \
+            --tag "$CI_IMAGE" .
+
+      - name: Start only this job's read-only loopback static container
+        timeout-minutes: 2
+        shell: bash
+        run: |
+          set -euo pipefail
+          CIDFILE="$RUNNER_TEMP/parallel-lines-tools-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT.cid"
+          docker run --detach --init \
+            --name "parallel-lines-tools-ci-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" \
+            --label "io.parallellines.tools-ci=$GITHUB_RUN_ID.$GITHUB_RUN_ATTEMPT" \
+            --cidfile "$CIDFILE" --read-only \
+            --tmpfs /var/cache/nginx:rw,nosuid,noexec,size=32m \
+            --tmpfs /var/run:rw,nosuid,noexec,size=1m \
+            --security-opt no-new-privileges:true \
+            --cpus 0.50 --memory 256m --pids-limit 64 \
+            --publish 127.0.0.1:5180:80 "$CI_IMAGE"
+          CID=$(cat "$CIDFILE")
+          [[ "$CID" =~ ^[a-f0-9]{64}$ ]]
+          docker exec "$CID" nginx -t
+          HEALTH=starting
+          for ATTEMPT in $(seq 1 12); do
+            HEALTH=$(docker inspect --format '{{.State.Health.Status}}' "$CID")
+            if [ "$HEALTH" = healthy ]; then break; fi
+            if [ "$HEALTH" = unhealthy ]; then
+              docker logs --tail 100 "$CID"
+              exit 1
+            fi
+            sleep 5
+          done
+          test "$HEALTH" = healthy
+
+      - name: Verify real static HTTP, metadata, MIME and cache contracts
+        timeout-minutes: 2
+        run: timeout 90s python3 scripts/check-static-http.py --base-url http://127.0.0.1:5180
+
+      - name: Verify real DOCX, duplicate-image ZIP and self-built media output
+        timeout-minutes: 6
+        shell: bash
+        run: |
+          set -euo pipefail
+          node node_modules/playwright/cli.js test --config scripts/playwright-deployment.config.ts \
+            --grep 'FFmpeg本地核心实际处理音频|Markdown 真实DOCX|图片批量重名ZIP'
+          node --input-type=module -e 'import fs from "node:fs"; const report=JSON.parse(fs.readFileSync("docs/evidence/deployment-e2e.json","utf8")); if(report.stats.expected!==3 || report.stats.unexpected!==0 || report.stats.flaky!==0 || report.stats.skipped!==0) throw new Error("Exactly three real deployment browser checks must pass without retries or skips");'
+
+      - name: Package validated static bytes and their deployment receipt
+        timeout-minutes: 4
+        run: node scripts/package-deployment.mjs
+
+      - name: Close only this job-owned container
+        if: always()
+        shell: bash
+        env:
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          set -euo pipefail
+          CIDFILE="$RUNNER_TEMP/parallel-lines-tools-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT.cid"
+          if [ ! -s "$CIDFILE" ]; then exit 0; fi
+          CID=$(cat "$CIDFILE")
+          [[ "$CID" =~ ^[a-f0-9]{64}$ ]]
+          OWNER=$(docker inspect --format '{{index .Config.Labels "io.parallellines.tools-ci"}}' "$CID")
+          test "$OWNER" = "$GITHUB_RUN_ID.$GITHUB_RUN_ATTEMPT"
+          if [ "$JOB_STATUS" != success ]; then docker logs --tail 100 "$CID"; fi
+          docker rm --force "$CID"
+
+      - name: Publish only the new validated static bundle and receipt
+        timeout-minutes: 3
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test "$(gh api "repos/$GH_REPO" --jq '.private')" = false
+          node --input-type=module -e 'import fs from "node:fs"; const receipt=JSON.parse(fs.readFileSync(".deployment/deployment-receipt.json","utf8")); if(receipt.applicationRevision!==process.env.APPLICATION_REVISION || receipt.nginxImage!==process.env.NGINX_IMAGE || receipt.bundle.file!=="toolbox-dist.tar.gz") throw new Error("Deployment receipt does not match this verified run");'
+          # 构建与测试期间远端可能改变，写入前重新核实，连无 tag 的已有草稿也不能复用。
+          for ENDPOINT in "git/ref/tags/$SITE_TAG" "releases/tags/$SITE_TAG"; do
+            if gh api "repos/$GH_REPO/$ENDPOINT" --silent 2>"$RUNNER_TEMP/site-publish-preflight-error.log"; then
+              echo 'Site tag or release appeared while building; refusing to publish over it.' >&2
+              exit 1
+            elif ! grep -q 'HTTP 404' "$RUNNER_TEMP/site-publish-preflight-error.log"; then
+              cat "$RUNNER_TEMP/site-publish-preflight-error.log" >&2
+              exit 1
+            fi
+          done
+          # 原子创建新 tag：并发或已有 tag 都失败，不复用、覆盖或删除已有发行状态。
+          gh api --method POST "repos/$GH_REPO/git/refs" \
+            -f "ref=refs/tags/$SITE_TAG" -f "sha=$APPLICATION_REVISION" >/dev/null
+          gh release create "$SITE_TAG" --verify-tag --draft \
+            --title "平行线工具箱 $SITE_TAG" \
+            --notes 'Validated static toolbox bundle and deployment receipt. Tested with the pinned official Nginx digest; no Docker/base-image copy is published. Production performs static COPY packaging only.'
+          gh release upload "$SITE_TAG" \
+            .deployment/toolbox-dist.tar.gz .deployment/deployment-receipt.json
+          test "$(gh api "repos/$GH_REPO" --jq '.private')" = false
+          gh release edit "$SITE_TAG" --draft=false

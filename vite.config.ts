@@ -6,18 +6,35 @@ import packageJson from './package.json';
 import { releasePolicy } from './scripts/release-policy';
 import upstream from './upstream-base.json';
 import path from 'node:path';
+import fs from 'node:fs';
 import { readMediaCoreInfo } from './scripts/media-core-info';
 
 // 源码包不依赖 .git 也可独立构建；本地候选不冒充新的已提交版本。
 const commitHash = `${upstream.commit.slice(0, 7)}-${upstream.candidate}`;
 const releaseModules = new Set<string>();
-const mediaCore = readMediaCoreInfo(process.env.TOOLBOX_MEDIA_CORE_DIR);
-if (
-  process.env.TOOLBOX_REQUIRE_MEDIA_CORE === '1' &&
-  (!mediaCore || !mediaCore.validated)
-)
+const mediaLock = fs.existsSync('media-core.lock.json')
+  ? JSON.parse(fs.readFileSync('media-core.lock.json', 'utf8'))
+  : null;
+const preparedCoreDirectory = process.env.TOOLBOX_MEDIA_CORE_DIR;
+const mediaCore = readMediaCoreInfo(
+  preparedCoreDirectory || (mediaLock ? '.media-core/runtime' : undefined)
+);
+const requireVerifiedCore =
+  process.env.TOOLBOX_REQUIRE_MEDIA_CORE === '1' ||
+  (mediaLock && !preparedCoreDirectory);
+if (requireVerifiedCore && (!mediaCore || !mediaCore.validated))
   throw new Error(
     'Public deployment requires the prepared media core and corresponding source receipt'
+  );
+if (
+  process.env.TOOLBOX_REQUIRE_MEDIA_CORE === '1' &&
+  (!mediaLock ||
+    !mediaCore ||
+    mediaCore?.version !== mediaLock.version ||
+    mediaCore.source.sha256 !== mediaLock.source.sha256)
+)
+  throw new Error(
+    'Public deployment core must match the committed corresponding-source lock'
   );
 
 // https://vitejs.dev/config https://vitest.dev/config

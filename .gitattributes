@@ -1,0 +1,2 @@
+# 对应源码镜像及原始许可按原字节保存；不让 Windows 自动行尾转换破坏来源校验。
+vendor-sources/heic/** -text

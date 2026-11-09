@@ -50,3 +50,6 @@ error.txt
 # 本地源码包重建证据不作为第二份项目源码提交。
 /docs/evidence/source-rebuild*/
 /.media-core/
+/.deployment/
+/.third-party-sources/
+__pycache__/
