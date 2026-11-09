@@ -1,7 +1,7 @@
 import { BrowserRouter, useRoutes } from 'react-router-dom';
 import routesConfig from '../config/routesConfig';
 import Navbar from './Navbar';
-import { Suspense, useState, useEffect } from 'react';
+import { createElement, Suspense, useState, useEffect } from 'react';
 import Loading from './Loading';
 import { CssBaseline, Theme, ThemeProvider } from '@mui/material';
 import { CustomSnackBarProvider } from '../contexts/CustomSnackBarContext';
@@ -20,8 +20,12 @@ export type Mode = 'dark' | 'light' | 'system';
 const AppRoutes = () => {
   const updatedRoutesConfig = [...routesConfig];
   tools.forEach((tool) => {
+    // 注册路由只创建元素，不执行未匹配工具的翻译 Hook；由 Router 选中后再实际渲染。
     if (tool.component)
-      updatedRoutesConfig.push({ path: tool.path, element: tool.component() });
+      updatedRoutesConfig.push({
+        path: tool.path,
+        element: createElement(tool.component)
+      });
   });
   return useRoutes(updatedRoutesConfig);
 };

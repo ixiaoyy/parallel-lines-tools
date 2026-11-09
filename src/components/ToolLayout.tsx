@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import ToolHeader from './ToolHeader';
 import Separator from './Separator';
@@ -31,7 +31,7 @@ export default function ToolLayout({
     shortDescription: FullI18nKey;
   };
 }) {
-  const { t } = useTranslation([
+  const { t, i18n: language } = useTranslation([
     'translation',
     getI18nNamespaceFromToolCategory(type)
   ]);
@@ -39,17 +39,49 @@ export default function ToolLayout({
   const toolTitle = t(i18n!.name);
   const toolDescription = t(i18n!.description);
 
-  const otherCategoryTools =
-    getToolsByCategory([], t)
-      .find((category) => category.type === type)
-      ?.tools.filter((tool) => t(tool.name) !== toolTitle)
-      .map((tool) => ({
-        title: tool.name,
-        description: tool.shortDescription,
-        link: getToolHref(tool),
-        external: !!tool.externalUrl,
-        icon: tool.icon
-      })) ?? [];
+  const related =
+    getToolsByCategory([], t).find((category) => category.type === type)
+      ?.tools ?? [];
+  const otherCategoryTools = related
+    .filter((tool) => t(tool.name) !== toolTitle)
+    .map((tool) => ({
+      title: tool.name,
+      description: tool.shortDescription,
+      link: getToolHref(tool),
+      external: !!tool.externalUrl,
+      icon: tool.icon
+    }));
+  const relatedRef = useRef<HTMLDivElement>(null);
+  const [relatedReady, setRelatedReady] = useState(false);
+  useEffect(() => {
+    let active = true;
+    setRelatedReady(false);
+    const target = relatedRef.current;
+    if (!target) return;
+    // 推荐工具靠近视口才加载其跨分类译文，不影响当前工具首屏。
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        observer.disconnect();
+        const namespaces = [
+          ...new Set(
+            related.flatMap((tool) =>
+              [tool.name, tool.shortDescription].map((key) => key.split(':')[0])
+            )
+          )
+        ];
+        language.loadNamespaces(namespaces, (errors) => {
+          if (active && !errors) setRelatedReady(true);
+        });
+      },
+      { rootMargin: '180px' }
+    );
+    observer.observe(target);
+    return () => {
+      active = false;
+      observer.disconnect();
+    };
+  }, [fullPath, language, language.resolvedLanguage]);
 
   return (
     <Box
@@ -73,16 +105,20 @@ export default function ToolLayout({
         />
         {children}
         <Separator backgroundColor="#5581b5" margin="50px" />
-        <AllTools
-          title={t('translation:toolLayout.allToolsTitle', '', {
-            type: capitalizeFirstLetter(
-              getToolsByCategory([], t).find(
-                (category) => category.type === type
-              )!.title
-            )
-          })}
-          toolCards={otherCategoryTools}
-        />
+        <Box ref={relatedRef} sx={{ minHeight: 80 }}>
+          {relatedReady && (
+            <AllTools
+              title={t('translation:toolLayout.allToolsTitle', '', {
+                type: capitalizeFirstLetter(
+                  getToolsByCategory([], t).find(
+                    (category) => category.type === type
+                  )!.title
+                )
+              })}
+              toolCards={otherCategoryTools}
+            />
+          )}
+        </Box>
       </Box>
     </Box>
   );

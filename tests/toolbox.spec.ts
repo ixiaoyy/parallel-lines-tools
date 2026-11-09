@@ -57,7 +57,7 @@ async function decodeDimensions(page: Page, data: Buffer, mime: string): Promise
 test('中文默认、搜索、深链接与英文切换', async ({ page }) => {
   await page.goto('/');
   await expect(page).toHaveTitle('平行线工具箱');
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('平行线工具箱');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('日常小事，顺手完成');
   await page.getByRole('combobox').last().fill('Markdown');
   await page.getByRole('option').filter({ hasText: md.title }).click();
   await expect(page).toHaveURL(/converters\/markdown-to-docx$/);

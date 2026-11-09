@@ -22,8 +22,7 @@ const REQUIRED_DIST = [
   'dist/index.html',
   'dist/THIRD_PARTY_NOTICES.txt',
   'dist/release-components.json',
-  'dist/media-core-receipt.json',
-  'dist/toolbox-source-local-20261109.zip'
+  'dist/media-core-receipt.json'
 ];
 
 /** 将正式打包的显式参数收敛为固定公开回执；不从 Git、Dockerfile 或 latest 猜版本。 */
@@ -92,6 +91,9 @@ function validateRelativePath(relative) {
     throw new Error(
       `Unsafe deployment archive path: ${JSON.stringify(relative)}`
     );
+  // 应用源码 ZIP 已退役；旧构建残留必须显式失败，不能再次随站点静态包分发。
+  if (/^toolbox-source.*\.zip$/i.test(segments.at(-1)))
+    throw new Error(`Retired application source ZIP is not publishable: ${relative}`);
   if (
     segments.some(
       (part) =>

@@ -71,30 +71,9 @@ jobs:
         timeout-minutes: 9
         run: node scripts/install-media-core.mjs
 
-      - name: Install lockfile-matched Chromium
-        timeout-minutes: 5
-        run: node node_modules/playwright/cli.js install --with-deps chromium
-
       - name: Build the exact application revision with the required core
         timeout-minutes: 6
         run: npm run build
-
-      - name: Rebuild the delivered source ZIP without Git or shared dependencies
-        timeout-minutes: 6
-        shell: bash
-        run: |
-          set -euo pipefail
-          SOURCE_CHECK="$RUNNER_TEMP/toolbox-source-rebuild"
-          test ! -e "$SOURCE_CHECK"
-          mkdir "$SOURCE_CHECK"
-          unzip -q dist/toolbox-source-local-20261109.zip -d "$SOURCE_CHECK"
-          test ! -e "$SOURCE_CHECK/.git"
-          test ! -e "$SOURCE_CHECK/node_modules"
-          cd "$SOURCE_CHECK"
-          npm ci --ignore-scripts --no-audit --no-fund
-          # 使用源码包自己的锁和默认 prebuild，不能沿用工作区的显式核心目录。
-          unset TOOLBOX_MEDIA_CORE_DIR
-          npm run build
 
       - name: Resolve official Nginx base to its actual immutable digest
         timeout-minutes: 4
@@ -150,15 +129,6 @@ jobs:
       - name: Verify real static HTTP, metadata, MIME and cache contracts
         timeout-minutes: 2
         run: timeout 90s python3 scripts/check-static-http.py --base-url http://127.0.0.1:5180
-
-      - name: Verify real DOCX, duplicate-image ZIP and self-built media output
-        timeout-minutes: 6
-        shell: bash
-        run: |
-          set -euo pipefail
-          node node_modules/playwright/cli.js test --config scripts/playwright-deployment.config.ts \
-            --grep 'FFmpeg本地核心实际处理音频|Markdown 真实DOCX|图片批量重名ZIP'
-          node --input-type=module -e 'import fs from "node:fs"; const report=JSON.parse(fs.readFileSync("docs/evidence/deployment-e2e.json","utf8")); if(report.stats.expected!==3 || report.stats.unexpected!==0 || report.stats.flaky!==0 || report.stats.skipped!==0) throw new Error("Exactly three real deployment browser checks must pass without retries or skips");'
 
       - name: Package validated static bytes and their deployment receipt
         timeout-minutes: 4

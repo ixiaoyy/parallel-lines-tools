@@ -12,6 +12,12 @@ import { readMediaCoreInfo } from './scripts/media-core-info';
 // 源码包不依赖 .git 也可独立构建；本地候选不冒充新的已提交版本。
 const commitHash = `${upstream.commit.slice(0, 7)}-${upstream.candidate}`;
 const releaseModules = new Set<string>();
+// 首包只带全局中文 UI；工具词条和其他语言继续按需读取原 JSON，不复制第二份翻译源。
+const defaultZhResources = {
+  translation: JSON.parse(
+    fs.readFileSync('public/locales/zh/translation.json', 'utf8')
+  )
+};
 const mediaLock = fs.existsSync('media-core.lock.json')
   ? JSON.parse(fs.readFileSync('media-core.lock.json', 'utf8'))
   : null;
@@ -74,7 +80,8 @@ export default defineConfig({
     'process.env': {},
     __APP_VERSION__: JSON.stringify(packageJson.version),
     __COMMIT_HASH__: JSON.stringify(commitHash),
-    __MEDIA_CORE_SOURCE_URL__: JSON.stringify(mediaCore?.source.url ?? null)
+    __MEDIA_CORE_SOURCE_URL__: JSON.stringify(mediaCore?.source.url ?? null),
+    __DEFAULT_ZH_RESOURCES__: JSON.stringify(defaultZhResources)
   },
   optimizeDeps: {
     exclude: ['@ffmpeg/ffmpeg', '@ffmpeg/util']

@@ -36,6 +36,10 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
+    // 首屏只内联唯一语言源中的中文全局 UI，工具命名空间留给真实使用处按需加载。
+    resources: { zh: __DEFAULT_ZH_RESOURCES__ },
+    // 未内联的中文工具词条、缓存选择的英文及其他语言均保留原 HTTP backend。
+    partialBundledLanguages: true,
     supportedLngs: [
       'en',
       'de',

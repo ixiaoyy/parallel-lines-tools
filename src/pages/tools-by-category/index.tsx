@@ -21,7 +21,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { Helmet } from 'react-helmet';
 import UserTypeFilter from '@components/UserTypeFilter';
 import { useTranslation } from 'react-i18next';
-import { validNamespaces } from '../../i18n';
+import type { I18nNamespaces } from '../../i18n';
 import { useUserTypeFilter } from '../../providers/UserTypeFilterProvider';
 import { getToolHref } from '@tools/defineTool';
 
@@ -38,13 +38,24 @@ export default function ToolsByCategory() {
   const { categoryName } = useParams();
   const [searchTerm, setSearchTerm] = React.useState<string>('');
   const { selectedUserTypes, setSelectedUserTypes } = useUserTypeFilter();
-  const { t } = useTranslation(validNamespaces);
-  const rawTitle = getToolCategoryTitle(categoryName as string, t);
-  // First get tools by category without filtering
-  const toolsByCategory = getToolsByCategory(selectedUserTypes, t).find(
+  const { t: uiText } = useTranslation('translation');
+  const toolsByCategory = getToolsByCategory(selectedUserTypes, uiText).find(
     ({ type }) => type === categoryName
   );
   const categoryDefinedTools = toolsByCategory?.tools ?? [];
+  // 分类页只取当前列表实际使用的译文，不触发整个工具箱的语言包下载。
+  const namespaces = [
+    ...new Set([
+      'translation',
+      ...categoryDefinedTools.flatMap((tool) =>
+        [tool.name, tool.description, tool.shortDescription].map(
+          (key) => key.split(':')[0]
+        )
+      )
+    ])
+  ] as I18nNamespaces[];
+  const { t } = useTranslation(namespaces);
+  const rawTitle = getToolCategoryTitle(categoryName as string, t);
 
   const categoryTools = filterTools(
     categoryDefinedTools,
@@ -65,14 +76,14 @@ export default function ToolsByCategory() {
         <title>{`${rawTitle} · ${t('translation:hero.brand')}`}</title>
       </Helmet>
       <Box
-        padding={{ xs: 1, md: 3, lg: 5 }}
+        padding={{ xs: 2, md: 3 }}
         display={'flex'}
         flexDirection={'column'}
         alignItems={'center'}
         justifyContent={'center'}
         width={'100%'}
       >
-        <Hero />
+        <Hero showShortcuts={false} />
       </Box>
       <Divider sx={{ borderColor: theme.palette.primary.main }} />
       <Box ref={mainContentRef} mt={3} ml={{ xs: 1, md: 2, lg: 3 }} padding={3}>

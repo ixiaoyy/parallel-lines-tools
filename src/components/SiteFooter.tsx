@@ -2,42 +2,59 @@ import { Box, Link, Stack, Typography } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-/** 统一展示实际开源归属、发行许可和延期工具说明，不嵌入第三方组件或跟踪脚本。 */
+/** 与主站保持一致的三个使用入口，圈子沿用尚未开放状态。 */
 export default function SiteFooter() {
   const { t } = useTranslation();
   return (
-    <Box component="footer" sx={{ px: 3, py: 4, textAlign: 'center' }}>
-      <Typography variant="body2" color="text.secondary">
-        {t('footer.attribution')}
-      </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ my: 1 }}>
-        {t('footer.privacy')}
-      </Typography>
+    <Box component="footer" sx={{ px: 2, py: 3, textAlign: 'center' }}>
       <Stack
+        component="nav"
+        aria-label={t('footer.navigation')}
         direction="row"
-        spacing={2}
+        spacing={1.5}
+        alignItems="center"
         justifyContent="center"
-        flexWrap="wrap"
-        useFlexGap
+        sx={{ color: 'text.secondary', fontSize: 14 }}
       >
-        <Link component={RouterLink} to="/deferred-tools">
-          {t('release.link')}
-        </Link>
-        <Link href="/THIRD_PARTY_NOTICES.txt">{t('footer.licenses')}</Link>
-        <Link href="/toolbox-source-local-20261109.zip">
-          {t('footer.modifiedSource')}
-        </Link>
-        {__MEDIA_CORE_SOURCE_URL__ && (
-          <Link href={__MEDIA_CORE_SOURCE_URL__}>
-            {t('footer.mediaSource')}
-          </Link>
-        )}
         <Link
-          href="https://pingxingxian.space/tools"
+          href="https://pingxingxian.space/"
           target="_blank"
           rel="noopener noreferrer"
+          color="inherit"
+          underline="hover"
         >
-          平行线
+          {t('footer.games')}
+        </Link>
+        <Typography component="span" aria-hidden="true">
+          |
+        </Typography>
+        <Box
+          component="button"
+          type="button"
+          disabled
+          aria-label={t('footer.communityUnavailable')}
+          sx={{
+            border: 0,
+            p: 0,
+            bgcolor: 'transparent',
+            color: 'text.disabled',
+            font: 'inherit'
+          }}
+        >
+          {t('footer.community')}
+        </Box>
+        <Typography component="span" aria-hidden="true">
+          |
+        </Typography>
+        <Link
+          component={RouterLink}
+          to="/"
+          aria-current="page"
+          color="inherit"
+          underline="hover"
+          fontWeight={700}
+        >
+          {t('footer.tools')}
         </Link>
       </Stack>
     </Box>

@@ -1,7 +1,7 @@
 import ToolLayout from '../components/ToolLayout';
 import React, { JSXElementConstructor, LazyExoticComponent } from 'react';
 import { IconifyIcon } from '@iconify/react';
-import { FullI18nKey, validNamespaces } from '../i18n';
+import { FullI18nKey, validNamespaces, type I18nNamespaces } from '../i18n';
 import { useTranslation } from 'react-i18next';
 
 export type UserType = 'generalUsers' | 'developers';
@@ -83,6 +83,21 @@ export const defineTool = (
   const { icon, path, keywords, component, i18n, alternativeCategories } =
     options;
   const Component = component;
+  // 仅在匹配本工具时等待其元信息实际引用的命名空间；公共 UI 始终来自 translation。
+  const metadataKeys = [
+    i18n.name,
+    i18n.description,
+    i18n.shortDescription,
+    i18n.longDescription
+  ];
+  const namespaces: I18nNamespaces[] = [
+    'translation',
+    ...validNamespaces.filter(
+      (namespace) =>
+        namespace !== 'translation' &&
+        metadataKeys.some((key) => key?.startsWith(`${namespace}:`))
+    )
+  ];
   return {
     type: basePath,
     alternativeCategories,
@@ -94,7 +109,7 @@ export const defineTool = (
     keywords,
     userTypes: i18n.userTypes,
     component: function ToolComponent() {
-      const { t } = useTranslation(validNamespaces);
+      const { t } = useTranslation(namespaces);
       return (
         <ToolLayout
           icon={icon}

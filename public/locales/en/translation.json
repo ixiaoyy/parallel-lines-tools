@@ -132,10 +132,15 @@
     },
     "search": {
       "noResult": "No results found, Try adjusting your search or filter criteria",
-      "placeholder": "Search all tools"
+      "placeholder": "Search all tools",
+      "loading": "Loading tools…",
+      "loadFailed": "Could not load tools. Reopen search to retry."
     },
     "title": "Everyday tasks, made simpler",
-    "removeBookmark": "Remove bookmark: {{title}}"
+    "removeBookmark": "Remove bookmark: {{title}}",
+    "commonTitle": "Common tools",
+    "bookmarksTitle": "My bookmarks",
+    "categoriesTitle": "All categories"
   },
   "inputFooter": {
     "clear": "Clear",
@@ -316,7 +321,12 @@
     "privacy": "Files and input are used only for the current operation and are not saved in bookmarks.",
     "licenses": "Open-source licenses",
     "modifiedSource": "Modified source (ZIP)",
-    "mediaSource": "Media engine corresponding source"
+    "mediaSource": "Media engine corresponding source",
+    "navigation": "Site navigation",
+    "games": "Games",
+    "community": "Community",
+    "tools": "Tools",
+    "communityUnavailable": "Community is not available yet"
   },
   "toolsByCategory": {
     "back": "Back to all tools",
@@ -325,10 +335,10 @@
   },
   "release": {
     "title": "Temporarily unavailable",
-    "intro": "These tools are deferred until their local runtime resources and processing quality are verified.",
+    "intro": "These tools are not available yet. Please choose another tool.",
     "back": "All tools",
-    "resources": "This feature still depends on external runtime resources.",
-    "binary": "The engine binary and corresponding source are not pinned.",
+    "resources": "Not available yet.",
+    "binary": "Not available yet.",
     "link": "Deferred tools",
     "notFound": "Page not found"
   },

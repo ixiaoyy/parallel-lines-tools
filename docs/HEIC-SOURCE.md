@@ -26,7 +26,7 @@ python3 scripts/package-library-sources.py
 
 该 helper 不加入普通 `npm run build` 的前置流程，不在用户打开网站时运行，也不增加外网运行时依赖。
 
-对应源码镜像作为交付材料保存在仓库 `vendor-sources/heic/`，共约9.4MB原包；普通Node构建不依赖Python或额外下载。CI会再次核对已提交镜像与锁，不静默改写预期。该目录包含三份未经重新打包的原 tar.gz、`manifest.json`、`HEIC-NOTICES.txt`、原文 `licenses/` 和 `build-materials/`。发布负责人将整个输出一起放进应用源码 ZIP，并核对公开下载地址；不能只列上游链接或把下载成功当成已发布。`library-sources.lock.json` 保存每份源码的固定 commit、公开 URL、实际 SHA256/字节数及许可文件身份。
+对应源码镜像作为交付材料保存在公开仓库 `https://github.com/ixiaoyy/parallel-lines-tools` 的 `vendor-sources/heic/`，共约9.4MB原包；普通Node构建不依赖Python或额外下载。CI会再次核对已提交镜像与锁，不静默改写预期。该目录包含三份未经重新打包的原 tar.gz、`manifest.json`、`HEIC-NOTICES.txt`、原文 `licenses/` 和 `build-materials/`。前端修改版源码及这些 vendor 材料通过该仓库交付，新候选不再额外打包或站内分发应用源码 ZIP；三份原包和许可材料原样保留，不能只列上游链接或把下载成功当成已发布。`library-sources.lock.json` 保存每份源码的固定 commit、公开 URL、实际 SHA256/字节数及许可文件身份。
 
 每份下载的连接与单次读取上限均为 20 秒，父进程提供 120 秒硬总截止，压缩包最多 40 MiB，检查的展开内容最多 200 MiB。失败或 hash 不匹配立即停止，不重试、不替换有效缓存。超时仅终止本任务自己的网络子进程，不触及服务或用户进程。源码只作 tar 成员检查与少量原文读取，不执行，也不全量解包。
 

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   AppBar,
   Box,
-  Button,
   Drawer,
   FormControl,
   IconButton,
@@ -40,7 +39,7 @@ const languages = [
   { code: 'uk', label: 'Українська' }
 ];
 
-/** 提供工具箱品牌、语言及主题入口；外部归属仅以普通链接呈现，不自动请求第三方。 */
+/** 提供工具箱品牌、语言及主题入口；不在使用界面展示项目源码或版本信息。 */
 const Navbar: React.FC<NavbarProps> = ({ mode, onChangeMode }) => {
   const { t, i18n } = useTranslation();
   const theme = useTheme();
@@ -81,24 +80,6 @@ const Navbar: React.FC<NavbarProps> = ({ mode, onChangeMode }) => {
       >
         <Brightness6Icon />
       </IconButton>
-      <Button
-        component="a"
-        href="https://pingxingxian.space/tools"
-        target="_blank"
-        rel="noopener noreferrer"
-        color="inherit"
-      >
-        {t('navbar.mainTools')}
-      </Button>
-      <Button
-        component="a"
-        href="https://github.com/iib0011/omni-tools"
-        target="_blank"
-        rel="noopener noreferrer"
-        color="inherit"
-      >
-        {t('navbar.source')}
-      </Button>
     </>
   );
 
@@ -109,7 +90,8 @@ const Navbar: React.FC<NavbarProps> = ({ mode, onChangeMode }) => {
         background: 'transparent',
         boxShadow: 'none',
         color: 'text.primary',
-        pt: 2
+        borderBottom: '1px solid',
+        borderColor: 'divider'
       }}
     >
       <Toolbar
@@ -133,9 +115,6 @@ const Navbar: React.FC<NavbarProps> = ({ mode, onChangeMode }) => {
             }}
           >
             {t('hero.brand')}
-          </Typography>
-          <Typography variant="caption" display="block" color="text.secondary">
-            OmniTools · v{__APP_VERSION__}
           </Typography>
         </Box>
         {isMobile ? (

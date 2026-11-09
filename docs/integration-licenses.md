@@ -36,6 +36,6 @@
 
 构建守卫同时检查主程序与 Worker 模块图，生成实际 `release-components.json` 与 `THIRD_PARTY_NOTICES.txt`。图标源码和版权/许可正文在 `licenses/icons/`；部分 npm 发布物遗漏的许可正文按固定来源补入 `licenses/vendor/`。tiny-case 的作者 MIT 声明保留原元数据，没有虚构版权年份。
 
-定制应用源码包与引擎对应源码是两项不同交付。`SOURCE-DELIVERY.md` 明确实际包的内容和缺口；仅有根 LICENSE、上游链接或应用源码 ZIP 不代表完整履行了媒体二进制的源码义务。
+前端修改版源码通过公开 Git 仓库 `https://github.com/ixiaoyy/parallel-lines-tools` 交付，新候选不再额外打包或站内分发应用源码 ZIP。第三方 `vendor-sources/heic/` 原包与许可、`media-core-pl.1` 的原生对应源码及构建材料原样保留；应用仓库不能代替媒体二进制的完整对应源码。取得方式与边界见 `SOURCE-DELIVERY.md`，不能只提供根 LICENSE 或原版上游链接。
 
-本次未创建远端 Fork、没有 commit/PR、没有公开任何修改版服务。许可材料尚未闭合的部分是公开分发前置工作，不再据此阻止已获授权的本地 M1/M2 开发，也不假称已经完成生产许可验收。
+初次本地审计时未创建远端 Fork、没有 commit/PR，也没有公开修改版服务；以上风险和待办保留其调查时语境。后续已授权的公开仓库、原生对应源码 Release 与生产结果另见 `deployment-status.md`。本次应用 ZIP 退役和普通使用界面清理不因此被记为已经上线。

@@ -53,7 +53,7 @@ def media_type(headers):
 
 
 def assert_cache(headers, immutable):
-    """入口/源码/错误不得长缓存；只有成功指纹资源按约定 immutable。"""
+    """入口/许可/错误不得长缓存；只有成功指纹资源按约定 immutable。"""
     value = headers.get("Cache-Control", "").lower()
     if immutable:
         require("immutable" in value and "max-age=31536000" in value, f"Missing immutable cache policy: {value}")
@@ -154,13 +154,13 @@ def run_check(dist, base_url):
     assert_cache(headers, True)
     checks.append("wasm-range-206")
 
-    for filename, mime in (("THIRD_PARTY_NOTICES.txt", "text/plain"), ("toolbox-source-local-20261109.zip", "application/zip")):
+    for filename, mime in (("THIRD_PARTY_NOTICES.txt", "text/plain"),):
         local = dist / filename
         require(local.is_file() and local.stat().st_size > 0, f"Missing delivery material: {filename}")
         status, headers, body = client.request("/" + filename, method="HEAD")
-        require(status == 200 and media_type(headers) == mime and int(headers.get("Content-Length", "-1")) == local.stat().st_size, f"Source/notice HTTP contract failed: {filename}")
+        require(status == 200 and media_type(headers) == mime and int(headers.get("Content-Length", "-1")) == local.stat().st_size, f"Notice HTTP contract failed: {filename}")
         assert_cache(headers, False)
-    checks.append("source-zip-and-notice")
+    checks.append("third-party-notice")
 
     served = {}
     for filename in ("media-core-receipt.json", "release-components.json"):

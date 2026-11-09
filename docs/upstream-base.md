@@ -1,6 +1,6 @@
 # 上游与主站基线
 
-核对时间：2026-11-08 至 2026-11-09（北京时间）。以下原版测试与工具清单是 M0 基线；当前定制实现及验收另见 `implementation-status.md`、`acceptance-report.md`。所有工作仅在本地，不代表线上状态。
+核对时间：2026-11-08 至 2026-11-09（北京时间）。以下原版测试、工具清单和权限/远端状态是 M0 调查时的历史基线，不代表当前线上状态；当前定制实现及验收另见 `implementation-status.md`、`acceptance-report.md`、`deployment-status.md`。
 
 ## 已确定的产品边界
 
@@ -23,7 +23,7 @@
 | 本轮运行环境 | Node `v22.14.0`、npm `10.9.2` |
 | 上游声明 | CI 和 Docker 使用 Node 20；package.json 未声明 engines，不据此猜更低版本支持 |
 | 依赖 | npm、原始 package-lock.json；不套用主站 pnpm |
-| 原版构建入口 | M0 为 `tsc && vite build`；当前 `npm run build` 另在最后生成定制源码 ZIP |
+| 构建与源码交付 | M0 为 `tsc && vite build`；早期定制候选曾额外生成应用源码 ZIP，该链已退役。当前前端源码通过公开 Git 仓库 `https://github.com/ixiaoyy/parallel-lines-tools` 交付，不再额外打包或站内分发应用 ZIP；第三方 vendor 和 `media-core-pl.1` 对应源码原样保留 |
 | 注册 | `src/tools/defineTool.tsx`、`src/tools/index.ts` 与各类 `index.ts` |
 | 翻译 | `src/i18n/index.ts`、`public/locales/{en,zh}/*.json` |
 | 源码工具量 | 128 个 meta 文件，通用计算器展开后 132 个工具，全部注册图可达 |

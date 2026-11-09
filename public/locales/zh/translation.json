@@ -124,10 +124,15 @@
     },
     "search": {
       "noResult": "没有找到匹配工具，请换个关键词或调整筛选。",
-      "placeholder": "搜索工具名称或用途"
+      "placeholder": "搜索工具名称或用途",
+      "loading": "正在加载工具…",
+      "loadFailed": "加载失败，请重新打开搜索重试。"
     },
     "title": "日常小事，顺手完成",
-    "removeBookmark": "取消收藏：{{title}}"
+    "removeBookmark": "取消收藏：{{title}}",
+    "commonTitle": "常用工具",
+    "bookmarksTitle": "我的收藏",
+    "categoriesTitle": "全部分类"
   },
   "inputFooter": {
     "clear": "清除",
@@ -322,14 +327,19 @@
     "privacy": "文件与输入内容仅用于当前工具处理；不会保存到收藏记录。",
     "licenses": "开源许可",
     "modifiedSource": "定制源码（ZIP）",
-    "mediaSource": "媒体引擎对应源码"
+    "mediaSource": "媒体引擎对应源码",
+    "navigation": "站点导航",
+    "games": "游戏",
+    "community": "圈子",
+    "tools": "工具",
+    "communityUnavailable": "圈子，暂未开放"
   },
   "release": {
     "title": "暂未开放",
-    "intro": "以下工具待本地运行资源与处理质量验证后再开放。",
+    "intro": "这些工具暂未开放，请先使用工具箱里的其他功能。",
     "back": "全部工具",
-    "resources": "此功能仍依赖外部运行资源。",
-    "binary": "引擎二进制及对应源码尚未锁定。",
+    "resources": "暂未开放。",
+    "binary": "暂未开放。",
     "link": "暂未开放的工具",
     "notFound": "页面不存在"
   },

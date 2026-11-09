@@ -29,7 +29,7 @@ node scripts/package-deployment.mjs --application-revision <40位小写Git提交
 
 脚本只使用已有 Node 与系统 GNU tar 或 bsdtar，无新增依赖。不收录符号链接、越界路径、真实环境文件、私钥文件或诊断产物；关键文件不存在或为空时失败。输入最多 10,000 个文件、512 MiB，tar 执行最多 180 秒。读取和打包期间若文件清单、大小或修改时间变化则停止；不把不同构建状态混成一次发行。失败退出不得继续发布残留的旧输出，必须核对成功回执中的应用 SHA。
 
-`.deployment/` 必须留在 Git 忽略范围，不将它或 CI 的临时镜像归档提交进源码。应用源码 ZIP 与媒体核心对应源码 URL 是不同交付物；打包脚本只消费已经通过的核心回执，不替代媒体核心源码、构建记录和公开下载的验收。
+`.deployment/` 必须留在 Git 忽略范围，不将它或 CI 的临时镜像归档提交进源码。前端修改版源码通过公开 Git 仓库 `https://github.com/ixiaoyy/parallel-lines-tools` 交付，新候选不再额外打包或站内分发应用源码 ZIP；第三方 `vendor-sources/heic/` 和 `media-core-pl.1` 对应源码原样保留。打包脚本只消费已经通过的核心回执，不替代媒体核心源码、构建记录和公开下载的验收；遇到 dist 残留的旧应用源码 ZIP 必须拒绝发布。
 
 ## 容器与网关接口
 
@@ -53,12 +53,12 @@ node scripts/package-deployment.mjs --application-revision <40位小写Git提交
 
 集成 CI 至少检查以下真实容器响应，不用纯字符串断言或 healthz 冒充：
 
-构建后先将实际交付源码 ZIP 解压到无 `.git`、无 `node_modules` 的新目录，独立 `npm ci` 并使用源码包默认 prebuild/build；不复用工作区显式媒体目录或依赖链接，失败则不发布。
+构建使用公开仓库的明确提交与当前修改版锁文件；前端源码由该仓库交付，不再增加应用源码 ZIP 的生成或解包重建步骤。原生第三方源码及许可检查仍保留。
 
 1. 使用回执固定的基础 digest 和同一份 dist/config 封装临时测试镜像，运行 `nginx -t`，以实际目标架构启动容器并等待健康。
 2. 首页及 `/converters/markdown-to-docx`、`/image-generic/compress` 深链接为 200，标题正确且入口 HTML 的 CSP 保留；入口 Cache-Control 为 no-store。
 3. 从该 index 实际引用中选取 JS/MJS、CSS 和 WASM，检查 200、正确 MIME；指纹资源为 immutable。WASM 另以 Range 请求验证 206 与正确内容类型。
-4. 站内源码 ZIP 下载为正确 MIME、no-store；若 dist 同时提供源码 tar，也检查其站内 MIME 和缓存。核心回执的外部 GitHub 源码 URL 则独立检查公开可下载，不能要求 GitHub 的响应缓存服从本站 Nginx 配置。不存在的 assets 必须 404 且不能长缓存，不能用 HTML 回退伪装资源。
+4. 检查第三方许可、vendor 源材料和核心回执身份；核心回执的外部 GitHub 对应源码 URL 独立检查公开可下载，不能要求 GitHub 的响应缓存服从本站 Nginx 配置。新候选不提供额外应用源码 ZIP。不存在的 assets 必须 404 且不能长缓存，不能用 HTML 回退伪装资源。
 5. 静态服务 POST 返回 405，不提供上传或转换 API。真实 Markdown、图片与媒体的产物/隐私检查按各自已有验收入口执行。
 6. 所有检查完成后再打包并核对 SHA-256/字节数。测试容器和临时镜像只在 CI 使用，不作为额外公开 Docker 镜像资产发布。
 
@@ -78,7 +78,7 @@ node scripts/package-deployment.mjs --application-revision <40位小写Git提交
 
 ## 静态 HTTP 合同
 
-- SPA 路由刷新返回 index.html；HTML、非指纹资源及源码 ZIP/tar 为 no-store，避免固定名字的旧源码包被复用。
+- SPA 路由刷新返回 index.html；HTML 和非指纹下载资源为 no-store。新候选不额外分发应用源码 ZIP；保留 ZIP/tar 等文件类型的通用 MIME 与缓存规则不代表仍在生成应用源码包。
 - 只有 `/assets/` 下带至少 8 位内容指纹的成功资源长缓存一年并 immutable；404 和缺失代码不长缓存，也不回退为 HTML。
 - JS/MJS、WASM、ZIP、tar、tar.gz/tgz 的 MIME 分别为 application/javascript、application/wasm、application/zip、application/x-tar、application/gzip；gzip 下载包不是 HTTP Content-Encoding。
 - 保留 HTML 现有 CSP，不给主站或 Chat 增加全局 COOP/COEP；没有跨站请求放行或 CDN 兜底。
@@ -96,6 +96,6 @@ node scripts/package-deployment.mjs --application-revision <40位小写Git提交
 
 既有静态配置曾以本地 Docker Compose v5.0.2 执行 config --quiet 通过，并用 7 个静态样例检查缓存分流。这些是配置层证据，不是运行中的 Nginx 或线上验收。
 
-本打包脚本的 9 项隔离合成 fixtures 检查通过：显式参数、成功 tar/回执 SHA-256 与字节数、未通过媒体验证、缺应用源码 ZIP、缺 WASM、核心版本不匹配、混入真实环境文件名、符号链接、带 token 查询参数的源码 URL。临时 fixture 均位于独立系统临时目录并已清理，没有伪造仓库实际媒体回执或生成正式发布包。体积上限没有通过制造超限大文件压测，GNU tar 分支和真实最终包由 CI 验证。
+应用 ZIP 链退役前，本打包脚本的 9 项隔离合成 fixtures 检查通过：显式参数、成功 tar/回执 SHA-256 与字节数、未通过媒体验证、缺应用源码 ZIP、缺 WASM、核心版本不匹配、混入真实环境文件名、符号链接、带 token 查询参数的源码 URL。此为历史候选回执，不代表当前仍要求或生成应用源码 ZIP。临时 fixture 均位于独立系统临时目录并已清理，没有伪造仓库实际媒体回执或生成正式发布包。体积上限没有通过制造超限大文件压测，GNU tar 分支和真实最终包由 CI 验证。
 
 镜像和 HTTP 由 CI/生产集成验收；本地替身/配置检查不证明远程执行或公开 Release 成功。本机不启动 Docker daemon，实际执行由发布负责人按本次授权完成并记录。

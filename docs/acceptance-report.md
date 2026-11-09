@@ -8,7 +8,7 @@
 - Markdown 转 Word：`http://127.0.0.1:5178/converters/markdown-to-docx`。
 - 图片压缩：`http://127.0.0.1:5178/image-generic/compress`。
 - 延期条目说明：`http://127.0.0.1:5178/deferred-tools`。
-- 页脚可下载实际许可全文与修改版应用源码 ZIP，不只链接原版上游。
+- 前端修改版源码通过公开 Git 仓库 `https://github.com/ixiaoyy/parallel-lines-tools` 交付；新候选不再额外打包或站内分发应用源码 ZIP，第三方 vendor 和 `media-core-pl.1` 对应源码原样保留。本次界面清理的发布状态尚未在本文记为上线。
 
 预览只监听本机。若预览进程结束，从仓库根执行：
 
@@ -16,7 +16,7 @@
 node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 5178 --strictPort
 ```
 
-先核端口归属，不终止其他服务。源码开发仍可用 `npm run dev`；生产构建是 `npm run build`，同时类型检查、构建及生成源码包。
+先核端口归属，不终止其他服务。源码开发仍可用 `npm run dev`；生产构建是 `npm run build`，执行类型检查与静态构建，不再生成额外应用源码 ZIP。
 
 ## 本轮行为
 
@@ -27,9 +27,11 @@ node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 5178 --strict
 | 图片压缩 | 沿用通用压缩入口，PNG 专用工具保留。JPEG/PNG/WebP、质量、最长边、目标大小、前后预览、逐件下载、重名安全 ZIP；批次/像素/字节/时间上限及串行执行，取消/重置/离页释放资源，新输入/设置废弃旧下载。保留 JPEG EXIF 并提示可能含拍摄位置，不充当脱敏工具；AVIF/动画不开放 |
 | 第三方资源 | Navbar 外站 iframe/推广删除，图标离线打包，字体使用系统栈，Monaco 和 FFmpeg JS/WASM 同源。CSP 不放行外站资源，保留本地/blob PDF 预览；不影响主站、Chat 或 OIDC 响应头 |
 | 许可 | 用户接受适用 GPL/AGPL 源码义务；非 MIT 不构成禁用依据。已撤回过宽隔离并恢复 23 项媒体/HEIC 注册。许可清单覆盖主图和独立 Worker 图；保留原始版权、补齐图标及缺失包的许可材料 |
-| 源码 | 修改版应用源码 ZIP 含锁文件、构建脚本、必要类型与资源，不依赖 `.git` 才能构建；不含真实环境文件、依赖目录、日志或渲染产物。该 ZIP 不替代 FFmpeg/codec 完整对应源码 |
+| 源码 | 公开 Git 仓库交付修改版前端、锁文件、构建脚本、必要类型与资源；当前构建不额外生成或站内分发应用源码 ZIP。第三方 vendor 材料和媒体核心原生对应源码保留，应用仓库不替代 FFmpeg/codec 完整对应源码 |
 
-## 实际验证
+## 早期候选的实际验证
+
+下表保留应用 ZIP 链退役前的实际结果与数值；源码生成、下载及解包重建仅为当时的历史验收，不表示当前构建仍产生或分发应用 ZIP。
 
 | 检查 | 结果与范围 | 证据 |
 |---|---|---|
@@ -68,4 +70,4 @@ React Doctor 未安装，本轮未为满足技能擅自安装；使用实际类�
 
 ## 后续生产验收补记
 
-正式site CI42570812688通过干净源码ZIP重建、真实Nginx HTTP/MIME/cache及3项文件浏览器检查；生产42573761415与独立health42574100132通过。线上Chrome同3项真实DOCX/图片ZIP/WAV用例全部通过，网络样本无外站请求、非GET/HEAD请求或pageerror；1280/375px截图已观察。Cloudflare自动统计注入曾造成首轮隐私断言失败，工具子域no-transform修复后原断言完整通过，没有删除检查或扩大CSP放行。实际应用SHA为ee61062ee39cb31189e365660e1fa2cca5009d88，主站main持久代理提交60e862d9。当前访问：https://tools.pingxingxian.space/ 。详见deployment-status.md及其证据索引。
+历史正式site CI42570812688通过当时的干净源码ZIP重建、真实Nginx HTTP/MIME/cache及3项文件浏览器检查；生产42573761415与独立health42574100132通过。线上Chrome同3项真实DOCX/图片ZIP/WAV用例全部通过，网络样本无外站请求、非GET/HEAD请求或pageerror；1280/375px截图已观察。Cloudflare自动统计注入曾造成首轮隐私断言失败，工具子域no-transform修复后原断言完整通过，没有删除检查或扩大CSP放行。当次实际应用SHA为ee61062ee39cb31189e365660e1fa2cca5009d88，主站main持久代理提交60e862d9。此回执不表示当前仍生成应用源码 ZIP，也不代表本次界面清理已上线。站点地址：https://tools.pingxingxian.space/ 。后续真实状态见deployment-status.md及其证据索引。
