@@ -26,12 +26,23 @@ function asset(value, filename) {
   )
     throw new Error(`Invalid locked media asset: ${filename}`);
   const url = new URL(value.url);
+  const canonical =
+    url.hostname === 'github.com' &&
+    url.pathname.startsWith('/ixiaoyy/parallel-lines-tools/releases/download/');
+  // 仅新增同仓公开资产 API 的整数 ID 地址；不放行其他仓库/端点、查询参数或认证信息。
+  const publicAssetAPI =
+    url.hostname === 'api.github.com' &&
+    /^\/repos\/ixiaoyy\/parallel-lines-tools\/releases\/assets\/[1-9]\d*$/.test(
+      url.pathname
+    ) &&
+    !url.port &&
+    !url.search &&
+    !url.hash;
   if (
     url.protocol !== 'https:' ||
-    url.hostname !== 'github.com' ||
     url.username ||
     url.password ||
-    !url.pathname.startsWith('/ixiaoyy/parallel-lines-tools/releases/download/')
+    (!canonical && !publicAssetAPI)
   )
     throw new Error(`Invalid media release URL: ${filename}`);
   return value;
@@ -83,6 +94,9 @@ async function download(info, target) {
     let file;
     try {
       const response = await fetch(info.url, {
+        method: 'GET',
+        // 公开 API 必须请求原资产字节，不用 token，也不能把资产 JSON 元数据当二进制缓存。
+        headers: { Accept: 'application/octet-stream' },
         signal: controller.signal,
         redirect: 'follow'
       });

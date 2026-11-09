@@ -57,6 +57,54 @@ describe('locked media installation', () => {
     expect(first.status, first.stderr).toBe(0); expect(JSON.parse(first.stdout).verifiedAssets).toBe(4);
     expect(run(root, true).status).toBe(0);
   });
+  it('downloads fixed public API assets as anonymous octet-stream GET and reuses the same verified cache', async () => {
+    const root = await sandbox();
+    const lockPath = path.join(root, 'media-core.lock.json');
+    const lock = JSON.parse(await fs.readFile(lockPath, 'utf8'));
+    const urls: Record<string, string> = {};
+    for (const [index, name] of Object.keys(lock.assets).entries()) {
+      const url = `https://api.github.com/repos/ixiaoyy/parallel-lines-tools/releases/assets/${1000 + index}`;
+      urls[url] = name;
+      lock.assets[name].url = url;
+    }
+    await fs.writeFile(lockPath, JSON.stringify(lock));
+    // 只在隔离 mock 中把实际 API ID 映射到既有同一份样本字节；生产实现不含 URL fallback。
+    await fs.appendFile(path.join(root, 'mock.mjs'), `
+const namesByURL=${JSON.stringify(urls)}; const apiCalls=[];
+globalThis.fetch=async(url,init)=>{
+  if(process.env.FAIL_ON_FETCH==='1')throw new Error('Unexpected API fetch for cached asset');
+  const name=namesByURL[url]; if(!name)throw new Error('Unexpected API URL');
+  const headers=new Headers(init?.headers);
+  apiCalls.push({url,method:init?.method,accept:headers.get('accept'),authorization:headers.get('authorization'),cookie:headers.get('cookie')});
+  return new Response(Buffer.from(bodies[name],'base64'),{status:200});
+};
+process.on('exit',()=>fs.writeFileSync(new URL('./api-calls.json',import.meta.url),JSON.stringify(apiCalls)));
+`);
+    const result = run(root);
+    expect(result.status, result.stderr).toBe(0);
+    expect(JSON.parse(result.stdout).verifiedAssets).toBe(4);
+    const calls = JSON.parse(await fs.readFile(path.join(root, 'api-calls.json'), 'utf8'));
+    expect(calls).toEqual(['core-receipt.json', 'ffmpeg-core.js', 'ffmpeg-core.wasm', 'media-core-NOTICES.txt'].map((name) => ({ url: lock.assets[name].url, method: 'GET', accept: 'application/octet-stream', authorization: null, cookie: null })));
+    const cached = run(root, true);
+    expect(cached.status, cached.stderr).toBe(0);
+    expect(JSON.parse(await fs.readFile(path.join(root, 'api-calls.json'), 'utf8'))).toEqual([]);
+  });
+  it.each([
+    'https://api.github.com/repos/other/parallel-lines-tools/releases/assets/123',
+    'https://api.github.com/repos/ixiaoyy/other/releases/assets/123',
+    'https://api.github.com/repos/ixiaoyy/parallel-lines-tools/releases/assets/not-an-id',
+    'https://api.github.com/repos/ixiaoyy/parallel-lines-tools/releases/assets/123?download=1'
+  ])('rejects out-of-scope or non-integer API asset URLs before downloading: %s', async (url) => {
+    const root = await sandbox();
+    const file = path.join(root, 'media-core.lock.json');
+    const lock = JSON.parse(await fs.readFile(file, 'utf8'));
+    lock.assets['ffmpeg-core.js'].url = url;
+    await fs.writeFile(file, JSON.stringify(lock));
+    const result = run(root, true);
+    expect(result.status).not.toBe(0);
+    expect(result.stderr).toContain('Invalid media release URL: ffmpeg-core.js');
+    await expect(fs.stat(path.join(root, '.media-core'))).rejects.toMatchObject({ code: 'ENOENT' });
+  });
   it('rejects hash mismatches without installing a corrupt binary or using the npm core', async () => {
     const root = await sandbox('passed', true); const result = run(root);
     expect(result.status).not.toBe(0); expect(result.stderr).toContain('integrity mismatch');
