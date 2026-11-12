@@ -284,5 +284,32 @@
     "batchConvertAListOfNumbers": "Batch Convert a List of Numbers",
     "eachLineIsProcessedIndependentlyPreservingTheLine": "Each line is processed independently, preserving the line structure in the output.",
     "thisExampleReversesAColumnOfTwentyThree": "This example reverses a column of twenty three-syllable nouns and prints all the words from the bottom to top. To separate the list items, it uses the \n character as input item separator, which means that each item is on its own line.."
+  },
+  "statistics": {
+    "title": "Data Statistics",
+    "description": "Paste a column of numbers to see the count, sum, mean, median, minimum and maximum together.",
+    "shortDescription": "Count, sum, average and extremes for a column of numbers",
+    "inputTitle": "Paste a column of numbers",
+    "resultTitle": "Statistics",
+    "inputHelp": "One number per line; blank lines are ignored. Negative values, decimals and scientific notation are supported, with up to 15 significant digits for decimals. No thousands separators, units or text. Up to {{max}} numbers.",
+    "example": "Use example",
+    "clear": "Clear",
+    "empty": "Paste a column of numbers or try the example.",
+    "count": "Count",
+    "sum": "Sum",
+    "mean": "Mean",
+    "median": "Median",
+    "min": "Minimum",
+    "max": "Maximum",
+    "copy": "Copy statistics",
+    "copyFailed": "Copy failed. Check your browser clipboard permission.",
+    "precisionNote": "Uses ordinary floating-point arithmetic. Safe integers are shown in full; other results use up to 15 significant digits. Not intended for financial or arbitrary-precision calculations.",
+    "advanced": "Text extraction, custom separators and running totals: open the original Sum tool",
+    "errors": {
+      "inputTooLarge": "Input exceeds {{max}} characters. Split it into smaller batches.",
+      "tooManyNumbers": "At most {{max}} numbers can be processed at once. Split the input and try again.",
+      "invalidNumber": "Line {{line}} is not a complete valid number. Use one number per line, without units, text or thousands separators.",
+      "outOfRange": "Line {{line}} exceeds the safe numeric or precision range. Use a safe integer or a decimal with up to 15 significant digits."
+    }
   }
 }

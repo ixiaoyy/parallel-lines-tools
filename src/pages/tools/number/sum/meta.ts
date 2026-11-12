@@ -4,6 +4,7 @@ import { lazy } from 'react';
 
 export const tool = defineTool('number', {
   path: 'sum',
+  catalogParent: 'number/statistics',
   icon: 'material-symbols:add',
 
   keywords: ['sum', 'add', 'calculate', 'total'],

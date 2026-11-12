@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import SearchIcon from '@mui/icons-material/Search';
 import Grid from '@mui/material/Grid';
 import { useEffect, useMemo, useState } from 'react';
-import { filterTools, tools } from '@tools/index';
+import { catalogTools, filterTools, tools } from '@tools/index';
 import { Link, useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { getToolCategoryTitle } from '@utils/string';
@@ -93,7 +93,7 @@ export default function Hero({
     () =>
       inputValue && !searchReady
         ? []
-        : filterTools(tools, inputValue, selectedUserTypes, t),
+        : filterTools(catalogTools, inputValue, selectedUserTypes, t),
     [inputValue, selectedUserTypes, t, searchReady]
   );
   const [bookmarkedToolPaths, setBookmarkedToolPaths] = useState<string[]>(
@@ -165,7 +165,17 @@ export default function Hero({
   });
 
   const toolsMap = new Map<string, ToolInfo>();
-  for (const tool of filteredTools) {
+  // 收藏按原稳定 ID 从完整库存查找；目录合并不能让用户已有收藏消失。
+  const bookmarkedTools =
+    inputValue && !searchReady
+      ? []
+      : filterTools(
+          tools.filter((tool) => bookmarkedToolPaths.includes(tool.path)),
+          inputValue,
+          selectedUserTypes,
+          t
+        );
+  for (const tool of bookmarkedTools) {
     toolsMap.set(tool.path, {
       label: tool.name,
       url: getToolHref(tool),

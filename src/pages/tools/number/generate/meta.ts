@@ -4,6 +4,7 @@ import { lazy } from 'react';
 
 export const tool = defineTool('number', {
   path: 'generate',
+  catalogParent: 'number/arithmetic-sequence',
   icon: 'material-symbols:add-circle',
 
   keywords: ['generate', 'random', 'numbers'],

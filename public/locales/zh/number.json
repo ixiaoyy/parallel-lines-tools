@@ -284,5 +284,32 @@
     "batchConvertAListOfNumbers": "批量转换数字列表",
     "eachLineIsProcessedIndependentlyPreservingTheLine": "逐行独立处理数字，输出保留原有行结构。",
     "thisExampleReversesAColumnOfTwentyThree": "将竖排的 20 个三音节名词从下往上排列；输入按换行分隔，每个单词各占一行。"
+  },
+  "statistics": {
+    "title": "数据统计",
+    "description": "粘贴一列数字，一次查看计数、总和、平均数、中位数和极值。",
+    "shortDescription": "一列数据的计数、求和、平均和极值",
+    "inputTitle": "粘贴一列数字",
+    "resultTitle": "统计结果",
+    "inputHelp": "每行一个数字，空行忽略。支持负数、小数和科学计数法，小数最多 15 位有效数字；不接受千位分隔符、单位或文字。最多 {{max}} 个数字。",
+    "example": "填入示例",
+    "clear": "清空",
+    "empty": "粘贴一列数字，或先试用示例。",
+    "count": "数字个数",
+    "sum": "总和",
+    "mean": "平均数",
+    "median": "中位数",
+    "min": "最小值",
+    "max": "最大值",
+    "copy": "复制统计结果",
+    "copyFailed": "复制失败，请检查浏览器剪贴板权限。",
+    "precisionNote": "采用一般浮点运算。安全整数完整显示，其余结果最多显示 15 位有效数字；不适合财务或任意精度计算。",
+    "advanced": "文本提取、自定义分隔与逐行累计：打开原求和工具",
+    "errors": {
+      "inputTooLarge": "输入超过 {{max}} 个字符，请拆分后统计。",
+      "tooManyNumbers": "一次最多统计 {{max}} 个数字，请拆分后重试。",
+      "invalidNumber": "第 {{line}} 行不是完整有效数字。每行只放一个数字，不支持单位、文字或千位分隔符。",
+      "outOfRange": "第 {{line}} 行超出安全数值或精度范围。请使用安全整数或最多 15 位有效数字的小数。"
+    }
   }
 }

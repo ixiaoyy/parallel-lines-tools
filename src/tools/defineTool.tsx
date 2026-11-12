@@ -8,6 +8,8 @@ export type UserType = 'generalUsers' | 'developers';
 
 export interface ToolMeta {
   path: string;
+  /** 仅合并普通目录入口；旧 path、路由和收藏仍使用完整库存。 */
+  catalogParent?: string;
   component: LazyExoticComponent<JSXElementConstructor<ToolComponentProps>>;
   keywords: string[];
   icon: IconifyIcon | string;
@@ -42,6 +44,7 @@ interface ToolDefinition {
   type: ToolCategory;
   alternativeCategories?: ToolCategory[];
   path: string;
+  catalogParent?: string;
   name: FullI18nKey;
   description: FullI18nKey;
   shortDescription: FullI18nKey;
@@ -80,8 +83,15 @@ export const defineTool = (
   basePath: ToolCategory,
   options: ToolMeta
 ): DefinedTool => {
-  const { icon, path, keywords, component, i18n, alternativeCategories } =
-    options;
+  const {
+    icon,
+    path,
+    keywords,
+    component,
+    i18n,
+    alternativeCategories,
+    catalogParent
+  } = options;
   const Component = component;
   // 仅在匹配本工具时等待其元信息实际引用的命名空间；公共 UI 始终来自 translation。
   const metadataKeys = [
@@ -102,6 +112,7 @@ export const defineTool = (
     type: basePath,
     alternativeCategories,
     path: `${basePath}/${path}`,
+    ...(catalogParent ? { catalogParent } : {}),
     name: i18n.name,
     icon,
     description: i18n.description,

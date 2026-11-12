@@ -50,6 +50,13 @@ export const tools: DefinedTool[] = [
   ...convertersTools,
   ...mainSiteTools
 ];
+
+/** 普通目录只展示独立入口；完整 tools 库存继续负责旧路由、书签和收藏。 */
+export const getCatalogTools = (
+  allTools: DefinedTool[] = tools
+): DefinedTool[] => allTools.filter((tool) => !tool.catalogParent);
+
+export const catalogTools = getCatalogTools();
 const categoriesConfig: {
   type: ToolCategory;
   title: FullI18nKey;
@@ -379,6 +386,7 @@ export const getToolsByCategory = (
   userTypes: UserType[]; // <-- Add this line
 }[] => {
   const groupedByType: Partial<Record<ToolCategory, DefinedTool[]>> = {};
+  const catalog = getCatalogTools(allTools);
 
   const addToolToCategory = (category: ToolCategory, tool: DefinedTool) => {
     groupedByType[category] = groupedByType[category] ?? [];
@@ -386,12 +394,12 @@ export const getToolsByCategory = (
   };
 
   // Native tools come first so the "example" tool of a category stays a native one
-  for (const tool of allTools) {
+  for (const tool of catalog) {
     addToolToCategory(tool.type, tool);
   }
 
   // Tools are then added to the alternative categories they declared
-  for (const tool of allTools) {
+  for (const tool of catalog) {
     for (const category of tool.alternativeCategories ?? []) {
       if (category === tool.type) continue;
       addToolToCategory(category, tool);
