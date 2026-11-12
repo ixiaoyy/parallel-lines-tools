@@ -177,7 +177,21 @@
     "confirmPassword2": "确认密码",
     "passwordsDoNotMatch": "两次输入的密码不一致。",
     "passwordCannotBeEmpty": "密码不能为空。",
-    "loadingPdf": "正在加载 PDF…"
+    "loadingPdf": "正在加载 PDF…",
+    "pngStage_loading": "正在读取 PDF 并准备本地渲染器…",
+    "pngStage_rendering": "正在渲染第 {{page}} / {{total}} 页…",
+    "pngStage_encoding": "正在生成第 {{page}} / {{total}} 页 PNG…",
+    "pngStage_packing": "正在打包全部 {{total}} 页 PNG…",
+    "pngCancel": "取消转换",
+    "pngRetry": "重试转换",
+    "pngCancelled": "已取消转换。未上传文件，也未保留本次未完成的结果。",
+    "pngDone": "已完成全部 {{total}} 页，可分别下载 PNG 或下载完整 ZIP。",
+    "pngLimits": "仅在本地处理，保持 2 倍渲染清晰度。读取与准备最多 60 秒，每页最多 90 秒，ZIP 最多 120 秒，转换总时限 10 分钟；结束清理最多 5 秒。",
+    "pngError_timeout": "转换超过当前阶段或总时限，已停止本次处理。文件未上传，请重试或在原 PDF 中确认页面是否能正常打开。",
+    "pngError_encoding": "浏览器未能将页面编码为 PNG，已结束本次转换。文件未上传；可关闭其他占用内存的页面后重试。",
+    "pngError_canvas": "浏览器无法创建页面画布，已结束本次转换。文件未上传；请释放内存或换用支持 Canvas 的浏览器重试。",
+    "pngError_failed": "本地 PDF 转换未完成，已结束等待。请确认 PDF 可正常打开且不需要密码，再重试；文件未上传。",
+    "pngError_cleanup": "转换后的本地渲染器未能正常清理，本次结果未发布。请重新选择文件重试；文件未上传。"
   },
   "exampleUi": {
     "minimalQualityLossWithSlightFileSizeReduction": "略微减小文件体积，尽量减少画质损失。",

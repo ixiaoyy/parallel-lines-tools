@@ -177,7 +177,21 @@
     "confirmPassword2": "Confirm password",
     "passwordsDoNotMatch": "Passwords do not match",
     "passwordCannotBeEmpty": "Password cannot be empty",
-    "loadingPdf": "Loading PDF..."
+    "loadingPdf": "Loading PDF...",
+    "pngStage_loading": "Reading PDF and preparing the local renderer…",
+    "pngStage_rendering": "Rendering page {{page}} / {{total}}…",
+    "pngStage_encoding": "Encoding PNG page {{page}} / {{total}}…",
+    "pngStage_packing": "Packing all {{total}} PNG pages…",
+    "pngCancel": "Cancel conversion",
+    "pngRetry": "Retry conversion",
+    "pngCancelled": "Conversion cancelled. No file was uploaded or incomplete result retained.",
+    "pngDone": "All {{total}} pages are ready. Download individual PNGs or the complete ZIP.",
+    "pngLimits": "Local processing at 2× render scale. Reading and setup: 60 seconds; each page: 90 seconds; ZIP: 120 seconds; total conversion: 10 minutes. Final cleanup: up to 5 seconds.",
+    "pngError_timeout": "The stage or total time limit was reached and processing stopped. No file was uploaded. Retry or check that the pages open normally in your PDF viewer.",
+    "pngError_encoding": "The browser could not encode a page as PNG. Conversion stopped without uploading your file. Free some browser memory and retry.",
+    "pngError_canvas": "The browser could not create a page canvas. Conversion stopped without uploading your file. Free memory or retry in a Canvas-capable browser.",
+    "pngError_failed": "Local PDF conversion did not finish and waiting has ended. Check that the PDF opens without a password, then retry. No file was uploaded.",
+    "pngError_cleanup": "The local renderer could not finish cleanup, so no result was published. Select the file again and retry. No file was uploaded."
   },
   "exampleUi": {
     "minimalQualityLossWithSlightFileSizeReduction": "Minimal quality loss with slight file size reduction",
