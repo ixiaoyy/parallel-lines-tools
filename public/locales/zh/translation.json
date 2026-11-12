@@ -330,6 +330,7 @@
     "mediaSource": "媒体引擎对应源码",
     "navigation": "站点导航",
     "games": "游戏",
+    "chat": "聊天",
     "community": "圈子",
     "tools": "工具",
     "communityUnavailable": "圈子，暂未开放"

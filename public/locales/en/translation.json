@@ -324,6 +324,7 @@
     "mediaSource": "Media engine corresponding source",
     "navigation": "Site navigation",
     "games": "Games",
+    "chat": "Chat",
     "community": "Community",
     "tools": "Tools",
     "communityUnavailable": "Community is not available yet"

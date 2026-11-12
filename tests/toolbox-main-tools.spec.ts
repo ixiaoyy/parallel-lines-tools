@@ -10,6 +10,8 @@ import zh from '../public/locales/zh/translation.json';
 import en from '../public/locales/en/translation.json';
 
 const MAIN = 'https://pingxingxian.space';
+const FORUM = 'https://forum.pingxingxian.space';
+const CHAT = 'https://chat.pingxingxian.space';
 const DIRECTORY = MAIN + '/tools';
 const toolboxOrigin = 'http://127.0.0.1:5180';
 const cases = [
@@ -32,6 +34,8 @@ const cases = [
 ] as const;
 const allowedMainURLs = new Set<string>([
   MAIN + '/',
+  FORUM + '/',
+  CHAT + '/',
   DIRECTORY,
   ...cases.map((tool) => tool.url)
 ]);
@@ -66,7 +70,7 @@ test.beforeEach(async ({ context, page }) => {
       await route.continue();
       return;
     }
-    if (url.origin === MAIN) {
+    if ([MAIN, FORUM, CHAT].includes(url.origin)) {
       if (url.pathname === '/favicon.ico' && request.method() === 'GET') {
         await route.fulfill({ status: 204, body: '' });
         return;
@@ -329,10 +333,10 @@ test('旧内置 Markdown 与图片压缩入口仍在当前标签，不被外链�
   await expect(page).toHaveURL(toolboxOrigin + '/image-generic/compress');
 });
 
-test('使用界面不显示项目源码或版本，页脚只保留游戏圈子工具', async ({
+test('页脚保留四产品导航，跨站入口在当前标签打开', async ({
   page,
   context
-}) => {
+}, testInfo) => {
   await page.goto('/');
   await expect(
     page.getByRole('link', { name: '工具收录页', exact: true })
@@ -345,17 +349,76 @@ test('使用界面不显示项目源码或版本，页脚只保留游戏圈子�
   await expect(footer.locator('a, button')).toHaveText([
     '游戏',
     '圈子',
-    '工具'
+    '工具',
+    '聊天'
   ]);
+  await expect(footer.getByRole('button')).toHaveCount(0);
   await expect(
-    footer.getByRole('button', { name: '圈子，暂未开放', exact: true })
-  ).toBeDisabled();
-  await newTab(
-    context,
-    page,
-    footer.getByRole('link', { name: '游戏', exact: true }),
-    MAIN + '/'
-  );
+    footer.getByRole('link', { name: '工具', exact: true })
+  ).toHaveAttribute('href', '/');
+  await expect(
+    footer.getByRole('link', { name: '工具', exact: true })
+  ).toHaveAttribute('aria-current', 'page');
+  for (const language of ['zh', 'en'] as const) {
+    const locale = language === 'zh' ? zh : en;
+    await page.setViewportSize({ width: 1280, height: 900 });
+    if (language === 'en') await english(page);
+    await expect(footer.getByRole('link')).toHaveText([
+      locale.footer.games,
+      locale.footer.community,
+      locale.footer.tools,
+      locale.footer.chat
+    ]);
+    await expect(
+      footer.getByRole('link', { name: locale.footer.community, exact: true })
+    ).toHaveAttribute('href', FORUM + '/');
+    for (const width of [1280, 390, 320]) {
+      await page.setViewportSize({ width, height: 900 });
+      expect(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth + 1
+        )
+      ).toBe(true);
+      expect(
+        await footer.locator('a').evaluateAll((links) =>
+          links.every((link) => {
+            const box = link.getBoundingClientRect();
+            return box.width >= 44 && box.height >= 44;
+          })
+        )
+      ).toBe(true);
+      await footer.scrollIntoViewIfNeeded();
+      const scrollTop = page.getByRole('button', {
+        name: locale.navigation.scrollTop,
+        exact: true
+      });
+      await expect(scrollTop).toBeVisible();
+      const chatBox = await footer
+        .getByRole('link', { name: locale.footer.chat, exact: true })
+        .boundingBox();
+      const scrollTopBox = await scrollTop.boundingBox();
+      expect(chatBox!.x + chatBox!.width).toBeLessThanOrEqual(
+        scrollTopBox!.x - 8
+      );
+      await footer.screenshot({
+        path: testInfo.outputPath(`site-footer-${language}-${width}.png`)
+      });
+    }
+  }
+  for (const [name, destination] of [
+    ['游戏', MAIN],
+    ['圈子', FORUM],
+    ['聊天', CHAT]
+  ]) {
+    await page.goto('/');
+    const link = page
+      .getByRole('contentinfo')
+      .getByRole('link', { name, exact: true });
+    await expect(link).toHaveAttribute('href', destination + '/');
+    await expect(link).not.toHaveAttribute('target', '_blank');
+    await noNewTab(context, () => link.click());
+    await expect(page).toHaveURL(destination + '/');
+  }
 });
 
 test('手机仅保留语言与主题控制，不再展示开发交付入口', async ({ page }) => {
@@ -372,6 +435,7 @@ test('手机仅保留语言与主题控制，不再展示开发交付入口', as
   await expect(page.getByRole('contentinfo').locator('a, button')).toHaveText([
     '游戏',
     '圈子',
-    '工具'
+    '工具',
+    '聊天'
   ]);
 });
