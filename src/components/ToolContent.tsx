@@ -17,19 +17,24 @@ const FormikListenerComponent = <T,>({
   onValuesChange
 }: {
   input: any;
-  compute: (optionsValues: T, input: any) => void;
+  compute: (optionsValues: T, input: any) => void | Promise<void>;
   onValuesChange?: (values: T) => void;
 }) => {
   const { values } = useFormikContext<T>();
   const { showSnackBar } = useContext(CustomSnackBarContext);
 
   React.useEffect(() => {
-    try {
-      compute(values, input);
-    } catch (exception: unknown) {
-      if (exception instanceof Error) showSnackBar(exception.message, 'error');
-      else console.error(exception);
-    }
+    // 同一错误边界处理同步和异步工具失败，避免 PDF 等工具只留下未处理的 rejection。
+    const run = async () => {
+      try {
+        await compute(values, input);
+      } catch (exception: unknown) {
+        if (exception instanceof Error)
+          showSnackBar(exception.message, 'error');
+        else console.error(exception);
+      }
+    };
+    void run();
   }, [values, input, showSnackBar]);
 
   useEffect(() => {
@@ -50,7 +55,7 @@ interface ToolContentProps<Options, Input> extends ToolComponentProps {
    * should return non-empty array or null
    */
   getGroups: GetGroupsType<Options> | null;
-  compute: (optionsValues: Options, input: Input) => void;
+  compute: (optionsValues: Options, input: Input) => void | Promise<void>;
   toolInfo?: {
     title: string;
     description?: string;

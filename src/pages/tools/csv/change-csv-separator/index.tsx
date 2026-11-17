@@ -28,7 +28,7 @@ export default function ChangeCsvDelimiter({
   longDescription
 }: ToolComponentProps) {
   // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
-  const { t: exampleText } = useExampleTranslation('csv');
+  const { t: exampleText } = useExampleTranslation(['csv', 'translation']);
   const exampleCards: CardExampleType<InitialValuesType>[] = [
     {
       title: exampleText('exampleUi.changeTheCsvDelimiterToASemicolon'),
@@ -227,7 +227,10 @@ Gargantuar/Level 5-8/3000/Instant-kill/4.7`,
       getGroups={getGroups}
       setInput={setInput}
       compute={compute}
-      toolInfo={{ title: `What is a ${title}?`, description: longDescription }}
+      toolInfo={{
+        title: exampleText('translation:toolInfo.aboutTitle', { title }),
+        description: longDescription
+      }}
     />
   );
 }

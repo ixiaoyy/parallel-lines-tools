@@ -10,7 +10,8 @@ import { tools } from '../tools';
 import './index.css';
 import { darkTheme, lightTheme } from '../config/muiConfig';
 import ScrollToTopButton from './ScrollToTopButton';
-import { I18nextProvider } from 'react-i18next';
+import { I18nextProvider, useTranslation } from 'react-i18next';
+import { Helmet } from 'react-helmet';
 import i18n from '../i18n';
 import { UserTypeFilterProvider } from 'providers/UserTypeFilterProvider';
 import SiteFooter from './SiteFooter';
@@ -31,6 +32,7 @@ const AppRoutes = () => {
 };
 
 function App() {
+  const { t } = useTranslation();
   const [mode, setMode] = useState<Mode>(
     () => (localStorage.getItem('theme') || 'system') as Mode
   );
@@ -54,6 +56,11 @@ function App() {
 
   return (
     <I18nextProvider i18n={i18n}>
+      <Helmet>
+        <title>{t('hero.brand')}</title>
+        <meta name="description" content={t('hero.description')} />
+        <meta name="apple-mobile-web-app-title" content={t('hero.brand')} />
+      </Helmet>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <SnackbarProvider

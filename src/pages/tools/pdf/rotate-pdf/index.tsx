@@ -61,7 +61,7 @@ export default function RotatePdf({
     }
   ];
 
-  const { t } = useTranslation('pdf');
+  const { t } = useTranslation(['pdf', 'translation']);
   const [input, setInput] = useState<File | null>(null);
   const [result, setResult] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
@@ -125,7 +125,9 @@ export default function RotatePdf({
       const rotatedPdf = await rotatePdf(input, values);
       setResult(rotatedPdf);
     } catch (error) {
-      throw new Error('Error rotating PDF: ' + error);
+      throw new Error(
+        t('translation:common.rotatePdfFailed', { error: String(error) })
+      );
     } finally {
       setIsProcessing(false);
     }

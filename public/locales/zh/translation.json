@@ -377,7 +377,11 @@
   },
   "common": {
     "error": "错误：{{error}}",
-    "pdfProtectionFailed": "PDF 加密失败：{{error}}"
+    "pdfProtectionFailed": "PDF 加密失败：{{error}}",
+    "splitPdfFailed": "提取 PDF 页面失败：{{error}}",
+    "mergePdfFailed": "合并 PDF 失败：{{error}}",
+    "rotatePdfFailed": "旋转 PDF 失败：{{error}}",
+    "imageToPdfFailed": "图片转 PDF 失败：{{error}}"
   },
   "toolCodeInput": {
     "languageHint": "编辑器内置菜单语言在首次加载时确定；切换语言后如需更新菜单，请先保存输入再刷新页面。"
@@ -393,5 +397,8 @@
       "description": "将图片转换为拼豆图纸，查看色号和用量。",
       "shortDescription": "图片转换、手动改格、用量统计与图纸导出。"
     }
+  },
+  "toolInfo": {
+    "aboutTitle": "关于{{title}}"
   }
 }

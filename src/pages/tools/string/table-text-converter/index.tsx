@@ -40,7 +40,7 @@ export default function TableTextConverter({
   longDescription
 }: ToolComponentProps) {
   // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
-  const { t: exampleText } = useExampleTranslation('string');
+  const { t: exampleText } = useExampleTranslation(['string', 'translation']);
   const exampleCards: CardExampleType<InitialValuesType>[] = [
     {
       title: exampleText('exampleUi.markdownTableToCsv'),
@@ -186,7 +186,7 @@ Alice,25,London`,
       }
       getGroups={getGroups}
       toolInfo={{
-        title: `What is a ${title}?`,
+        title: exampleText('translation:toolInfo.aboutTitle', { title }),
         description: longDescription
       }}
     />

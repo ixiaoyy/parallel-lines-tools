@@ -74,6 +74,12 @@ export default function ToolsByCategory() {
     <Box sx={{ backgroundColor: 'background.default' }}>
       <Helmet>
         <title>{`${rawTitle} · ${t('translation:hero.brand')}`}</title>
+        <meta
+          name="description"
+          content={
+            toolsByCategory?.description ?? t('translation:hero.description')
+          }
+        />
       </Helmet>
       <Box
         padding={{ xs: 2, md: 3 }}

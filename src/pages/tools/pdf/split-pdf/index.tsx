@@ -52,7 +52,7 @@ export default function SplitPdf({ title }: ToolComponentProps) {
     }
   ];
 
-  const { t } = useTranslation('pdf');
+  const { t } = useTranslation(['pdf', 'translation']);
   const [input, setInput] = useState<File | null>(null);
   const [result, setResult] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
@@ -107,7 +107,9 @@ export default function SplitPdf({ title }: ToolComponentProps) {
       const splitResult = await splitPdf(input, values.pageRanges);
       setResult(splitResult);
     } catch (error) {
-      throw new Error('Error splitting PDF:' + error);
+      throw new Error(
+        t('translation:common.splitPdfFailed', { error: String(error) })
+      );
     } finally {
       setIsProcessing(false);
     }

@@ -36,9 +36,9 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    // 首屏只内联唯一语言源中的中文全局 UI，工具命名空间留给真实使用处按需加载。
-    resources: { zh: __DEFAULT_ZH_RESOURCES__ },
-    // 未内联的中文工具词条、缓存选择的英文及其他语言均保留原 HTTP backend。
+    // 中英全局 UI 随首屏提供，避免首次按浏览器语言进入时先出现中文或空白导航。
+    resources: { zh: __DEFAULT_ZH_RESOURCES__, en: __DEFAULT_EN_RESOURCES__ },
+    // 工具词条及其他语言继续使用原 HTTP backend，保持唯一翻译来源。
     partialBundledLanguages: true,
     supportedLngs: [
       'en',
@@ -62,19 +62,22 @@ i18n
       loadPath: '/locales/{{lng}}/{{ns}}.json'
     },
     detection: {
-      // 未选择语言时默认中文，仅恢复用户保存的语言，不由浏览器语言覆盖。
-      order: ['localStorage'],
+      // 手动选择优先于浏览器语言；不支持的语言仍回退中文，不保存工具输入。
+      order: ['localStorage', 'navigator'],
       lookupLocalStorage: 'lang',
       caches: ['localStorage'] // cache the detected lang back to localStorage
     }
   });
 
-// 页面语言与实际界面同步，供读屏和浏览器正确识别。
-i18n.on('languageChanged', (language) => {
+/** 同步初次检测和后续手动切换的页面语言，供读屏及原生日期控件识别。 */
+function updateDocumentLanguage(language: string) {
   if (typeof document !== 'undefined') {
     document.documentElement.lang = language === 'zh' ? 'zh-CN' : language;
   }
-});
+}
+i18n.on('languageChanged', updateDocumentLanguage);
+// 已内联的中英资源可同步初始化；监听器注册前发生的首次检测也必须同步。
+updateDocumentLanguage(i18n.resolvedLanguage || i18n.language || 'zh');
 
 // 复制原始模板，避免 setLocale 修改共享对象后丢失英文校验行为。
 const originalValidation = {

@@ -26,7 +26,7 @@ export default function SortJson({
   longDescription
 }: ToolComponentProps) {
   // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
-  const { t: exampleText } = useExampleTranslation('json');
+  const { t: exampleText } = useExampleTranslation(['json', 'translation']);
   const exampleCards: CardExampleType<InitialValuesType>[] = [
     {
       title: exampleText('exampleUi.sortByNameAscending'),
@@ -181,7 +181,10 @@ export default function SortJson({
       input={input}
       setInput={setInput}
       exampleCards={exampleCards}
-      toolInfo={{ title: `What is a ${title}?`, description: longDescription }}
+      toolInfo={{
+        title: exampleText('translation:toolInfo.aboutTitle', { title }),
+        description: longDescription
+      }}
     />
   );
 }

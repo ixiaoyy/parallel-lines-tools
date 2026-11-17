@@ -376,7 +376,11 @@
   },
   "common": {
     "error": "Error: {{error}}",
-    "pdfProtectionFailed": "Failed to protect PDF: {{error}}"
+    "pdfProtectionFailed": "Failed to protect PDF: {{error}}",
+    "splitPdfFailed": "Failed to split PDF: {{error}}",
+    "mergePdfFailed": "Failed to merge PDFs: {{error}}",
+    "rotatePdfFailed": "Failed to rotate PDF: {{error}}",
+    "imageToPdfFailed": "Failed to convert images to PDF: {{error}}"
   },
   "toolCodeInput": {
     "languageHint": "Editor menus use the language selected at first load. Save your input before refreshing to update the menus after changing language."
@@ -392,5 +396,8 @@
       "description": "Convert images into bead patterns and view color codes and quantities.",
       "shortDescription": "Image conversion, cell editing, bead counts and pattern export."
     }
+  },
+  "toolInfo": {
+    "aboutTitle": "About {{title}}"
   }
 }

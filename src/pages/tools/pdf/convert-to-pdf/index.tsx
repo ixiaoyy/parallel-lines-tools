@@ -25,7 +25,7 @@ const initialValues: InitialValuesType = {
 };
 
 export default function ConvertToPdf({ title }: ToolComponentProps) {
-  const { t } = useTranslation('pdf');
+  const { t } = useTranslation(['pdf', 'translation']);
   const [input, setInput] = useState<MultiImageInput[]>([]);
   const [result, setResult] = useState<File | null>(null);
   const [imageSizes, setImageSizes] = useState<ImageSize[] | null>(null);
@@ -46,7 +46,9 @@ export default function ConvertToPdf({ title }: ToolComponentProps) {
       setResult(pdfFile);
       setImageSizes(imageSizes);
     } catch (error) {
-      throw new Error('Error converting image(s) to PDF:' + error);
+      throw new Error(
+        t('translation:common.imageToPdfFailed', { error: String(error) })
+      );
     } finally {
       setIsProcessing(false);
     }

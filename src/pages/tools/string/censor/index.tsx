@@ -27,7 +27,7 @@ export default function CensorText({
   longDescription
 }: ToolComponentProps) {
   // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
-  const { t: exampleText } = useExampleTranslation('string');
+  const { t: exampleText } = useExampleTranslation(['string', 'translation']);
   const exampleCards: CardExampleType<InitialValuesType>[] = [
     {
       title: exampleText('exampleUi.censorAWordInAQuote'),
@@ -169,7 +169,10 @@ export default function CensorText({
           value={result}
         />
       }
-      toolInfo={{ title: `What is a ${title}?`, description: longDescription }}
+      toolInfo={{
+        title: exampleText('translation:toolInfo.aboutTitle', { title }),
+        description: longDescription
+      }}
       exampleCards={exampleCards}
     />
   );

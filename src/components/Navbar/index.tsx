@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   AppBar,
   Box,
-  Drawer,
   FormControl,
   IconButton,
   MenuItem,
@@ -12,11 +11,8 @@ import {
   Toolbar,
   Typography
 } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
 import Brightness6Icon from '@mui/icons-material/Brightness6';
 import { Link } from 'react-router-dom';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@mui/material/styles';
 import { Mode } from 'components/App';
 import { useTranslation } from 'react-i18next';
 
@@ -42,9 +38,6 @@ const languages = [
 /** 提供工具箱品牌、语言及主题入口；不在使用界面展示项目源码或版本信息。 */
 const Navbar: React.FC<NavbarProps> = ({ mode, onChangeMode }) => {
   const { t, i18n } = useTranslation();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const [drawerOpen, setDrawerOpen] = useState(false);
   const modeLabel = t(
     mode === 'light'
       ? 'navbar.themeLight'
@@ -59,7 +52,7 @@ const Navbar: React.FC<NavbarProps> = ({ mode, onChangeMode }) => {
   };
   const controls = (
     <>
-      <FormControl size="small" sx={{ minWidth: 120 }}>
+      <FormControl size="small" sx={{ minWidth: { xs: 104, md: 120 } }}>
         <Select
           value={i18n.resolvedLanguage || 'zh'}
           onChange={handleLanguageChange}
@@ -97,19 +90,20 @@ const Navbar: React.FC<NavbarProps> = ({ mode, onChangeMode }) => {
       <Toolbar
         sx={{
           justifyContent: 'space-between',
-          gap: 2,
+          gap: { xs: 1, md: 2 },
+          px: { xs: 1.5, sm: 3 },
           width: '100%',
           maxWidth: 1280,
           mx: 'auto'
         }}
       >
-        <Box>
+        <Box sx={{ minWidth: 0 }}>
           <Typography
             component={Link}
             to="/"
             sx={{
               color: 'text.primary',
-              fontSize: { xs: 20, md: 24 },
+              fontSize: { xs: 18, md: 24 },
               fontWeight: 700,
               textDecoration: 'none'
             }}
@@ -117,34 +111,15 @@ const Navbar: React.FC<NavbarProps> = ({ mode, onChangeMode }) => {
             {t('hero.brand')}
           </Typography>
         </Box>
-        {isMobile ? (
-          <>
-            <IconButton
-              aria-label={t('navbar.menu')}
-              onClick={() => setDrawerOpen(true)}
-              sx={{ minWidth: 44, minHeight: 44 }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Drawer
-              anchor="right"
-              open={drawerOpen}
-              onClose={() => setDrawerOpen(false)}
-            >
-              <Stack
-                spacing={2}
-                alignItems="stretch"
-                sx={{ p: 3, minWidth: 240 }}
-              >
-                {controls}
-              </Stack>
-            </Drawer>
-          </>
-        ) : (
-          <Stack direction="row" spacing={1.5} alignItems="center">
-            {controls}
-          </Stack>
-        )}
+        {/* 手机也常驻语言入口；切换不刷新页面，不丢弃当前工具输入。 */}
+        <Stack
+          direction="row"
+          spacing={{ xs: 0.5, md: 1.5 }}
+          alignItems="center"
+          sx={{ flexShrink: 0 }}
+        >
+          {controls}
+        </Stack>
       </Toolbar>
     </AppBar>
   );

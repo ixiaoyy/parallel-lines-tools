@@ -24,7 +24,7 @@ export default function CsvRowsToColumns({
   longDescription
 }: ToolComponentProps) {
   // 示例标题和说明随界面语言更新；sampleText、sampleResult 和选项原样保留。
-  const { t: exampleText } = useExampleTranslation('csv');
+  const { t: exampleText } = useExampleTranslation(['csv', 'translation']);
   const exampleCards: CardExampleType<InitialValuesType>[] = [
     {
       title: exampleText('csvRowsToColumns.title'),
@@ -158,7 +158,10 @@ Players,5,11,11,NA`,
       getGroups={getGroups}
       setInput={setInput}
       compute={compute}
-      toolInfo={{ title: `What is a ${title}?`, description: longDescription }}
+      toolInfo={{
+        title: exampleText('translation:toolInfo.aboutTitle', { title }),
+        description: longDescription
+      }}
       exampleCards={exampleCards}
     />
   );

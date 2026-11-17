@@ -9,7 +9,7 @@ import ToolMultiPdfInput, {
 import { useTranslation } from 'react-i18next';
 
 export default function MergePdf({ title }: ToolComponentProps) {
-  const { t } = useTranslation('pdf');
+  const { t } = useTranslation(['pdf', 'translation']);
   const [input, setInput] = useState<MultiPdfInput[]>([]);
   const [result, setResult] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
@@ -24,7 +24,9 @@ export default function MergePdf({ title }: ToolComponentProps) {
       const mergeResult = await mergePdf(input.map((i) => i.file));
       setResult(mergeResult);
     } catch (error) {
-      throw new Error('Error merging PDF:' + error);
+      throw new Error(
+        t('translation:common.mergePdfFailed', { error: String(error) })
+      );
     } finally {
       setIsProcessing(false);
     }
