@@ -49,7 +49,8 @@ export default function ToolLayout({
       description: tool.shortDescription,
       link: getToolHref(tool),
       external: !!tool.externalUrl,
-      icon: tool.icon
+      icon: tool.icon,
+      catalogTool: tool
     }));
   const relatedRef = useRef<HTMLDivElement>(null);
   const [relatedReady, setRelatedReady] = useState(false);

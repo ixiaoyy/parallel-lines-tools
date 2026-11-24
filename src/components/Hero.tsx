@@ -13,7 +13,12 @@ import Typography from '@mui/material/Typography';
 import SearchIcon from '@mui/icons-material/Search';
 import Grid from '@mui/material/Grid';
 import { useEffect, useMemo, useState } from 'react';
-import { catalogTools, filterTools, tools } from '@tools/index';
+import {
+  catalogTools,
+  filterTools,
+  filterToolsByFormat,
+  tools
+} from '@tools/index';
 import { Link, useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { getToolCategoryTitle } from '@utils/string';
@@ -27,7 +32,16 @@ import {
 } from '@utils/bookmark';
 import IconButton from '@mui/material/IconButton';
 import { useUserTypeFilter } from '../providers/UserTypeFilterProvider';
-import { getToolHref, openTool } from '@tools/defineTool';
+import {
+  getToolHref,
+  getToolActionKey,
+  openTool,
+  type DefinedTool
+} from '@tools/defineTool';
+import { useToolFormatFilter } from '../hooks/useToolFormatFilter';
+import ToolFormatFilter from './ToolFormatFilter';
+import ToolCatalogMeta from './ToolCatalogMeta';
+import CatalogToolCard from './CatalogToolCard';
 
 const GroupHeader = styled('div')(({ theme }) => ({
   position: 'sticky',
@@ -45,6 +59,7 @@ const GroupItems = styled('ul')({
 });
 
 type ToolInfo = {
+  definition: DefinedTool;
   label: FullI18nKey;
   url: string;
   external?: boolean;
@@ -88,13 +103,19 @@ export default function Hero({
   }, [searchRequest, i18n, i18n.resolvedLanguage]);
   const theme = useTheme();
   const { selectedUserTypes } = useUserTypeFilter();
-  // 搜索结果随语言和用户类型同步计算，切换语言后不沿用旧语言的匹配结果。
+  const { format } = useToolFormatFilter();
+  // 搜索结果同时遵守语言、人群和使用形式；不让安装型条目混进在线筛选。
   const filteredTools = useMemo(
     () =>
       inputValue && !searchReady
         ? []
-        : filterTools(catalogTools, inputValue, selectedUserTypes, t),
-    [inputValue, selectedUserTypes, t, searchReady]
+        : filterTools(
+            filterToolsByFormat(catalogTools, format),
+            inputValue,
+            selectedUserTypes,
+            t
+          ),
+    [inputValue, selectedUserTypes, t, searchReady, format]
   );
   const [bookmarkedToolPaths, setBookmarkedToolPaths] = useState<string[]>(
     getBookmarkedToolPaths()
@@ -155,6 +176,7 @@ export default function Hero({
     return tool
       ? [
           {
+            definition: tool,
             label,
             url: getToolHref(tool),
             external: !!tool.externalUrl,
@@ -170,13 +192,17 @@ export default function Hero({
     inputValue && !searchReady
       ? []
       : filterTools(
-          tools.filter((tool) => bookmarkedToolPaths.includes(tool.path)),
+          filterToolsByFormat(
+            tools.filter((tool) => bookmarkedToolPaths.includes(tool.path)),
+            format
+          ),
           inputValue,
           selectedUserTypes,
           t
         );
   for (const tool of bookmarkedTools) {
     toolsMap.set(tool.path, {
+      definition: tool,
       label: tool.name,
       url: getToolHref(tool),
       external: !!tool.externalUrl,
@@ -184,6 +210,7 @@ export default function Hero({
     });
   }
 
+  // 安装型精选沿用当前筛选结果；存在收藏时只展示原收藏，不自动混入推荐条目。
   const displayedTools =
     bookmarkedToolPaths.length > 0
       ? bookmarkedToolPaths.flatMap((path) => {
@@ -194,9 +221,19 @@ export default function Hero({
           return [tool];
         })
       : // 暂缓开放的工具不应留在首页快捷入口中；收藏记录本身保持不变。
-        exampleTools.filter((example) =>
-          tools.some((tool) => getToolHref(tool) === example.url)
-        );
+        format === 'desktop' || format === 'extension'
+        ? filteredTools.slice(0, 6).map((tool) => ({
+            definition: tool,
+            label: tool.name,
+            url: getToolHref(tool),
+            external: !!tool.externalUrl,
+            bookmarkPath: tool.path
+          }))
+        : exampleTools.filter((example) =>
+            filterToolsByFormat(tools, format).some(
+              (tool) => getToolHref(tool) === example.url
+            )
+          );
 
   return (
     <Box width="100%">
@@ -210,6 +247,8 @@ export default function Hero({
       <Typography sx={{ textAlign: 'center' }} fontSize={15} mb={2}>
         {t('translation:hero.description')}
       </Typography>
+
+      <ToolFormatFilter />
 
       <Autocomplete
         sx={{ mb: 2, maxWidth: 760, mx: 'auto' }}
@@ -275,6 +314,10 @@ export default function Hero({
                   <Typography fontSize={12}>
                     {t(option.shortDescription)}
                   </Typography>
+                  <ToolCatalogMeta tool={option} compact />
+                  <Typography variant="caption" color="text.secondary">
+                    {t(getToolActionKey(option))}
+                  </Typography>
                 </Box>
               </Stack>
               <IconButton
@@ -323,9 +366,18 @@ export default function Hero({
             {t(
               bookmarkedToolPaths.length
                 ? 'hero.bookmarksTitle'
-                : 'hero.commonTitle'
+                : format === 'desktop' || format === 'extension'
+                  ? 'catalog.curatedTitle'
+                  : 'hero.commonTitle'
             )}
           </Typography>
+          {!!bookmarkedToolPaths.length &&
+            bookmarksReady &&
+            displayedTools.length === 0 && (
+              <Typography role="status" color="text.secondary" sx={{ mb: 2 }}>
+                {t('translation:catalog.noMatchingBookmarks')}
+              </Typography>
+            )}
           {!!bookmarkedToolPaths.length && !bookmarksReady && (
             <Typography color="text.secondary" fontSize={14}>
               {t(
@@ -340,73 +392,75 @@ export default function Hero({
               ? []
               : displayedTools
             ).map((tool) => (
-              <Grid item xs={6} md={4} key={tool.label}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderWidth: 1,
-                    padding: 1,
-                    borderRadius: 2,
-                    borderColor: 'divider',
-                    borderStyle: 'solid',
-                    backgroundColor: 'background.paper',
-                    cursor: 'pointer',
-                    '&:hover': {
-                      backgroundColor: 'background.hover'
-                    },
-                    height: '100%'
-                  }}
-                >
-                  <Stack direction={'row'} spacing={1} alignItems={'center'}>
-                    <Button
-                      {...(tool.external
-                        ? {
-                            component: 'a' as const,
-                            href: tool.url,
-                            target: '_blank',
-                            rel: 'noopener noreferrer'
+              <Grid
+                item
+                xs={
+                  tool.definition.formats || bookmarkedToolPaths.length ? 12 : 6
+                }
+                md={
+                  tool.definition.formats || bookmarkedToolPaths.length ? 6 : 4
+                }
+                key={tool.definition.path}
+              >
+                {tool.definition.formats || bookmarkedToolPaths.length ? (
+                  <CatalogToolCard
+                    tool={tool.definition}
+                    onRemoveBookmark={
+                      bookmarkedToolPaths.length
+                        ? () => {
+                            toggleBookmarked(tool.bookmarkPath!);
+                            setBookmarkedToolPaths(getBookmarkedToolPaths());
                           }
-                        : {
-                            component: Link,
-                            to: tool.url.startsWith('/')
-                              ? tool.url
-                              : `/${tool.url}`
-                          })}
-                      color="inherit"
-                      sx={{
-                        minHeight: 48,
-                        flex: 1,
-                        fontWeight: 500,
-                        lineHeight: 1.5
-                      }}
-                    >
-                      {t(tool.label)}
-                    </Button>
-                    {bookmarkedToolPaths.length > 0 && (
-                      <IconButton
-                        aria-label={t('translation:hero.removeBookmark', {
-                          title: t(tool.label)
-                        })}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          // 收藏快捷项均来自 toolsMap，使用原稳定 ID，不从外链 URL 反推。
-                          const path = tool.bookmarkPath!;
-                          toggleBookmarked(path);
-                          setBookmarkedToolPaths(getBookmarkedToolPaths());
+                        : undefined
+                    }
+                  />
+                ) : (
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      borderWidth: 1,
+                      padding: 1,
+                      borderRadius: 2,
+                      borderColor: 'divider',
+                      borderStyle: 'solid',
+                      backgroundColor: 'background.paper',
+                      cursor: 'pointer',
+                      '&:hover': {
+                        backgroundColor: 'background.hover'
+                      },
+                      height: '100%'
+                    }}
+                  >
+                    <Stack direction={'row'} spacing={1} alignItems={'center'}>
+                      <Button
+                        {...(tool.external
+                          ? {
+                              component: 'a' as const,
+                              href: tool.url,
+                              target: '_blank',
+                              rel: 'noopener noreferrer'
+                            }
+                          : {
+                              component: Link,
+                              to: tool.url.startsWith('/')
+                                ? tool.url
+                                : `/${tool.url}`
+                            })}
+                        color="inherit"
+                        sx={{
+                          minHeight: 48,
+                          flex: 1,
+                          fontWeight: 500,
+                          lineHeight: 1.5
                         }}
-                        size={'small'}
                       >
-                        <Icon
-                          icon={'mdi:close'}
-                          color={theme.palette.grey[500]}
-                          fontSize={15}
-                        />
-                      </IconButton>
-                    )}
-                  </Stack>
-                </Box>
+                        {t(tool.label)}
+                      </Button>
+                    </Stack>
+                  </Box>
+                )}
               </Grid>
             ))}
           </Grid>

@@ -1,0 +1,21 @@
+SingleFile 1.37.0 Chromium 扩展镜像材料
+
+作者：Gildas Lormeau
+官网：https://www.getsinglefile.com/
+上游：https://github.com/gildas-lormeau/SingleFile-MV3
+发布：https://github.com/gildas-lormeau/SingleFile-MV3/releases/tag/v1.37.0
+原始附件：https://github.com/gildas-lormeau/SingleFile-MV3/releases/download/v1.37.0/singlefile-extension-chromium.zip
+
+本站 singlefile-extension-chromium-1.37.0.zip 为上游 Chromium 附件的原样副本，未修改、重建或重新打包内部内容。本站不是本扩展作者。
+
+SingleFile-MV3 v1.37.0 和 single-file-core v1.12.0 的上游 package.json 均声明 AGPL-3.0-or-later。LICENSE.txt 是 SingleFile-MV3 v1.37.0 上游 AGPL v3 许可证原文。原包的版权、免责和第三方许可声明保持不变，各文件声明继续适用。
+
+部分上游文件具有 AGPL 第7节附加许可：原样分发这些文件时，可不随文件附 AGPL 全文，但须保留该许可声明并提供接收者可取得对应源码的 URL。此许可仅按各文件声明适用，不扩展为对全部第三方组件的额外授权。本材料额外提供许可全文和对应源码。
+
+对应源码：singlefile-corresponding-source-1.37.0.zip（请从安装包旁的对应源码入口获取）
+其中包含两份完整官方 tag 原归档，以及来源、重建说明、本声明和许可全文。
+https://github.com/gildas-lormeau/SingleFile-MV3/tree/v1.37.0
+https://github.com/gildas-lormeau/single-file-core/tree/v1.12.0
+
+原版权及不提供担保声明详见上游源码、第三方声明和 LICENSE.txt。本材料没有执行上游代码、安装依赖或重建扩展，也没有声称源码重建结果与官方附件逐字节一致。
+材料整理日期：2026-11-16

@@ -1,4 +1,4 @@
-import { getToolsByCategory } from '@tools/index';
+import { getToolsByCategory, filterToolsByFormat, tools } from '@tools/index';
 import Grid from '@mui/material/Grid';
 import { Card, CardContent, Stack, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
@@ -6,19 +6,29 @@ import { categoriesColors } from 'config/uiConfig';
 import { Icon } from '@iconify/react';
 import { useTranslation } from 'react-i18next';
 import { useUserTypeFilter } from '../../providers/UserTypeFilterProvider';
+import { useToolFormatFilter } from '../../hooks/useToolFormatFilter';
 
 /** 分类保留一个清晰入口，不再重复堆叠两套操作按钮。 */
 export default function Categories() {
   const { selectedUserTypes } = useUserTypeFilter();
   const { t } = useTranslation();
-  const categories = getToolsByCategory(selectedUserTypes, t);
+  const { format } = useToolFormatFilter();
+  const categories = getToolsByCategory(
+    selectedUserTypes,
+    t,
+    filterToolsByFormat(tools, format)
+  );
   return (
     <Grid container spacing={2}>
       {categories.map((category, index) => (
         <Grid item xs={12} sm={6} md={4} key={category.type}>
           <Card
             component={Link}
-            to={'/categories/' + category.type}
+            to={
+              '/categories/' +
+              category.type +
+              (format === 'all' ? '' : `?format=${format}`)
+            }
             aria-label={category.rawTitle}
             variant="outlined"
             sx={{
@@ -75,6 +85,13 @@ export default function Categories() {
           </Card>
         </Grid>
       ))}
+      {categories.length === 0 && (
+        <Grid item xs={12}>
+          <Typography role="status" color="text.secondary">
+            {t('catalog.noMatchingCategories')}
+          </Typography>
+        </Grid>
+      )}
     </Grid>
   );
 }

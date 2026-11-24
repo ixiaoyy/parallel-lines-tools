@@ -96,7 +96,11 @@
     },
     "office": {
       "title": "Office Tools",
-      "description": "Everyday spreadsheet guides, comparison and cleaning tools."
+      "description": "Tools and apps for documents, spreadsheets and webpage archiving."
+    },
+    "network": {
+      "title": "Network tools",
+      "description": "Browser proxy and network services. Review permissions, privacy and plans before use."
     }
   },
   "converters": {
@@ -116,7 +120,7 @@
   },
   "hero": {
     "brand": "Parallel Lines Toolbox",
-    "description": "Find image, document, text and data utilities. No sign-up required. Check each tool for supported formats and limits.",
+    "description": "Find online tools, desktop apps and browser extensions by purpose. Get external apps from official sources; check each listing for platforms and pricing.",
     "examples": {
       "calculateNumberSum": "Calculate number sum",
       "changeGifSpeed": "Change GIF speed",
@@ -395,6 +399,126 @@
       "title": "Bead Pattern Generator",
       "description": "Convert images into bead patterns and view color codes and quantities.",
       "shortDescription": "Image conversion, cell editing, bead counts and pattern export."
+    }
+  },
+  "catalog": {
+    "formatLabel": "Usage format",
+    "formats": {
+      "all": "All",
+      "online": "Online tools",
+      "desktop": "Desktop apps",
+      "extension": "Browser extensions"
+    },
+    "platformLabel": "Platforms",
+    "publisherLabel": "Publisher",
+    "pricing": {
+      "free": "Free",
+      "freemium": "Free basics · Paid extras",
+      "paid": "Paid"
+    },
+    "platforms": {
+      "windows": "Windows",
+      "macos": "macOS",
+      "linux": "Linux",
+      "chrome": "Chrome",
+      "edge": "Edge",
+      "firefox": "Firefox",
+      "safari": "Safari"
+    },
+    "actions": {
+      "online": "Use online",
+      "download": "Download from official site",
+      "extension-store": "Visit extension store"
+    },
+    "stores": {
+      "chrome": "Visit Chrome Web Store",
+      "edge": "Visit Edge Add-ons",
+      "firefox": "Visit Firefox Add-ons",
+      "safari": "Visit App Store"
+    },
+    "officialWebsite": "Official website",
+    "otherBrowsers": "Website & other browsers",
+    "searchCategory": "Search this category",
+    "curatedTitle": "Selected apps & extensions",
+    "noMatchingBookmarks": "No bookmarks match these filters. Change the usage format or clear filters to see them. Your bookmarks are unchanged.",
+    "noMatchingCategories": "No categories match. Adjust the usage format or audience filters.",
+    "noResultsDescription": "Try another keyword, usage format or audience filter.",
+    "offline": {
+      "open": "Offline package & install guide",
+      "title": "{{name}} · Offline Chrome installation",
+      "warning": "Manual installation is required. Chrome will not install it automatically. Only install extensions you trust.",
+      "step1Title": "1. Download and extract",
+      "step1": "Download the ZIP, extract it and remember the folder location.",
+      "download": "Download official ZIP",
+      "version": "Version: {{version}}. Check the author’s release notes.",
+      "step2Title": "2. Open the extensions page",
+      "step2": "Copy the address below, paste it into the Chrome address bar and press Enter.",
+      "addressLabel": "Extensions page address",
+      "copy": "Copy address",
+      "copying": "Copying…",
+      "copied": "Address copied. Paste it into the Chrome address bar.",
+      "copyFailed": "Could not copy. Copy the address above manually into the Chrome address bar.",
+      "step3Title": "3. Load the folder",
+      "step3": "Turn on Developer mode at the top right → choose Load unpacked → select the folder you extracted.",
+      "updateNotice": "Keep the extracted folder after installation. To update, download a new package and follow the author’s instructions.",
+      "networkNotice": "The author hosts this package, so access to their download site is required. Offline installation does not mean offline use.",
+      "guide": "Read the official instructions",
+      "close": "Close",
+      "downloadHosted": "Download ZIP from this site",
+      "source": "Corresponding source",
+      "license": "License",
+      "notices": "Attribution",
+      "hostedNotice": "This package is available on this site without visiting GitHub. Online features in the extension still need a connection."
+    }
+  },
+  "externalApps": {
+    "libreoffice": {
+      "title": "LibreOffice",
+      "description": "A free desktop office suite with word processing, spreadsheets and presentations for Windows, macOS and Linux.",
+      "shortDescription": "Edit documents, spreadsheets and presentations on your computer.",
+      "notice": "Installation required. Check complex Office documents, macros and fonts using a copy first."
+    },
+    "sharex": {
+      "title": "ShareX",
+      "description": "A free, open-source Windows app for screenshots, screen recording and image annotation.",
+      "shortDescription": "Capture your screen, record video and annotate images.",
+      "notice": "Windows only. Automatic upload tasks can be configured; check upload settings before capturing sensitive content."
+    },
+    "singlefile": {
+      "title": "SingleFile",
+      "description": "Save a complete webpage as a single HTML file for offline reading and archiving. Available for multiple browsers.",
+      "shortDescription": "Save webpages as single HTML files for offline reading.",
+      "notice": "Review webpage access and download permissions before installing. Choose other browser versions on the official website."
+    },
+    "immersiveTranslate": {
+      "title": "Immersive Translate",
+      "description": "Read webpages bilingually and translate PDFs and video subtitles. Basic features are free; some advanced services are paid.",
+      "shortDescription": "Read webpages bilingually and translate PDFs and subtitles.",
+      "notice": "Online translation sends text to your selected translation service. Use care on sensitive pages; check official free limits and pricing."
+    },
+    "simpleTranslate": {
+      "title": "Simple Translate",
+      "description": "Sienori’s extension for translating selected or typed text with Google Translate or the DeepL API.",
+      "shortDescription": "Translate selected text or use the right-click menu.",
+      "notice": "Requires a connection and sends text to your chosen service. Google also receives the page URL when selected."
+    },
+    "gofullpage": {
+      "title": "GoFullPage",
+      "description": "Capture entire webpages and export images or PDFs. Advanced editing and annotation are paid features.",
+      "shortDescription": "Capture entire webpages as images or PDFs.",
+      "notice": "Advanced editing and annotation are paid. Downloads and iframe capture may request additional permissions."
+    },
+    "markdownReader": {
+      "title": "Markdown Reader",
+      "description": "Bener’s reader for local and online Markdown documents. Some features require a Pro subscription.",
+      "shortDescription": "Read Markdown with a table of contents and highlighted code.",
+      "notice": "Local files require file-URL access to be enabled manually. Remote resources and Pro verification may need a connection."
+    },
+    "ghelper": {
+      "title": "Ghelper",
+      "description": "A browser proxy and network access service with free services and paid plans.",
+      "shortDescription": "Access network resources through a browser proxy service.",
+      "notice": "Changes browser proxy settings and uses extension-management permissions. Review permissions, privacy and plans before installing."
     }
   },
   "toolInfo": {

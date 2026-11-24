@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import type { Plugin } from 'vite';
 import type { MediaCoreInfo } from './media-core-info';
+import { getExtensionDownloadFiles } from './extension-downloads';
 
 const forbidden =
   /\/node_modules\/(?:@imgly\/|@embedpdf\/|heic2any\/|onnxruntime-web\/|tesseract\.js\/|react-pdf\/|react-filerobot-image-editor\/)/;
@@ -169,7 +170,10 @@ export function releasePolicy(
           fileName: 'media-core-receipt.json',
           source: mediaCore.receipt
         });
-      // public 仅发布允许的语言包、背景与自有 SVG，排除 gs.js、未核实字体和旧站点品牌资产。
+      // 扩展原包只按版本清单发布，并要求源码与许可同批具备；不放开任意下载目录。
+      for (const file of getExtensionDownloadFiles('public'))
+        this.emitFile({ type: 'asset', ...file });
+      // public 其余内容只发布允许的语言包、背景与自有 SVG。
       const copy = (directory: string) => {
         for (const entry of fs.readdirSync(directory, {
           withFileTypes: true

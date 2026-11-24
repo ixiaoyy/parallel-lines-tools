@@ -53,3 +53,6 @@ error.txt
 /.deployment/
 /.third-party-sources/
 __pycache__/
+
+# 本地扩展源码原归档缓存；正式对应源码包按版本清单发布。
+/public/downloads/extensions/singlefile/1.37.0/.source-inputs/

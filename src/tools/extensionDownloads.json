@@ -1,0 +1,9 @@
+{
+  "singlefile": {
+    "version": "1.37.0",
+    "packagePath": "downloads/extensions/singlefile/1.37.0/singlefile-extension-chromium-1.37.0.zip",
+    "sourcePath": "downloads/extensions/singlefile/1.37.0/singlefile-corresponding-source-1.37.0.zip",
+    "licensePath": "downloads/extensions/singlefile/1.37.0/LICENSE.txt",
+    "noticePath": "downloads/extensions/singlefile/1.37.0/NOTICE.txt"
+  }
+}

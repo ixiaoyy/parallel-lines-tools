@@ -1,21 +1,20 @@
 import {
   Box,
-  Divider,
+  Grid,
   Stack,
-  styled,
+  Typography,
   TextField,
-  useTheme
+  IconButton
 } from '@mui/material';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { filterTools, getToolsByCategory } from '../../tools';
+import {
+  filterTools,
+  filterToolsByFormat,
+  getToolsByCategory
+} from '@tools/index';
 import Hero from 'components/Hero';
+import CatalogToolCard from 'components/CatalogToolCard';
 import { getToolCategoryTitle } from '@utils/string';
-import { Icon } from '@iconify/react';
-import { categoriesColors } from 'config/uiConfig';
 import React, { useEffect } from 'react';
-import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SearchIcon from '@mui/icons-material/Search';
 import { Helmet } from 'react-helmet';
@@ -23,27 +22,22 @@ import UserTypeFilter from '@components/UserTypeFilter';
 import { useTranslation } from 'react-i18next';
 import type { I18nNamespaces } from '../../i18n';
 import { useUserTypeFilter } from '../../providers/UserTypeFilterProvider';
-import { getToolHref } from '@tools/defineTool';
-
-const StyledLink = styled(Link)(({ theme }) => ({
-  '&:hover': {
-    color: theme.palette.mode === 'dark' ? 'white' : theme.palette.primary.light
-  }
-}));
+import { useToolFormatFilter } from '../../hooks/useToolFormatFilter';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export default function ToolsByCategory() {
   const navigate = useNavigate();
-  const theme = useTheme();
   const mainContentRef = React.useRef<HTMLDivElement>(null);
   const { categoryName } = useParams();
-  const [searchTerm, setSearchTerm] = React.useState<string>('');
+  const [searchTerm, setSearchTerm] = React.useState('');
+  const { format } = useToolFormatFilter();
   const { selectedUserTypes, setSelectedUserTypes } = useUserTypeFilter();
   const { t: uiText } = useTranslation('translation');
   const toolsByCategory = getToolsByCategory(selectedUserTypes, uiText).find(
     ({ type }) => type === categoryName
   );
   const categoryDefinedTools = toolsByCategory?.tools ?? [];
-  // 分类页只取当前列表实际使用的译文，不触发整个工具箱的语言包下载。
+  // 分类页只取当前用途实际引用的译文；形式筛选不改变用途，也不为整个工具箱预载语言包。
   const namespaces = [
     ...new Set([
       'translation',
@@ -56,22 +50,26 @@ export default function ToolsByCategory() {
   ] as I18nNamespaces[];
   const { t } = useTranslation(namespaces);
   const rawTitle = getToolCategoryTitle(categoryName as string, t);
-
   const categoryTools = filterTools(
-    categoryDefinedTools,
+    filterToolsByFormat(categoryDefinedTools, format),
     searchTerm,
     selectedUserTypes,
     t
   );
 
   useEffect(() => {
-    if (mainContentRef.current) {
-      mainContentRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
+    mainContentRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, []);
 
   return (
-    <Box sx={{ backgroundColor: 'background.default' }}>
+    <Box
+      component="main"
+      sx={{
+        bgcolor: 'background.default',
+        px: { xs: 2, md: 3 },
+        py: { xs: 3, md: 4 }
+      }}
+    >
       <Helmet>
         <title>{`${rawTitle} · ${t('translation:hero.brand')}`}</title>
         <meta
@@ -81,133 +79,69 @@ export default function ToolsByCategory() {
           }
         />
       </Helmet>
-      <Box
-        padding={{ xs: 2, md: 3 }}
-        display={'flex'}
-        flexDirection={'column'}
-        alignItems={'center'}
-        justifyContent={'center'}
-        width={'100%'}
-      >
+      <Box sx={{ maxWidth: 1180, mx: 'auto' }}>
         <Hero showShortcuts={false} />
-      </Box>
-      <Divider sx={{ borderColor: theme.palette.primary.main }} />
-      <Box ref={mainContentRef} mt={3} ml={{ xs: 1, md: 2, lg: 3 }} padding={3}>
-        <Stack
-          direction={{ xs: 'column', md: 'row' }}
-          justifyContent={'space-between'}
-          spacing={2}
-        >
-          <Stack direction={'row'} alignItems={'center'} spacing={1}>
-            <IconButton
-              aria-label={t('translation:toolsByCategory.back')}
-              onClick={() => navigate('/')}
-            >
-              <ArrowBackIcon color={'primary'} />
-            </IconButton>
-            <Typography fontSize={22} color={theme.palette.primary.main}>
-              {t('translation:toolLayout.allToolsTitle', { type: rawTitle })}
-            </Typography>
-          </Stack>
-          <TextField
-            placeholder={t('translation:hero.search.placeholder')}
-            aria-label={t('translation:hero.search.placeholder')}
-            InputProps={{
-              endAdornment: <SearchIcon />,
-              sx: {
-                borderRadius: 4,
-                backgroundColor: 'background.paper',
-                maxWidth: 400
-              }
-            }}
-            onChange={(event) => setSearchTerm(event.target.value)}
-          />
-        </Stack>
-        <Box
-          width={'100%'}
-          display={'flex'}
-          alignItems={'center'}
-          justifyContent={'center'}
-          my={2}
-        >
-          <UserTypeFilter
-            userTypes={toolsByCategory?.userTypes ?? undefined}
-            selectedUserTypes={selectedUserTypes}
-            onUserTypesChange={setSelectedUserTypes}
-          />
-        </Box>
-        {categoryTools.length === 0 && (
-          <Box role="status" sx={{ py: 6, textAlign: 'center' }}>
-            <Typography variant="h6">
-              {t('translation:toolsByCategory.noResultsTitle')}
-            </Typography>
-            <Typography color="text.secondary">
-              {t('translation:toolsByCategory.noResultsDescription')}
-            </Typography>
-          </Box>
-        )}
-        <Grid container spacing={2}>
-          {categoryTools.map((tool, index) => (
-            <Grid item xs={12} md={6} lg={4} key={tool.path}>
-              <Stack
-                sx={{
-                  backgroundColor: 'background.paper',
-                  boxShadow: `5px 4px 2px ${
-                    theme.palette.mode === 'dark' ? 'black' : '#E9E9ED'
-                  }`,
-                  cursor: 'pointer',
-                  height: '100%',
-                  '&:hover': {
-                    backgroundColor: theme.palette.background.hover
-                  }
-                }}
-                {...(tool.externalUrl
-                  ? {
-                      component: 'a' as const,
-                      href: getToolHref(tool),
-                      target: '_blank',
-                      rel: 'noopener noreferrer'
-                    }
-                  : { onClick: () => navigate('/' + tool.path) })}
-                direction={'row'}
-                alignItems={'center'}
-                spacing={2}
-                padding={2}
-                border={`1px solid ${theme.palette.background.default}`}
-                borderRadius={2}
-                color="inherit"
-                style={{ textDecoration: 'none' }}
+        <Box ref={mainContentRef} sx={{ mt: 4 }}>
+          <Stack
+            direction={{ xs: 'column', md: 'row' }}
+            justifyContent="space-between"
+            spacing={2}
+          >
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <IconButton
+                aria-label={t('translation:toolsByCategory.back')}
+                onClick={() =>
+                  navigate('/' + (format === 'all' ? '' : `?format=${format}`))
+                }
               >
-                <Icon
-                  icon={tool.icon ?? 'ph:compass-tool-thin'}
-                  fontSize={'60px'}
-                  color={categoriesColors[index % categoriesColors.length]}
-                />
-                <Box>
-                  {tool.externalUrl ? (
-                    <Typography component="span" fontSize={20}>
-                      {t(tool.name)}
-                    </Typography>
-                  ) : (
-                    <StyledLink
-                      style={{
-                        fontSize: 20
-                      }}
-                      to={'/' + tool.path}
-                    >
-                      {/*@ts-ignore*/}
-                      {t(tool.name)}
-                    </StyledLink>
-                  )}
-                  <Typography sx={{ mt: 2 }}>
-                    {/*@ts-ignore*/}
-                    {t(tool.shortDescription)}
-                  </Typography>
-                </Box>
-              </Stack>
-            </Grid>
-          ))}
-        </Grid>
+                <ArrowBackIcon />
+              </IconButton>
+              <Typography component="h2" fontSize={22} fontWeight={700}>
+                {rawTitle}
+              </Typography>
+              <Typography color="text.secondary">
+                {categoryTools.length}
+              </Typography>
+            </Stack>
+            <TextField
+              size="small"
+              value={searchTerm}
+              placeholder={t('translation:catalog.searchCategory')}
+              inputProps={{
+                'aria-label': t('translation:catalog.searchCategory')
+              }}
+              InputProps={{
+                endAdornment: <SearchIcon />,
+                sx: { bgcolor: 'background.paper', borderRadius: 2 }
+              }}
+              onChange={(event) => setSearchTerm(event.target.value)}
+            />
+          </Stack>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', my: 2 }}>
+            <UserTypeFilter
+              userTypes={toolsByCategory?.userTypes ?? undefined}
+              selectedUserTypes={selectedUserTypes}
+              onUserTypesChange={setSelectedUserTypes}
+            />
+          </Box>
+          {categoryTools.length === 0 && (
+            <Box role="status" sx={{ py: 6, textAlign: 'center' }}>
+              <Typography variant="h6">
+                {t('translation:toolsByCategory.noResultsTitle')}
+              </Typography>
+              <Typography color="text.secondary">
+                {t('translation:catalog.noResultsDescription')}
+              </Typography>
+            </Box>
+          )}
+          <Grid container spacing={2}>
+            {categoryTools.map((tool) => (
+              <Grid item xs={12} md={6} key={tool.path}>
+                <CatalogToolCard tool={tool} />
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
       </Box>
     </Box>
   );

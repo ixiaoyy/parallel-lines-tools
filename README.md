@@ -21,13 +21,21 @@
         <br /><br />
 </div>
 
-Welcome to OmniTools, a self-hosted web app offering a variety of online tools to simplify everyday tasks.
+## 平行线定制版
+
+平行线工具箱按用途收录在线工具、桌面应用和浏览器扩展。现有站内工具继续按原路径使用；外部应用默认链接官网或官方扩展商店；许可、来源和配套材料已核实的扩展可从本站下载，其他项目仍使用官方入口。目录提供使用形式筛选，并显示已核实的平台、收费情况、发布者及必要提醒。
+
+首批条目与维护要求见 [应用与扩展收录说明](docs/catalog-apps.md)。平台、价格与权限可能变化，条目信息不代替官方说明，也不构成软件安全背书。
+
+以下保留 OmniTools 上游介绍及开发说明。
+
+OmniTools is a self-hosted web app offering online tools to simplify everyday tasks.
 Whether you are coding, manipulating images/videos, PDFs or crunching numbers, OmniTools has you covered. Please don't
 forget to
 star the repo to support us.
 Here is the [demo](https://omnitools.app) website.
 
-All files are processed entirely on the client side: nothing ever leaves your device.
+Built-in processing tools run in the browser; check each tool for its actual processing boundaries. External apps and extensions have their own privacy policies.
 Plus, the Docker image is super lightweight at just 28MB, making it fast to deploy and easy to self-host.
 
 ![img.png](docs-images/img.png)

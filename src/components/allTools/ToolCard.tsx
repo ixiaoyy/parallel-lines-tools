@@ -11,16 +11,21 @@ import { ToolCardProps } from './AllTools';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
+import ToolCatalogMeta from '../ToolCatalogMeta';
+import { getToolActionKey } from '@tools/toolCatalog';
+import { useTranslation } from 'react-i18next';
 
 export default function ToolCard({
   title,
   description,
   link,
   external,
-  icon
+  icon,
+  catalogTool
 }: ToolCardProps) {
   const theme = useTheme();
   const navigate = useNavigate();
+  const { t } = useTranslation(['translation']);
   return (
     <Card
       {...(external
@@ -76,6 +81,22 @@ export default function ToolCard({
         <Typography variant="body2" mt={2} color="#fff">
           {description}
         </Typography>
+        {catalogTool?.formats && (
+          <Box
+            sx={{
+              '& .MuiChip-root': {
+                color: 'inherit',
+                borderColor: '#ffffff80',
+                bgcolor: 'transparent'
+              }
+            }}
+          >
+            <ToolCatalogMeta tool={catalogTool} compact />
+            <Typography variant="body2" sx={{ mt: 1 }}>
+              {t(getToolActionKey(catalogTool))}
+            </Typography>
+          </Box>
+        )}
       </CardContent>
     </Card>
   );

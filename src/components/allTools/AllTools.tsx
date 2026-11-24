@@ -3,6 +3,7 @@ import ToolCard from './ToolCard';
 import { IconifyIcon } from '@iconify/react';
 import { useTranslation } from 'react-i18next';
 import { FullI18nKey } from '../../i18n';
+import type { DefinedTool } from '@tools/defineTool';
 
 export interface ToolCardProps {
   title: FullI18nKey;
@@ -10,6 +11,7 @@ export interface ToolCardProps {
   link: string;
   external?: boolean;
   icon: IconifyIcon | string;
+  catalogTool?: DefinedTool;
 }
 
 interface AllToolsProps {
@@ -36,6 +38,7 @@ export default function AllTools({ title, toolCards }: AllToolsProps) {
                 link={card.link}
                 external={card.external}
                 icon={card.icon}
+                catalogTool={card.catalogTool}
               />
             </Grid>
           ))}

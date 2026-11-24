@@ -96,7 +96,11 @@
     },
     "office": {
       "title": "办公工具",
-      "description": "Excel公式速查、表格核对与清洗等日常办公工具。"
+      "description": "文档、表格、网页归档等日常办公工具与应用。"
+    },
+    "network": {
+      "title": "网络工具",
+      "description": "浏览器代理与网络辅助服务，使用前查看权限、隐私和套餐。"
     }
   },
   "csv": {
@@ -108,7 +112,7 @@
   },
   "hero": {
     "brand": "平行线工具箱",
-    "description": "按用途查找图片、文档、文本和数据工具。无需注册，打开即可使用；格式与大小限制请查看各工具说明。",
+    "description": "按用途查找在线工具、桌面应用与浏览器扩展。外部应用通过官方入口获取，支持平台与收费情况请查看条目说明。",
     "examples": {
       "calculateNumberSum": "计算数字和",
       "changeGifSpeed": "更改 GIF 速度",
@@ -396,6 +400,126 @@
       "title": "拼豆图纸生成器",
       "description": "将图片转换为拼豆图纸，查看色号和用量。",
       "shortDescription": "图片转换、手动改格、用量统计与图纸导出。"
+    }
+  },
+  "catalog": {
+    "formatLabel": "使用形式",
+    "formats": {
+      "all": "全部",
+      "online": "在线工具",
+      "desktop": "桌面应用",
+      "extension": "浏览器扩展"
+    },
+    "platformLabel": "支持平台",
+    "publisherLabel": "来源",
+    "pricing": {
+      "free": "免费",
+      "freemium": "免费基础功能 · 部分收费",
+      "paid": "付费"
+    },
+    "platforms": {
+      "windows": "Windows",
+      "macos": "macOS",
+      "linux": "Linux",
+      "chrome": "Chrome",
+      "edge": "Edge",
+      "firefox": "Firefox",
+      "safari": "Safari"
+    },
+    "actions": {
+      "online": "在线使用",
+      "download": "前往官网下载",
+      "extension-store": "前往扩展商店"
+    },
+    "stores": {
+      "chrome": "前往 Chrome 商店",
+      "edge": "前往 Edge 商店",
+      "firefox": "前往 Firefox 商店",
+      "safari": "前往 App Store"
+    },
+    "officialWebsite": "官网",
+    "otherBrowsers": "官网与其他浏览器",
+    "searchCategory": "在当前分类中搜索",
+    "curatedTitle": "精选入口",
+    "noMatchingBookmarks": "当前筛选下没有匹配的收藏。切换使用形式或清除筛选即可查看，原收藏仍保留。",
+    "noMatchingCategories": "当前筛选下没有匹配的分类，请调整使用形式或人群筛选。",
+    "noResultsDescription": "请调整关键词、使用形式或人群筛选。",
+    "offline": {
+      "open": "离线包与安装指南",
+      "title": "{{name}} · Chrome 离线安装",
+      "warning": "需要手动安装，Chrome 不会自动装好。请只安装你信任的扩展。",
+      "step1Title": "1. 下载并解压",
+      "step1": "下载 ZIP 后解压，记住解压后的文件夹。",
+      "download": "官方下载 ZIP",
+      "version": "版本：{{version}}。以作者发布说明为准。",
+      "step2Title": "2. 打开扩展页",
+      "step2": "复制下方地址，粘贴到 Chrome 地址栏，按回车。",
+      "addressLabel": "扩展管理页地址",
+      "copy": "复制地址",
+      "copying": "正在复制…",
+      "copied": "地址已复制，请粘贴到 Chrome 地址栏打开。",
+      "copyFailed": "复制失败，请手动复制上方地址到 Chrome 地址栏。",
+      "step3Title": "3. 加载文件夹",
+      "step3": "开启右上角的开发者模式 → 点击加载已解压的扩展程序 → 选择刚才解压的文件夹。",
+      "updateNotice": "装好后不要删除解压文件夹。更新时重新下载，并按作者说明操作。",
+      "networkNotice": "此包由作者官方下载站点提供，需要能访问该站点；离线安装不等于离线使用。",
+      "guide": "查看官方详细说明",
+      "close": "关闭",
+      "downloadHosted": "本站下载 ZIP",
+      "source": "对应源码",
+      "license": "许可证",
+      "notices": "归属说明",
+      "hostedNotice": "此安装包可从本站下载，不用访问 GitHub；扩展中的在线功能仍需联网。"
+    }
+  },
+  "externalApps": {
+    "libreoffice": {
+      "title": "LibreOffice",
+      "description": "免费的桌面办公套件，包含文档、电子表格和演示文稿应用，支持 Windows、macOS 与 Linux。",
+      "shortDescription": "在电脑上编辑文档、表格和演示文稿。",
+      "notice": "需下载安装。复杂 Office 文件的格式、宏和字体兼容性请先用副本核对。"
+    },
+    "sharex": {
+      "title": "ShareX",
+      "description": "面向 Windows 的免费开源截图与录屏工具，支持图片标注和多种捕获方式。",
+      "shortDescription": "截图、录屏，并对图片进行标注。",
+      "notice": "仅支持 Windows。可配置自动上传任务，处理敏感截图前请检查上传设置。"
+    },
+    "singlefile": {
+      "title": "SingleFile",
+      "description": "将完整网页保存成单个 HTML 文件，便于离线阅读和归档。提供多个浏览器版本。",
+      "shortDescription": "将网页保存为单个 HTML 文件，便于离线阅读。",
+      "notice": "安装前请检查网页访问和下载权限；其他浏览器版本可从官网选择。"
+    },
+    "immersiveTranslate": {
+      "title": "沉浸式翻译",
+      "description": "提供网页双语对照翻译，并支持 PDF 与视频字幕翻译。基础功能免费，部分高级服务收费。",
+      "shortDescription": "双语对照阅读网页，翻译 PDF 和视频字幕。",
+      "notice": "在线翻译会将待译内容发往所选翻译服务；敏感页面慎用，免费额度与收费以官方说明为准。"
+    },
+    "simpleTranslate": {
+      "title": "Simple Translate",
+      "description": "Sienori 的划词与输入翻译扩展，支持 Google 翻译与 DeepL API。",
+      "shortDescription": "选中文字或右键，快速查看翻译。",
+      "notice": "需要联网，待译文字会发送给所选服务；使用 Google 时也会发送页面地址。"
+    },
+    "gofullpage": {
+      "title": "GoFullPage",
+      "description": "捕获整页网页并导出图片或 PDF，编辑与标注等高级功能收费。",
+      "shortDescription": "将整个网页截成长图，导出图片或 PDF。",
+      "notice": "编辑和标注等高级功能收费；下载或捕获内嵌页面时可能请求额外权限。"
+    },
+    "markdownReader": {
+      "title": "Markdown Reader",
+      "description": "Bener 的 Markdown 阅读扩展，可预览本地和在线文档，部分功能需 Pro 订阅。",
+      "shortDescription": "在浏览器里阅读 Markdown，查看目录与代码高亮。",
+      "notice": "读本地文件需手动允许访问文件网址；远程资源与 Pro 验证可能联网。"
+    },
+    "ghelper": {
+      "title": "Ghelper",
+      "description": "浏览器代理与网络访问服务，含免费服务和付费套餐。",
+      "shortDescription": "通过浏览器代理服务访问网络资源。",
+      "notice": "会更改浏览器代理设置，并使用扩展管理权限。安装前查看权限、隐私和套餐说明。"
     }
   },
   "toolInfo": {

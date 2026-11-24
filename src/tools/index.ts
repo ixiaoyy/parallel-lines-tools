@@ -1,6 +1,12 @@
 import { stringTools } from '../pages/tools/string';
 import { imageTools } from '../pages/tools/image';
-import { DefinedTool, ToolCategory, UserType } from './defineTool';
+import {
+  DefinedTool,
+  ToolCategory,
+  ToolFormat,
+  UserType,
+  getToolFormats
+} from './defineTool';
 import { capitalizeFirstLetter } from '@utils/string';
 import { numberTools } from '../pages/tools/number';
 import { videoTools } from '../pages/tools/video';
@@ -17,9 +23,11 @@ import { convertersTools } from '../pages/tools/converters';
 import { TFunction } from 'i18next';
 import { FullI18nKey, I18nNamespaces } from '../i18n';
 import { mainSiteTools } from './mainSiteTools';
+import { externalApps } from './externalApps';
 
 const toolCategoriesOrder: ToolCategory[] = [
   'office',
+  'network',
   'image-generic',
   'pdf',
   'string',
@@ -48,7 +56,8 @@ export const tools: DefinedTool[] = [
   ...audioTools,
   ...xmlTools,
   ...convertersTools,
-  ...mainSiteTools
+  ...mainSiteTools,
+  ...externalApps
 ];
 
 /** 普通目录只展示独立入口；完整 tools 库存继续负责旧路由、书签和收藏。 */
@@ -57,12 +66,27 @@ export const getCatalogTools = (
 ): DefinedTool[] => allTools.filter((tool) => !tool.catalogParent);
 
 export const catalogTools = getCatalogTools();
+
+/** 按使用形式筛选，保持库存顺序和原 path；不改变旧搜索、分类或收藏接口。 */
+export const filterToolsByFormat = (
+  allTools: DefinedTool[],
+  format: ToolFormat | 'all'
+): DefinedTool[] =>
+  format === 'all'
+    ? allTools
+    : allTools.filter((tool) => getToolFormats(tool).includes(format));
 const categoriesConfig: {
   type: ToolCategory;
   title: FullI18nKey;
   value: FullI18nKey;
   icon: IconifyIcon | string;
 }[] = [
+  {
+    type: 'network',
+    icon: 'mdi:network',
+    value: 'translation:categories.network.description',
+    title: 'translation:categories.network.title'
+  },
   {
     type: 'office',
     icon: 'fluent:document-landscape-data-24-filled',

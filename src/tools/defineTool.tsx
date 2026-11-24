@@ -6,6 +6,17 @@ import { useTranslation } from 'react-i18next';
 
 export type UserType = 'generalUsers' | 'developers';
 
+export type ToolFormat = 'online' | 'desktop' | 'extension';
+export type ToolPlatform =
+  | 'windows'
+  | 'macos'
+  | 'linux'
+  | 'chrome'
+  | 'edge'
+  | 'firefox'
+  | 'safari';
+export type ToolEntryAction = 'online' | 'download' | 'extension-store';
+
 export interface ToolMeta {
   path: string;
   /** 仅合并普通目录入口；旧 path、路由和收藏仍使用完整库存。 */
@@ -38,6 +49,7 @@ export type ToolCategory =
   | 'audio'
   | 'xml'
   | 'office'
+  | 'network'
   | 'converters';
 
 interface ToolDefinition {
@@ -51,6 +63,27 @@ interface ToolDefinition {
   icon: IconifyIcon | string;
   keywords: string[];
   userTypes?: UserType[];
+  /** 使用形式与用途分类独立；旧条目不填时仍为在线工具。 */
+  formats?: ToolFormat[];
+  platforms?: ToolPlatform[];
+  pricing?: 'free' | 'freemium' | 'paid';
+  publisher?: string;
+  officialWebsite?: string;
+  notice?: FullI18nKey;
+  entryAction?: ToolEntryAction;
+  /** 商店入口对应的浏览器，避免把单一商店误当成全部平台的安装入口。 */
+  entryBrowser?: 'chrome' | 'edge' | 'firefox' | 'safari';
+  /** 原包可来自作者或许可已核的本站镜像；均不自动安装或变更浏览器设置。 */
+  offlineInstall?: {
+    packageUrl: string;
+    instructionsUrl: string;
+    version?: string;
+    selfHosted?: {
+      sourceUrl: string;
+      licenseUrl: string;
+      noticeUrl: string;
+    };
+  };
 }
 
 // 已有工具继续由本应用渲染；收录入口只提供原站地址，不加载或复制另一套工具实现。
@@ -60,9 +93,7 @@ export type DefinedTool = ToolDefinition &
     | { externalUrl: string; component?: never }
   );
 
-/** 返回菜单的实际目标；path 仍作为稳定收藏 ID，不将旧站地址写入收藏存储。 */
-export const getToolHref = (tool: DefinedTool): string =>
-  tool.externalUrl ?? `/${tool.path}`;
+export { getToolFormats, getToolActionKey, getToolHref } from './toolCatalog';
 
 /** 从用户点击/键盘选择打开工具；外链另页且不携 opener，原站内工具沿用 SPA 导航。 */
 export function openTool(
