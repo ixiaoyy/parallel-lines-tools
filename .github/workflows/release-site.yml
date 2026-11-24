@@ -73,6 +73,8 @@ jobs:
 
       - name: Build the exact application revision with the required core
         timeout-minutes: 6
+        env:
+          VITE_TRAFFIC_ANALYTICS_ENABLED: ${{ vars.VITE_TRAFFIC_ANALYTICS_ENABLED || 'false' }}
         run: npm run build
 
       - name: Resolve official Nginx base to its actual immutable digest

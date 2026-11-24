@@ -22,6 +22,7 @@ export default function ResultFooter({
   return (
     <Stack mt={1} direction={'row'} spacing={2}>
       <Button
+        data-traffic-action="tool_download"
         disabled={disabled}
         onClick={handleDownload}
         startIcon={<DownloadIcon />}
@@ -30,6 +31,7 @@ export default function ResultFooter({
       </Button>
       {!hideCopy && (
         <Button
+          data-traffic-action="tool_copy"
           disabled={disabled}
           onClick={handleCopy}
           startIcon={<ContentPasteIcon />}

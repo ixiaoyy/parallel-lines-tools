@@ -7,6 +7,8 @@ COPY package.json package-lock.json ./
 RUN npm ci --ignore-scripts --no-audit --no-fund
 
 COPY . .
+ARG VITE_TRAFFIC_ANALYTICS_ENABLED=false
+ENV VITE_TRAFFIC_ANALYTICS_ENABLED=$VITE_TRAFFIC_ANALYTICS_ENABLED
 RUN npm run build
 
 FROM ${NGINX_IMAGE} AS runtime

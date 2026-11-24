@@ -143,6 +143,7 @@ export default function ToolMultiFileResult({
                   <Typography>{t('toolMultiFileResult.ready')}</Typography>
                 )}
                 <Button
+                  data-traffic-action="tool_download"
                   onClick={() => handleDownload(file)}
                   size="small"
                   sx={{ mt: 1 }}

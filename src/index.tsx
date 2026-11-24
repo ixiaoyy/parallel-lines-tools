@@ -4,6 +4,7 @@ import App from 'components/App';
 import { addCollection } from '@iconify/react/offline';
 import type { IconifyJSON } from '@iconify/types';
 import localIcons from './assets/local-icons.json';
+import { installTrafficAnalytics } from './lib/trafficAnalytics';
 
 // 在首屏渲染前注册随站点打包的图标；离线组件从不请求 Iconify 的公共 API。
 for (const collection of localIcons) {
@@ -26,3 +27,4 @@ const container = document.getElementById('root') as HTMLDivElement;
 const root = createRoot(container);
 
 root.render(<App />);
+installTrafficAnalytics();
