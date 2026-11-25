@@ -6,7 +6,7 @@
 
 1. 主站先准备已批准的统计迁移、Redis 队列、独立统计 worker 和 `/api/v1/site/traffic`；迁移与发布须另获目标环境授权。
 2. 确认主站 `/traffic-collector.v1.js` 可访问，采集接口允许正式工具域名，未将其加入业务写入或登录链。
-3. 工具站本地构建使用 `VITE_TRAFFIC_ANALYTICS_ENABLED=true npm run build`（PowerShell 用 `$env:VITE_TRAFFIC_ANALYTICS_ENABLED='true'`）；Docker 对应 `--build-arg VITE_TRAFFIC_ANALYTICS_ENABLED=true`。正式 release workflow 使用同名仓库变量，默认 false，设置远端变量须另获授权。
+3. 工具站本地构建使用 `VITE_TRAFFIC_ANALYTICS_ENABLED=true npm run build`（PowerShell 用 `$env:VITE_TRAFFIC_ANALYTICS_ENABLED='true'`）；Docker 对应 `--build-arg VITE_TRAFFIC_ANALYTICS_ENABLED=true`。正式 release workflow 使用同名仓库变量（2026-11-25 已按授权设为 `true`）。
 4. 不需要在工具站增加服务、数据库或上传接口。关闭时重建为 false；主站接收开关可立即停收，新采集器本页遇到失败即停发。
 
 ## 性能与数据边界
