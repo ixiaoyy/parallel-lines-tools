@@ -274,8 +274,12 @@ describe.each(['zh', 'en'] as const)('tool catalog UI in %s', (language) => {
       'network/ghelper': 'nonmafimegllfoonjgplbabhmgfanaka'
     };
     expect(
-      externalApps.filter(({ type }) => type !== 'ai-creative')
-    ).toHaveLength(8);
+      filterToolsByFormat(externalApps, 'desktop').map(({ path }) => path)
+    ).toEqual([
+      'office/libreoffice',
+      'image-generic/sharex',
+      'network/localsend'
+    ]);
     expect(extensionTools).toHaveLength(Object.keys(storeIds).length);
     expect(new Set(externalApps.map((tool) => tool.path)).size).toBe(
       externalApps.length
@@ -317,7 +321,7 @@ describe.each(['zh', 'en'] as const)('tool catalog UI in %s', (language) => {
     ).toBe('network');
   });
 
-  it('lists exactly the three AI creation sites as searchable online cards with official destinations', async () => {
+  it('lists the AI creation sites as searchable online cards with official destinations', async () => {
     const expected = [
       {
         path: 'ai-creative/jimeng',
@@ -333,6 +337,21 @@ describe.each(['zh', 'en'] as const)('tool catalog UI in %s', (language) => {
         path: 'ai-creative/biling-novel',
         url: 'https://ibiling.cn/novel-workbench',
         query: { zh: 'AI小说', en: 'fiction writing' }
+      },
+      {
+        path: 'ai-creative/haimian-music',
+        url: 'https://www.haimian.com/',
+        query: { zh: '配乐', en: 'song generator' }
+      },
+      {
+        path: 'ai-creative/hunyuan-3d',
+        url: 'https://3d.hunyuan.tencent.com/',
+        query: { zh: '图生3D', en: 'image to 3D' }
+      },
+      {
+        path: 'ai-creative/adobe-enhance-speech',
+        url: 'https://podcast.adobe.com/en/enhance',
+        query: { zh: '录音降噪', en: 'speech enhancement' }
       }
     ];
     const translate = ((key: string) =>
@@ -366,6 +385,83 @@ describe.each(['zh', 'en'] as const)('tool catalog UI in %s', (language) => {
         expect(link).toHaveAttribute('href', url);
         expect(link).toHaveAttribute('target', '_blank');
         expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+      }
+      cleanup();
+    }
+  });
+
+  it('lists everyday tools under their existing categories and distinguishes online use from an official download', async () => {
+    const entries = [
+      {
+        path: 'office/excalidraw',
+        category: 'office',
+        format: 'online',
+        action: 'online',
+        url: 'https://excalidraw.com/',
+        query: { zh: '流程图', en: 'whiteboard' }
+      },
+      {
+        path: 'image-generic/photopea',
+        category: 'image-generic',
+        format: 'online',
+        action: 'online',
+        url: 'https://www.photopea.com/',
+        query: { zh: '蒙版', en: 'PSD editor' }
+      },
+      {
+        path: 'network/localsend',
+        category: 'network',
+        format: 'desktop',
+        action: 'download',
+        url: 'https://localsend.org/download',
+        query: { zh: '文件互传', en: 'file transfer' }
+      }
+    ] as const;
+    const translate = ((key: string) =>
+      text(language, key)) as Parameters<typeof getToolsByCategory>[1];
+    const categories = getToolsByCategory([], translate);
+
+    for (const { path, category, format, action, url, query } of entries) {
+      const group = categories.find(({ type }) => type === category)!;
+      const tool = group.tools.find((entry) => entry.path === path)!;
+      const formatTools = filterToolsByFormat(group.tools, format);
+      expect(formatTools).toContain(tool);
+      // 此测试只加载目录词条；站内编辑器的独立词条由真实页面验证。
+      expect(
+        filterTools(
+          formatTools.filter(({ externalUrl }) => Boolean(externalUrl)),
+          query[language],
+          [],
+          translate
+        )
+      ).toContain(tool);
+      expect(
+        filterToolsByFormat(
+          group.tools,
+          format === 'online' ? 'desktop' : 'online'
+        )
+      ).not.toContain(tool);
+      expect(filterToolsByFormat(group.tools, 'extension')).not.toContain(tool);
+      expect(tool.offlineInstall).toBeUndefined();
+      await renderUi(<CatalogToolCard tool={tool} />, language);
+      expect(
+        screen.getByText(text(language, `catalog.formats.${format}`))
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(text(language, tool.notice!))
+      ).toBeInTheDocument();
+      for (const name of [
+        text(language, tool.name),
+        `${text(language, `catalog.actions.${action}`)} ↗`
+      ]) {
+        const link = screen.getByRole('link', { name });
+        expect(link).toHaveAttribute('href', url);
+        expect(link).toHaveAttribute('target', '_blank');
+        expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+      }
+      if (format === 'desktop') {
+        expect(tool.platforms).toEqual(['windows', 'macos', 'linux']);
+        expect(tool.pricing).toBe('free');
       }
       cleanup();
     }

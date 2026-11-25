@@ -96,7 +96,7 @@
     },
     "office": {
       "title": "办公工具",
-      "description": "文档、表格、网页归档等日常办公工具与应用。"
+      "description": "文档、表格、白板绘图和网页归档等日常办公工具。"
     },
     "ai-creative": {
       "title": "AI 创作",
@@ -104,7 +104,7 @@
     },
     "network": {
       "title": "网络工具",
-      "description": "浏览器代理与网络辅助服务，使用前查看权限、隐私和套餐。"
+      "description": "局域网文件互传、浏览器代理等工具。使用代理前请查看权限、隐私和套餐。"
     }
   },
   "csv": {
@@ -129,6 +129,26 @@
       "trimVideo": "修剪视频",
       "markdownToDocx": "Markdown 转 Word",
       "compressImage": "图片压缩"
+    },
+    "workbench": {
+      "label": "试做页",
+      "creative": "创作工具",
+      "bead": {
+        "tab": "拼豆图纸",
+        "title": "把照片做成拼豆图纸",
+        "before": "原图",
+        "after": "拼豆图纸",
+        "alt": "左边是小猫的水彩原图，右边是同一只小猫的拼豆示意图。",
+        "action": "打开拼豆工具",
+        "note": "再拼一颗。"
+      },
+      "model": {
+        "title": "把草图做成 3D 模型",
+        "before": "灯塔草图",
+        "after": "3D 效果示意",
+        "alt": "左边是小灯塔的手绘草图，右边是同一座灯塔的三维效果示意。",
+        "action": "打开腾讯混元 3D"
+      }
     },
     "search": {
       "noResult": "没有找到匹配工具，请换个关键词或调整筛选。",
@@ -494,6 +514,42 @@
       "description": "为中文小说整理大纲和人物设定，在工作台按章节写作或续写。",
       "shortDescription": "整理小说大纲和人设，也可按章节续写。",
       "notice": "输入的设定和稿件由笔灵处理；可用功能与收费以笔灵页面为准。"
+    },
+    "haimianMusic": {
+      "title": "海绵音乐",
+      "description": "用文字描述或自写歌词生成歌曲，可选择曲风，适合做配乐小样。",
+      "shortDescription": "用想法或歌词生成歌曲，适合做配乐小样。",
+      "notice": "歌词和参考音频由海绵音乐处理；公开发布或商用前请查看官方使用条款。"
+    },
+    "hunyuan3d": {
+      "title": "腾讯混元 3D",
+      "description": "输入文字描述或上传参考图生成 3D 模型，适合制作游戏道具和场景原型。",
+      "shortDescription": "用文字或图片生成 3D 模型，适合做游戏道具原型。",
+      "notice": "提示词和参考图由腾讯混元处理；生成额度和导出选项以官方页面为准。"
+    },
+    "adobeEnhanceSpeech": {
+      "title": "Adobe Podcast 人声增强",
+      "description": "降低录音里的背景噪声和回声，让旁白、访谈或播客的人声更清晰。",
+      "shortDescription": "降低录音里的噪声和回声，让旁白或访谈更清晰。",
+      "notice": "录音需上传到 Adobe；请勿上传未经授权或含敏感信息的录音，免费用量和功能以官方页面为准。"
+    },
+    "excalidraw": {
+      "title": "Excalidraw",
+      "description": "在手绘风格的在线白板上绘制流程图、线框图或草图，支持导出图片和可编辑文件。",
+      "shortDescription": "用手绘风白板画流程图、线框图和草图。",
+      "notice": "草稿自动保存在当前浏览器。需要留档或换设备继续编辑时，请导出可编辑文件。"
+    },
+    "photopea": {
+      "title": "Photopea",
+      "description": "在浏览器里打开和编辑 PSD 文件，可用图层、蒙版和混合模式合成图片。",
+      "shortDescription": "打开和编辑 PSD，用图层和蒙版修图。",
+      "notice": "需要保留图层以便继续编辑时，请另存为 PSD。"
+    },
+    "localsend": {
+      "title": "LocalSend",
+      "description": "手机和电脑在同一局域网内直接互传照片、视频和文档，无需网盘。",
+      "shortDescription": "在同一局域网内给手机和电脑互传文件，不走网盘。",
+      "notice": "发送和接收设备都需安装 LocalSend。官方下载页也提供 Android 和 iOS 版本。"
     },
     "libreoffice": {
       "title": "LibreOffice",

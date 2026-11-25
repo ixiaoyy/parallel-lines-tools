@@ -30,15 +30,28 @@
 
 ## AI 创作外链
 
-核实日期：2026-11-25。三项归入「AI 创作」，使用形式均为在线工具。卡片新标签打开官方入口；本站不接收提示词或素材、不调用生成接口，不代登录或计费。
+首批三项核实于 2026-11-25；音乐、3D 建模和人声增强三项核实于 2026-11-26。六项均归入「AI 创作 → 在线工具」。卡片新标签打开官方入口；本站不接收提示词或素材、不调用生成接口，不代登录或计费。
 
 | 稳定 ID | 用途 | 官方入口 |
 | --- | --- | --- |
 | `ai-creative/jimeng` | 封面、角色图与插画；支持局部重绘及扩图 | [即梦 AI](https://jimeng.jianying.com/ai-tool/tools) |
 | `ai-creative/kling` | 文生视频、图生视频，适合动态分镜或预告片段 | [可灵 AI 中文站](https://klingai.kuaishou.com/)（[快手官方入口说明](https://ir.kuaishou.com/zh-hans/news-releases/news-release-details/kuaishoukelingaixiangquanqiuyonghuquanmiankaifangneice)） |
 | `ai-creative/biling-novel` | 中文小说大纲、人设与章节续写 | [笔灵 AI 小说工作台](https://ibiling.cn/novel-workbench) |
+| `ai-creative/haimian-music` | 用文字或歌词生成歌曲；公开发布或商用前看官方条款 | [海绵音乐](https://www.haimian.com/)（[官方功能说明](https://www.haimian.com/about)） |
+| `ai-creative/hunyuan-3d` | 用文字或图片生成 3D 模型，适合做游戏道具原型 | [腾讯混元 3D](https://3d.hunyuan.tencent.com/)（[腾讯官方介绍](https://developer.cloud.tencent.com/article/2493300)） |
+| `ai-creative/adobe-enhance-speech` | 降低录音噪声和回声；录音需上传到 Adobe | [Adobe Podcast 人声增强](https://podcast.adobe.com/en/enhance)（[官方功能与方案](https://podcast.adobe.com/en/plans)） |
 
-参考流程：笔灵写人物小传 → 即梦做角色图 → 可灵把角色图做成短镜头。三站相互独立，素材由用户自行转移；登录、额度、费用与数据处理以各自官方页面为准。未登录或实测生成。ComfyUI 不在首批收录范围内。
+参考流程：笔灵写人物小传 → 即梦做角色图 → 可灵把角色图做成短镜头。需要配乐小样时可另用海绵音乐；已有旁白录音可用 Adobe Podcast 做清理。各站相互独立，素材由用户自行转移；登录、额度、费用与数据处理以各自官方页面为准。未登录、上传素材或实测生成和音频处理。ComfyUI 不在首批收录范围内。
+
+## 日常工具外链
+
+核实日期：2026-11-26。沿用现有用途分类和使用形式筛选；在线工具打开官方编辑器，桌面应用打开官方下载页。本站不嵌入工具、不接收素材、不分发安装包。
+
+| 稳定 ID | 分类与用途 | 官方入口 |
+| --- | --- | --- |
+| `office/excalidraw` | 办公 · 在线；手绘风流程图、白板草图。草稿自动保存在浏览器，可导出可编辑文件。 | [在线白板](https://excalidraw.com/)（[官方功能说明](https://github.com/excalidraw/excalidraw#features)） |
+| `image-generic/photopea` | 图片 · 在线；打开和保存 PSD，支持图层、蒙版和混合模式。 | [在线编辑器](https://www.photopea.com/)（[官方文件读写说明](https://www.photopea.com/learn/opening-saving)） |
+| `network/localsend` | 网络 · 桌面；同一局域网内互传文件。收发设备都需安装；目录平台栏列 Windows、macOS、Linux，下载页另提供 Android、iOS 版。 | [官方下载](https://localsend.org/download) |
 
 ## 本站下载与许可
 

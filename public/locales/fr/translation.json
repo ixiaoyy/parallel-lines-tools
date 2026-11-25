@@ -81,7 +81,7 @@
     }
   },
   "hero": {
-    "brand": "OmniTools",
+    "brand": "Parallel Lines Toolbox",
     "description": "Trouvez des outils en ligne, des applications de bureau et des extensions par usage. Les applications externes sont liées à leurs sources officielles ; consultez les plateformes et tarifs dans chaque fiche.",
     "examples": {
       "calculateNumberSum": "Calculer la somme des nombres",

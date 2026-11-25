@@ -81,7 +81,7 @@
     }
   },
   "hero": {
-    "brand": "OmniTools",
+    "brand": "Parallel Lines Toolbox",
     "description": "Online-Tools, Desktop-Apps und Browser-Erweiterungen nach Zweck finden. Externe Apps sind über offizielle Quellen verlinkt; Plattformen und Preise stehen im Eintrag.",
     "examples": {
       "calculateNumberSum": "Zahlensumme berechnen",

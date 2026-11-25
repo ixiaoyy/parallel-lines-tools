@@ -349,5 +349,146 @@ export const externalApps: DefinedTool[] = [
       '续写'
     ],
     userTypes: ['generalUsers']
+  },
+  {
+    type: 'ai-creative',
+    path: 'ai-creative/haimian-music',
+    externalUrl: 'https://www.haimian.com/',
+    formats: ['online'],
+    entryAction: 'online',
+    name: 'translation:externalApps.haimianMusic.title',
+    description: 'translation:externalApps.haimianMusic.description',
+    shortDescription: 'translation:externalApps.haimianMusic.shortDescription',
+    notice: 'translation:externalApps.haimianMusic.notice',
+    icon: 'tabler:music-plus',
+    keywords: [
+      'Haimian',
+      'AI music',
+      'song generator',
+      'AI音乐',
+      '生成歌曲',
+      '歌词',
+      '配乐'
+    ],
+    userTypes: ['generalUsers']
+  },
+  {
+    type: 'ai-creative',
+    path: 'ai-creative/hunyuan-3d',
+    externalUrl: 'https://3d.hunyuan.tencent.com/',
+    formats: ['online'],
+    entryAction: 'online',
+    name: 'translation:externalApps.hunyuan3d.title',
+    description: 'translation:externalApps.hunyuan3d.description',
+    shortDescription: 'translation:externalApps.hunyuan3d.shortDescription',
+    notice: 'translation:externalApps.hunyuan3d.notice',
+    icon: 'ph:sphere-duotone',
+    keywords: [
+      'Tencent',
+      'Hunyuan',
+      'text to 3D',
+      'image to 3D',
+      '文生3D',
+      '图生3D',
+      '三维建模',
+      '游戏道具'
+    ],
+    userTypes: ['generalUsers']
+  },
+  {
+    type: 'ai-creative',
+    path: 'ai-creative/adobe-enhance-speech',
+    externalUrl: 'https://podcast.adobe.com/en/enhance',
+    formats: ['online'],
+    entryAction: 'online',
+    name: 'translation:externalApps.adobeEnhanceSpeech.title',
+    description: 'translation:externalApps.adobeEnhanceSpeech.description',
+    shortDescription:
+      'translation:externalApps.adobeEnhanceSpeech.shortDescription',
+    notice: 'translation:externalApps.adobeEnhanceSpeech.notice',
+    icon: 'ic:twotone-audiotrack',
+    keywords: [
+      'Adobe Podcast',
+      'Enhance Speech',
+      'audio denoise',
+      'speech enhancement',
+      '录音降噪',
+      '人声增强',
+      '回声',
+      '播客'
+    ],
+    userTypes: ['generalUsers']
+  },
+  // 日常工具只链接官方编辑器或下载页，不嵌入服务，也不分发安装包。
+  {
+    type: 'office',
+    path: 'office/excalidraw',
+    externalUrl: 'https://excalidraw.com/',
+    formats: ['online'],
+    entryAction: 'online',
+    name: 'translation:externalApps.excalidraw.title',
+    description: 'translation:externalApps.excalidraw.description',
+    shortDescription: 'translation:externalApps.excalidraw.shortDescription',
+    notice: 'translation:externalApps.excalidraw.notice',
+    icon: 'ph:compass-tool-thin',
+    keywords: [
+      'Excalidraw',
+      'whiteboard',
+      'flowchart',
+      'diagram',
+      '流程图',
+      '白板',
+      '手绘',
+      '草图'
+    ],
+    userTypes: ['generalUsers', 'developers']
+  },
+  {
+    type: 'image-generic',
+    path: 'image-generic/photopea',
+    externalUrl: 'https://www.photopea.com/',
+    formats: ['online'],
+    entryAction: 'online',
+    name: 'translation:externalApps.photopea.title',
+    description: 'translation:externalApps.photopea.description',
+    shortDescription: 'translation:externalApps.photopea.shortDescription',
+    notice: 'translation:externalApps.photopea.notice',
+    icon: 'mdi:image-edit',
+    keywords: [
+      'Photopea',
+      'PSD editor',
+      'layer mask',
+      'image editor',
+      '在线修图',
+      '图层',
+      '蒙版',
+      '合成'
+    ],
+    userTypes: ['generalUsers']
+  },
+  {
+    type: 'network',
+    path: 'network/localsend',
+    externalUrl: 'https://localsend.org/download',
+    formats: ['desktop'],
+    platforms: ['windows', 'macos', 'linux'],
+    pricing: 'free',
+    entryAction: 'download',
+    name: 'translation:externalApps.localsend.title',
+    description: 'translation:externalApps.localsend.description',
+    shortDescription: 'translation:externalApps.localsend.shortDescription',
+    notice: 'translation:externalApps.localsend.notice',
+    icon: 'mdi:network',
+    keywords: [
+      'LocalSend',
+      'local network',
+      'file transfer',
+      'Android',
+      'iOS',
+      '局域网',
+      '文件互传',
+      '手机传电脑'
+    ],
+    userTypes: ['generalUsers']
   }
 ];

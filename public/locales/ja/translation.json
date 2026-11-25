@@ -81,7 +81,7 @@
     }
   },
   "hero": {
-    "brand": "オムニツール",
+    "brand": "Parallel Lines Toolbox",
     "description": "用途からオンラインツール、デスクトップアプリ、ブラウザー拡張機能を探せます。外部アプリは公式サイトから入手し、対応環境と料金は各項目でご確認ください。",
     "examples": {
       "calculateNumberSum": "数値の合計を計算する",

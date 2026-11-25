@@ -96,7 +96,7 @@
     },
     "office": {
       "title": "Office Tools",
-      "description": "Tools and apps for documents, spreadsheets and webpage archiving."
+      "description": "Everyday tools for documents, spreadsheets, whiteboard diagrams and webpage archiving."
     },
     "ai-creative": {
       "title": "AI Creation",
@@ -104,7 +104,7 @@
     },
     "network": {
       "title": "Network tools",
-      "description": "Browser proxy and network services. Review permissions, privacy and plans before use."
+      "description": "Local file sharing, browser proxies and more. Check permissions, privacy and plans before using a proxy."
     }
   },
   "converters": {
@@ -137,6 +137,26 @@
       "trimVideo": "Trim video",
       "markdownToDocx": "Markdown to Word",
       "compressImage": "Compress images"
+    },
+    "workbench": {
+      "label": "Try it out",
+      "creative": "Creative tools",
+      "bead": {
+        "tab": "Bead patterns",
+        "title": "Turn a photo into a bead pattern",
+        "before": "Original",
+        "after": "Bead pattern",
+        "alt": "A watercolor cat on the left, and an illustration of the same cat as a bead pattern on the right.",
+        "action": "Open the bead tool",
+        "note": "One more bead!"
+      },
+      "model": {
+        "title": "Turn a sketch into a 3D model",
+        "before": "Lighthouse sketch",
+        "after": "Example 3D render",
+        "alt": "A hand-drawn lighthouse on the left, and an illustrative 3D rendering of the same lighthouse on the right.",
+        "action": "Open Tencent Hunyuan 3D"
+      }
     },
     "search": {
       "noResult": "No results found, Try adjusting your search or filter criteria",
@@ -493,6 +513,42 @@
       "description": "Plan outlines and characters for Chinese-language fiction, then draft or continue the story chapter by chapter.",
       "shortDescription": "Outline Chinese-language fiction, develop characters, and continue individual chapters.",
       "notice": "Biling processes the story notes and drafts you submit. Check its site for features and pricing."
+    },
+    "haimianMusic": {
+      "title": "Haimian Music",
+      "description": "Turn a prompt or your own lyrics into a song, and choose a style for a soundtrack demo.",
+      "shortDescription": "Turn ideas or lyrics into songs for soundtrack demos.",
+      "notice": "Haimian processes your lyrics and reference audio. Check its terms before publishing or using the output commercially."
+    },
+    "hunyuan3d": {
+      "title": "Tencent Hunyuan 3D",
+      "description": "Generate a 3D model from a text prompt or reference image for game props and scene prototypes.",
+      "shortDescription": "Generate 3D models from text or images to prototype game props.",
+      "notice": "Tencent Hunyuan processes your prompts and reference images. Check its site for generation limits and export options."
+    },
+    "adobeEnhanceSpeech": {
+      "title": "Adobe Podcast Enhance Speech",
+      "description": "Reduce background noise and echo to make voices clearer in narration, interviews, or podcasts.",
+      "shortDescription": "Reduce noise and echo in narration or interview recordings.",
+      "notice": "Recordings are uploaded to Adobe. Don't upload sensitive recordings or recordings you don't have permission to share. Check Adobe for free usage limits and features."
+    },
+    "excalidraw": {
+      "title": "Excalidraw",
+      "description": "Draw flowcharts, wireframes or sketches on a hand-drawn-style online whiteboard, then export an image or an editable file.",
+      "shortDescription": "Sketch flowcharts, wireframes and ideas on a hand-drawn-style whiteboard.",
+      "notice": "Drafts are saved in this browser. Export an editable file to keep a copy or continue on another device."
+    },
+    "photopea": {
+      "title": "Photopea",
+      "description": "Open and edit PSD files in your browser, and combine images using layers, masks and blending modes.",
+      "shortDescription": "Open PSD files and edit images with layers and masks.",
+      "notice": "Save a PSD copy to preserve layers for further editing."
+    },
+    "localsend": {
+      "title": "LocalSend",
+      "description": "Send photos, videos and documents directly between phones and computers on the same local network, without cloud storage.",
+      "shortDescription": "Share files between phones and computers on the same local network, without the cloud.",
+      "notice": "Install LocalSend on both devices. The official download page also offers Android and iOS versions."
     },
     "libreoffice": {
       "title": "LibreOffice",
