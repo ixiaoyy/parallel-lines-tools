@@ -98,6 +98,10 @@
       "title": "Office Tools",
       "description": "Tools and apps for documents, spreadsheets and webpage archiving."
     },
+    "ai-creative": {
+      "title": "AI Creation",
+      "description": "Outline a novel, create cover or character art, or turn an image into a short clip. Opens third-party sites."
+    },
     "network": {
       "title": "Network tools",
       "description": "Browser proxy and network services. Review permissions, privacy and plans before use."
@@ -472,6 +476,24 @@
     }
   },
   "externalApps": {
+    "jimeng": {
+      "title": "Jimeng AI",
+      "description": "Generate images from text or refine character art, illustrations, and covers with inpainting and image expansion.",
+      "shortDescription": "Create covers, character art, and illustrations, then retouch or expand them.",
+      "notice": "Jimeng processes your prompts and reference images. Check its site for limits and pricing."
+    },
+    "kling": {
+      "title": "Kling AI",
+      "description": "Generate video clips from text or images for storyboards, character animation, and book trailers.",
+      "shortDescription": "Turn text or a reference image into a moving storyboard or trailer clip.",
+      "notice": "Kling processes your prompts and reference materials. Check its site for limits and pricing."
+    },
+    "bilingNovel": {
+      "title": "Biling AI Novel",
+      "description": "Plan outlines and characters for Chinese-language fiction, then draft or continue the story chapter by chapter.",
+      "shortDescription": "Outline Chinese-language fiction, develop characters, and continue individual chapters.",
+      "notice": "Biling processes the story notes and drafts you submit. Check its site for features and pricing."
+    },
     "libreoffice": {
       "title": "LibreOffice",
       "description": "A free desktop office suite with word processing, spreadsheets and presentations for Windows, macOS and Linux.",

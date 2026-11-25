@@ -274,5 +274,80 @@ export const externalApps: DefinedTool[] = [
     icon: 'mdi:network',
     keywords: ['Ghelper', 'network', 'proxy', '网络', '浏览器代理', '上网助手'],
     userTypes: ['generalUsers']
+  },
+  // AI 创作条目只打开官方网页；提示词、素材和用量不经过本站。
+  {
+    type: 'ai-creative',
+    path: 'ai-creative/jimeng',
+    externalUrl: 'https://jimeng.jianying.com/ai-tool/tools',
+    formats: ['online'],
+    entryAction: 'online',
+    name: 'translation:externalApps.jimeng.title',
+    description: 'translation:externalApps.jimeng.description',
+    shortDescription: 'translation:externalApps.jimeng.shortDescription',
+    notice: 'translation:externalApps.jimeng.notice',
+    icon: 'material-symbols-light:image-outline-rounded',
+    keywords: [
+      'Jimeng',
+      'AI image',
+      'text to image',
+      'image editing',
+      'AI图片',
+      'AI绘图',
+      'AI生图',
+      '文生图',
+      '局部重绘',
+      '扩图',
+      '角色立绘',
+      '小说封面'
+    ],
+    userTypes: ['generalUsers']
+  },
+  {
+    type: 'ai-creative',
+    path: 'ai-creative/kling',
+    externalUrl: 'https://klingai.kuaishou.com/',
+    formats: ['online'],
+    entryAction: 'online',
+    name: 'translation:externalApps.kling.title',
+    description: 'translation:externalApps.kling.description',
+    shortDescription: 'translation:externalApps.kling.shortDescription',
+    notice: 'translation:externalApps.kling.notice',
+    icon: 'lets-icons:video-light',
+    keywords: [
+      'Kling',
+      'AI video',
+      'text to video',
+      'image to video',
+      'AI视频',
+      '文生视频',
+      '图生视频',
+      '分镜',
+      '短视频'
+    ],
+    userTypes: ['generalUsers']
+  },
+  {
+    type: 'ai-creative',
+    path: 'ai-creative/biling-novel',
+    externalUrl: 'https://ibiling.cn/novel-workbench',
+    formats: ['online'],
+    entryAction: 'online',
+    name: 'translation:externalApps.bilingNovel.title',
+    description: 'translation:externalApps.bilingNovel.description',
+    shortDescription: 'translation:externalApps.bilingNovel.shortDescription',
+    notice: 'translation:externalApps.bilingNovel.notice',
+    icon: 'mdi:file-document-edit',
+    keywords: [
+      'Biling',
+      'AI novel',
+      'fiction writing',
+      'AI小说',
+      'AI写作',
+      '小说大纲',
+      '人设',
+      '续写'
+    ],
+    userTypes: ['generalUsers']
   }
 ];

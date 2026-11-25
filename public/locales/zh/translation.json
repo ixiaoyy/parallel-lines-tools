@@ -98,6 +98,10 @@
       "title": "办公工具",
       "description": "文档、表格、网页归档等日常办公工具与应用。"
     },
+    "ai-creative": {
+      "title": "AI 创作",
+      "description": "写小说大纲、画封面和角色图，或把图片做成短视频。均跳转第三方官网。"
+    },
     "network": {
       "title": "网络工具",
       "description": "浏览器代理与网络辅助服务，使用前查看权限、隐私和套餐。"
@@ -473,6 +477,24 @@
     }
   },
   "externalApps": {
+    "jimeng": {
+      "title": "即梦 AI",
+      "description": "通过文字生成图片，或用局部重绘和扩图调整角色立绘、插画和封面。",
+      "shortDescription": "生成封面、角色图和插画，也可局部重绘和扩图。",
+      "notice": "提示词和参考图由即梦处理；可用额度与收费以即梦页面为准。"
+    },
+    "kling": {
+      "title": "可灵 AI",
+      "description": "从文字或图片生成视频片段，可用于分镜、动态角色图和小说预告。",
+      "shortDescription": "输入文字或参考图，生成动态分镜或预告片片段。",
+      "notice": "提示词和参考素材由可灵处理；可用额度与收费以可灵页面为准。"
+    },
+    "bilingNovel": {
+      "title": "笔灵 AI 小说",
+      "description": "为中文小说整理大纲和人物设定，在工作台按章节写作或续写。",
+      "shortDescription": "整理小说大纲和人设，也可按章节续写。",
+      "notice": "输入的设定和稿件由笔灵处理；可用功能与收费以笔灵页面为准。"
+    },
     "libreoffice": {
       "title": "LibreOffice",
       "description": "免费的桌面办公套件，包含文档、电子表格和演示文稿应用，支持 Windows、macOS 与 Linux。",

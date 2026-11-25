@@ -49,6 +49,7 @@ export type ToolCategory =
   | 'audio'
   | 'xml'
   | 'office'
+  | 'ai-creative'
   | 'network'
   | 'converters';
 

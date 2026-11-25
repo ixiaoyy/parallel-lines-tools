@@ -28,6 +28,18 @@
 
 截图中的 JSON Viewer 以作者 [tulios/json-viewer](https://github.com/tulios/json-viewer) 核对：当前公开 manifest 仍是 `0.18.1`、Manifest V2，未确认可用于新版 Chrome 的正式 MV3 包，因此不以旧包凑数，也未擅自替换成同名作者产品。[Chrome 官方时间表](https://developer.chrome.com/docs/extensions/develop/migrate/mv2-deprecation-timeline)说明 Chrome 139 起不再支持 MV2。ChatGPT 扩展未收录、未下载。
 
+## AI 创作外链
+
+核实日期：2026-11-25。三项归入「AI 创作」，使用形式均为在线工具。卡片新标签打开官方入口；本站不接收提示词或素材、不调用生成接口，不代登录或计费。
+
+| 稳定 ID | 用途 | 官方入口 |
+| --- | --- | --- |
+| `ai-creative/jimeng` | 封面、角色图与插画；支持局部重绘及扩图 | [即梦 AI](https://jimeng.jianying.com/ai-tool/tools) |
+| `ai-creative/kling` | 文生视频、图生视频，适合动态分镜或预告片段 | [可灵 AI 中文站](https://klingai.kuaishou.com/)（[快手官方入口说明](https://ir.kuaishou.com/zh-hans/news-releases/news-release-details/kuaishoukelingaixiangquanqiuyonghuquanmiankaifangneice)） |
+| `ai-creative/biling-novel` | 中文小说大纲、人设与章节续写 | [笔灵 AI 小说工作台](https://ibiling.cn/novel-workbench) |
+
+参考流程：笔灵写人物小传 → 即梦做角色图 → 可灵把角色图做成短镜头。三站相互独立，素材由用户自行转移；登录、额度、费用与数据处理以各自官方页面为准。未登录或实测生成。ComfyUI 不在首批收录范围内。
+
 ## 本站下载与许可
 
 当前仅 SingleFile 进入 `src/tools/extensionDownloads.json` 的本站分发清单：

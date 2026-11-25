@@ -21,7 +21,13 @@ import ToolFormatFilter from './ToolFormatFilter';
 import CatalogToolCard from './CatalogToolCard';
 import { externalApps } from '../tools/externalApps';
 import downloads from '../tools/extensionDownloads.json';
-import { catalogTools, tools } from '../tools';
+import {
+  catalogTools,
+  filterTools,
+  filterToolsByFormat,
+  getToolsByCategory,
+  tools
+} from '../tools';
 import { mainSiteTools } from '../tools/mainSiteTools';
 import type { DefinedTool } from '../tools/defineTool';
 import zh from '../../public/locales/zh/translation.json';
@@ -267,7 +273,9 @@ describe.each(['zh', 'en'] as const)('tool catalog UI in %s', (language) => {
       'office/markdown-reader': 'medapdbncneneejhbgcjceippjlfkmkg',
       'network/ghelper': 'nonmafimegllfoonjgplbabhmgfanaka'
     };
-    expect(externalApps).toHaveLength(8);
+    expect(
+      externalApps.filter(({ type }) => type !== 'ai-creative')
+    ).toHaveLength(8);
     expect(extensionTools).toHaveLength(Object.keys(storeIds).length);
     expect(new Set(externalApps.map((tool) => tool.path)).size).toBe(
       externalApps.length
@@ -307,6 +315,60 @@ describe.each(['zh', 'en'] as const)('tool catalog UI in %s', (language) => {
     expect(
       extensionTools.find((tool) => tool.path === 'network/ghelper')!.type
     ).toBe('network');
+  });
+
+  it('lists exactly the three AI creation sites as searchable online cards with official destinations', async () => {
+    const expected = [
+      {
+        path: 'ai-creative/jimeng',
+        url: 'https://jimeng.jianying.com/ai-tool/tools',
+        query: { zh: 'AI绘图', en: 'text to image' }
+      },
+      {
+        path: 'ai-creative/kling',
+        url: 'https://klingai.kuaishou.com/',
+        query: { zh: '图生视频', en: 'image to video' }
+      },
+      {
+        path: 'ai-creative/biling-novel',
+        url: 'https://ibiling.cn/novel-workbench',
+        query: { zh: 'AI小说', en: 'fiction writing' }
+      }
+    ];
+    const translate = ((key: string) =>
+      text(language, key)) as Parameters<typeof getToolsByCategory>[1];
+    const group = getToolsByCategory([], translate).find(
+      ({ type }) => type === 'ai-creative'
+    )!;
+    expect(group.rawTitle).toBe(language === 'zh' ? 'AI 创作' : 'AI Creation');
+    expect(group.tools.map(({ path }) => path)).toEqual(
+      expected.map(({ path }) => path)
+    );
+    expect(filterToolsByFormat(group.tools, 'online')).toEqual(group.tools);
+    expect(filterToolsByFormat(group.tools, 'desktop')).toEqual([]);
+    expect(filterToolsByFormat(group.tools, 'extension')).toEqual([]);
+
+    for (const { path, url, query } of expected) {
+      const tool = group.tools.find((entry) => entry.path === path)!;
+      expect(
+        filterTools(group.tools, query[language], [], translate)
+      ).toContain(tool);
+      expect(tool.offlineInstall).toBeUndefined();
+      await renderUi(<CatalogToolCard tool={tool} />, language);
+      expect(
+        screen.getByText(text(language, tool.notice!))
+      ).toBeInTheDocument();
+      for (const name of [
+        text(language, tool.name),
+        text(language, 'catalog.actions.online') + ' ↗'
+      ]) {
+        const link = screen.getByRole('link', { name });
+        expect(link).toHaveAttribute('href', url);
+        expect(link).toHaveAttribute('target', '_blank');
+        expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+      }
+      cleanup();
+    }
   });
 
   it('does not advertise an offline package for the four newly listed extensions', async () => {

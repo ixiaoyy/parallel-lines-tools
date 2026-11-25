@@ -27,6 +27,7 @@ import { externalApps } from './externalApps';
 
 const toolCategoriesOrder: ToolCategory[] = [
   'office',
+  'ai-creative',
   'network',
   'image-generic',
   'pdf',
@@ -81,6 +82,12 @@ const categoriesConfig: {
   value: FullI18nKey;
   icon: IconifyIcon | string;
 }[] = [
+  {
+    type: 'ai-creative',
+    icon: 'ph:compass-tool-thin',
+    value: 'translation:categories.ai-creative.description',
+    title: 'translation:categories.ai-creative.title'
+  },
   {
     type: 'network',
     icon: 'mdi:network',
