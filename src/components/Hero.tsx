@@ -1,6 +1,7 @@
 import {
   Autocomplete,
   Box,
+  Button,
   darken,
   lighten,
   Stack,
@@ -10,8 +11,9 @@ import {
 } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import SearchIcon from '@mui/icons-material/Search';
+import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import Grid from '@mui/material/Grid';
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import { Fragment, type ReactNode, useEffect, useMemo, useState } from 'react';
 import {
   catalogTools,
   filterTools,
@@ -44,6 +46,8 @@ import ToolCatalogMeta from './ToolCatalogMeta';
 import CatalogToolCard from './CatalogToolCard';
 import WorkbenchPreview from './WorkbenchPreview';
 import { getCreativeHighlights } from '@tools/homeDiscovery';
+
+const installationPreviewSize = 6;
 
 const GroupHeader = styled('div')(({ theme }) => ({
   position: 'sticky',
@@ -168,9 +172,11 @@ function CreativeToolIcon({ tool }: { tool: DefinedTool }) {
 }
 
 export default function Hero({
-  showShortcuts = true
+  showShortcuts = true,
+  children
 }: {
   showShortcuts?: boolean;
+  children?: ReactNode;
 }) {
   const { t: globalText, i18n } = useTranslation('translation');
   // 加载只订阅全局 UI，查询仍允许已按需取得的显式命名空间 key。
@@ -182,6 +188,9 @@ export default function Hero({
   const [searchRequest, setSearchRequest] = useState(0);
   const [bookmarksReady, setBookmarksReady] = useState(false);
   const [bookmarksFailed, setBookmarksFailed] = useState(false);
+  const [expandedInstallationFormat, setExpandedInstallationFormat] = useState<
+    'desktop' | 'extension' | null
+  >(null);
 
   // 完整目录译文仅在打开搜索时加载，切换语言后也不沿用旧请求结果。
   const loadSearch = () => {
@@ -258,9 +267,13 @@ export default function Hero({
 
   const hasBookmarks = bookmarkedToolPaths.length > 0;
   const installationFormat = format === 'desktop' || format === 'extension';
+  // 展开只切换当前形式的列表，不改变收藏、搜索词或网址筛选。
+  const showingAllInstallations =
+    installationFormat && expandedInstallationFormat === format;
+  const showingBookmarks = hasBookmarks && !showingAllInstallations;
   // 旧收藏从完整库存按原 ID 查找，首页精选仍只消费当前公开目录。
   const matchingBookmarks =
-    !hasBookmarks || (inputValue && !searchReady)
+    !showingBookmarks || (inputValue && !searchReady)
       ? []
       : filterTools(
           filterToolsByFormat(
@@ -271,14 +284,14 @@ export default function Hero({
           selectedUserTypes,
           t
         );
-  const displayedTools = hasBookmarks
+  const displayedTools = showingBookmarks
     ? bookmarkedToolPaths.flatMap((path) => {
         const tool = matchingBookmarks.find((entry) => entry.path === path);
         return tool ? [tool] : [];
       })
-    : installationFormat
-      ? filteredTools.slice(0, 6)
-      : [];
+    : showingAllInstallations
+      ? filteredTools
+      : filteredTools.slice(0, installationPreviewSize);
   const shortlist = filterToolsByUserTypes(
     filterToolsByFormat(catalogTools, format),
     selectedUserTypes
@@ -546,38 +559,102 @@ export default function Hero({
         </Box>
       )}
 
+      {showShortcuts && children}
+
       {showShortcuts && (hasBookmarks || installationFormat) && (
-        <Box component="section" sx={{ mt: 3 }}>
-          <Typography
-            component="h2"
-            fontSize={19}
-            fontWeight={700}
-            sx={{ mb: 1.5 }}
+        <Box
+          component="section"
+          aria-labelledby="home-tool-list-title"
+          sx={{ mt: 3 }}
+        >
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+            flexWrap="wrap"
+            useFlexGap
+            sx={{ gap: 1, mb: 1.5 }}
           >
-            {t(hasBookmarks ? 'hero.bookmarksTitle' : 'catalog.curatedTitle')}
-          </Typography>
-          {hasBookmarks && bookmarksReady && displayedTools.length === 0 && (
-            <Typography role="status" color="text.secondary" sx={{ mb: 2 }}>
-              {t('translation:catalog.noMatchingBookmarks')}
+            <Typography
+              id="home-tool-list-title"
+              component="h2"
+              fontSize={{ xs: 16, md: 17.5 }}
+              fontWeight={700}
+            >
+              {t(
+                showingBookmarks
+                  ? 'hero.bookmarksTitle'
+                  : showingAllInstallations
+                    ? `catalog.formats.${format}`
+                    : 'catalog.curatedTitle'
+              )}
             </Typography>
-          )}
-          {hasBookmarks && !bookmarksReady && (
-            <Typography color="text.secondary" fontSize={14}>
+            {installationFormat &&
+              (showingAllInstallations ||
+                filteredTools.length >
+                  (showingBookmarks ? 0 : installationPreviewSize)) && (
+                <Button
+                  variant="outlined"
+                  size="small"
+                  endIcon={
+                    <KeyboardArrowDownRoundedIcon
+                      sx={{
+                        transform: showingAllInstallations
+                          ? 'rotate(180deg)'
+                          : undefined
+                      }}
+                    />
+                  }
+                  aria-expanded={showingAllInstallations}
+                  aria-controls="home-tool-list"
+                  onClick={() =>
+                    setExpandedInstallationFormat(
+                      showingAllInstallations ? null : format
+                    )
+                  }
+                  sx={{ minHeight: 44, px: 1.5, fontWeight: 700 }}
+                >
+                  {showingAllInstallations
+                    ? t(
+                        hasBookmarks
+                          ? 'catalog.showBookmarks'
+                          : 'catalog.showFeatured'
+                      )
+                    : t('catalog.viewAllEntries', {
+                        count: filteredTools.length
+                      })}
+                </Button>
+              )}
+          </Stack>
+          {showingBookmarks && !bookmarksReady ? (
+            <Typography role="status" color="text.secondary" fontSize={14}>
               {t(
                 bookmarksFailed
                   ? 'hero.search.loadFailed'
                   : 'hero.search.loading'
               )}
             </Typography>
-          )}
-          <Grid container spacing={1.5}>
-            {(hasBookmarks && !bookmarksReady ? [] : displayedTools).map(
+          ) : displayedTools.length === 0 ? (
+            <Typography role="status" color="text.secondary" sx={{ mb: 2 }}>
+              {t(
+                showingBookmarks
+                  ? 'catalog.noMatchingBookmarks'
+                  : inputValue && !searchReady
+                    ? searchFailed
+                      ? 'hero.search.loadFailed'
+                      : 'hero.search.loading'
+                    : 'hero.search.noResult'
+              )}
+            </Typography>
+          ) : null}
+          <Grid id="home-tool-list" container spacing={1.5}>
+            {(showingBookmarks && !bookmarksReady ? [] : displayedTools).map(
               (tool) => (
                 <Grid item xs={12} md={6} key={tool.path}>
                   <CatalogToolCard
                     tool={tool}
                     onRemoveBookmark={
-                      hasBookmarks
+                      showingBookmarks
                         ? () => {
                             toggleBookmarked(tool.path);
                             setBookmarkedToolPaths(getBookmarkedToolPaths());

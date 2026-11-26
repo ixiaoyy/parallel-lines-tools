@@ -28,6 +28,12 @@ import { externalApps } from './externalApps';
 const toolCategoriesOrder: ToolCategory[] = [
   'office',
   'ai-creative',
+  'system',
+  'design',
+  'security',
+  'learning',
+  'developer',
+  'life',
   'network',
   'image-generic',
   'pdf',
@@ -87,6 +93,42 @@ const categoriesConfig: {
     icon: 'ph:compass-tool-thin',
     value: 'translation:categories.ai-creative.description',
     title: 'translation:categories.ai-creative.title'
+  },
+  {
+    type: 'system',
+    icon: 'material-symbols-light:checklist',
+    value: 'translation:categories.system.description',
+    title: 'translation:categories.system.title'
+  },
+  {
+    type: 'design',
+    icon: 'ph:compass-tool-thin',
+    value: 'translation:categories.design.description',
+    title: 'translation:categories.design.title'
+  },
+  {
+    type: 'security',
+    icon: 'material-symbols:lock',
+    value: 'translation:categories.security.description',
+    title: 'translation:categories.security.title'
+  },
+  {
+    type: 'learning',
+    icon: 'material-symbols:import-contacts',
+    value: 'translation:categories.learning.description',
+    title: 'translation:categories.learning.title'
+  },
+  {
+    type: 'developer',
+    icon: 'material-symbols:code',
+    value: 'translation:categories.developer.description',
+    title: 'translation:categories.developer.title'
+  },
+  {
+    type: 'life',
+    icon: 'material-symbols:calendar-month',
+    value: 'translation:categories.life.description',
+    title: 'translation:categories.life.title'
   },
   {
     type: 'network',

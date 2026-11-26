@@ -32,10 +32,9 @@ export default function Home() {
         <meta name="description" content={t('hero.description')} />
       </Helmet>
       <Box sx={{ width: '100%', maxWidth: 1120, mx: 'auto' }}>
-        <Hero />
-        <Box sx={{ mt: { xs: 2.25, md: 2.75 } }}>
+        <Hero>
           <Categories />
-        </Box>
+        </Hero>
       </Box>
     </Box>
   );

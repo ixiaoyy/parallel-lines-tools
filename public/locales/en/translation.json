@@ -102,6 +102,30 @@
       "title": "AI Creation",
       "description": "Outline a novel, create cover or character art, or turn an image into a short clip. Opens third-party sites."
     },
+    "system": {
+      "title": "System & Utilities",
+      "description": "Fast file search, archiving, disk space analysis, clipboard history and system utilities."
+    },
+    "design": {
+      "title": "Design & Color",
+      "description": "Color palettes, open-source fonts, icon libraries, UI prototyping and vector or 3D design tools."
+    },
+    "security": {
+      "title": "Security & Privacy",
+      "description": "Password managers, 2FA authenticators, disk encryption, content blockers and malware scanners."
+    },
+    "learning": {
+      "title": "Learning & Reading",
+      "description": "Local notes, mind maps, flashcards, reference managers, e-books and math graphing tools."
+    },
+    "developer": {
+      "title": "Developer Tools",
+      "description": "Code editors, API clients, regex testers, code converters and browser compatibility tables."
+    },
+    "life": {
+      "title": "Everyday Life",
+      "description": "Pomodoro timers, ambient noise mixers, global weather maps and world clocks."
+    },
     "network": {
       "title": "Network tools",
       "description": "Local file sharing, browser proxies and more. Check permissions, privacy and plans before using a proxy."
@@ -464,6 +488,12 @@
     "otherBrowsers": "Website & other browsers",
     "searchCategory": "Search this category",
     "curatedTitle": "Selected apps & extensions",
+    "browseByPurpose": "Browse by purpose",
+    "viewAllCategories": "View all {{count}} categories",
+    "collapseCategories": "Show fewer categories",
+    "viewAllEntries": "View all {{count}} tools",
+    "showFeatured": "Show featured only",
+    "showBookmarks": "Back to bookmarks",
     "noMatchingBookmarks": "No bookmarks match these filters. Change the usage format or clear filters to see them. Your bookmarks are unchanged.",
     "noMatchingCategories": "No categories match. Adjust the usage format or audience filters.",
     "noResultsDescription": "Try another keyword, usage format or audience filter.",
@@ -597,6 +627,288 @@
       "description": "A browser proxy and network access service with free services and paid plans.",
       "shortDescription": "Access network resources through a browser proxy service.",
       "notice": "Changes browser proxy settings and uses extension-management permissions. Review permissions, privacy and plans before installing."
+    },
+    "tingwu": {
+      "title": "Tongyi Tingwu",
+      "description": "Transcribe meetings, interviews and classes, identify speakers and pull out key points.",
+      "shortDescription": "Turn recordings into transcripts and meeting notes.",
+      "notice": "Tongyi Tingwu processes the recordings. Only upload audio you have permission to share."
+    },
+    "removeBg": {
+      "title": "remove.bg",
+      "description": "Remove backgrounds from portraits or product photos and export images with transparent backgrounds.",
+      "shortDescription": "Remove the background from a portrait or product photo.",
+      "notice": "Images are uploaded to remove.bg. Low-resolution previews are free; high-resolution downloads use credits."
+    },
+    "markmap": {
+      "title": "Markmap",
+      "description": "Turn a Markdown outline into an interactive mind map you can fold, zoom and export.",
+      "shortDescription": "Paste a Markdown outline to make a collapsible mind map."
+    },
+    "regex101": {
+      "title": "regex101",
+      "description": "Test regular expressions for PHP, JavaScript, Python and more, and inspect matches, capture groups and explanations.",
+      "shortDescription": "Test a regular expression against sample text and inspect the matches.",
+      "notice": "Remove tokens and personal information from your sample text before saving or sharing it."
+    },
+    "svgomg": {
+      "title": "SVGOMG",
+      "description": "Trim paths, styles and metadata from SVG icons and illustrations, then compare the result with the original.",
+      "shortDescription": "Minify SVG files and preview the result before downloading.",
+      "notice": "Optimization can change element IDs and numeric precision. Check the export if your scripts refer to those elements."
+    },
+    "webaimContrast": {
+      "title": "WebAIM Contrast Checker",
+      "description": "Enter foreground and background colors to check the contrast ratio and see how each text size fares.",
+      "shortDescription": "Check text contrast against a background color and preview the result."
+    },
+    "pdf24Creator": {
+      "title": "PDF24 Creator",
+      "description": "Reorder PDF pages and add a searchable text layer to scanned documents on Windows.",
+      "shortDescription": "Organize PDF pages and make scanned documents searchable."
+    },
+    "obsidian": {
+      "title": "Obsidian",
+      "description": "Keep notes in local Markdown files and connect related notes with backlinks.",
+      "shortDescription": "Write local Markdown notes and link related ideas.",
+      "notice": "Local notes are free. Obsidian's sync and publishing services are paid add-ons."
+    },
+    "sevenZip": {
+      "title": "7-Zip",
+      "description": "Package files into 7z or ZIP archives and extract RAR and other formats.",
+      "shortDescription": "Compress and extract files in formats such as 7z and ZIP.",
+      "notice": "The graphical app is for Windows. The download page also offers command-line versions for macOS and Linux."
+    },
+    "powertoys": {
+      "title": "Microsoft PowerToys",
+      "description": "Batch rename files, arrange windows into zones or remap keys on Windows.",
+      "shortDescription": "Rename files in batches and arrange windows into layouts."
+    },
+    "inkscape": {
+      "title": "Inkscape",
+      "description": "Create scalable SVG illustrations, icons and logos with paths, shapes and text.",
+      "shortDescription": "Draw and edit SVG graphics for icons and logos."
+    },
+    "kdenlive": {
+      "title": "Kdenlive",
+      "description": "Edit video on a multitrack timeline, layer video and audio, and add transitions.",
+      "shortDescription": "Cut and layer video clips on a multitrack timeline."
+    },
+    "audacity": {
+      "title": "Audacity",
+      "description": "Record narration, interviews or podcasts, then edit, mix and reduce noise across audio tracks.",
+      "shortDescription": "Record and mix audio, and reduce noise in recordings."
+    },
+    "darkReader": {
+      "title": "Dark Reader",
+      "description": "Add a dark theme to webpages and adjust brightness and contrast per site.",
+      "shortDescription": "Give websites a dark mode, even when they don't offer one.",
+      "notice": "Requests access to websites and can be turned off per site. The Safari version is sold separately."
+    },
+    "tabSessionManager": {
+      "title": "Tab Session Manager",
+      "description": "Save browser windows, tabs and groups as a session so you can reopen them together later.",
+      "shortDescription": "Save a group of tabs and reopen them together later.",
+      "notice": "Sessions include page URLs. Before turning on cloud sync, check that those links can be stored in Google Drive."
+    },
+    "drawio": {
+      "title": "draw.io",
+      "description": "Create flowcharts, architecture diagrams, UML and wireframes in your browser and export images or editable files.",
+      "shortDescription": "Draw flowcharts, architecture diagrams and UML charts for free.",
+      "notice": "Diagrams can be saved locally or to your chosen cloud storage. Export as PNG, SVG or an editable .drawio file."
+    },
+    "mermaidLive": {
+      "title": "Mermaid Live Editor",
+      "description": "Write flowcharts, sequence diagrams, state charts and Gantt charts using text syntax, then preview and export SVG or PNG.",
+      "shortDescription": "Generate flowcharts, sequence diagrams and Gantt charts from text.",
+      "notice": "Diagram code is encoded in shareable URLs. Remove sensitive details before sharing a link."
+    },
+    "squoosh": {
+      "title": "Squoosh",
+      "description": "Compress and convert images (WebP, AVIF, MozJPEG and more) locally in your browser with side-by-side quality comparison.",
+      "shortDescription": "Compress images locally in your browser and compare quality side by side.",
+      "notice": "Images are compressed locally in your browser and are not uploaded to a server."
+    },
+    "hoppscotch": {
+      "title": "Hoppscotch",
+      "description": "Open-source online API client for testing REST, GraphQL and WebSocket endpoints and inspecting responses.",
+      "shortDescription": "Test REST, GraphQL and WebSocket APIs in your browser.",
+      "notice": "Direct browser requests are subject to CORS restrictions; follow the official guide for proxy or desktop agent setup when testing local endpoints."
+    },
+    "cloudflareSpeed": {
+      "title": "Cloudflare Speed Test",
+      "description": "Measure download speed, upload speed, latency, jitter and packet loss against Cloudflare's global edge network.",
+      "shortDescription": "Test download and upload speed, latency and jitter.",
+      "notice": "Transfers test payloads through Cloudflare edge servers and uses network bandwidth."
+    },
+    "obsStudio": {
+      "title": "OBS Studio",
+      "description": "Free, open-source desktop software for screen recording and live streaming with multi-scene mixing and custom encoding.",
+      "shortDescription": "Record your screen or stream live with customizable scenes."
+    },
+    "vlc": {
+      "title": "VLC media player",
+      "description": "Free, open-source cross-platform player that handles most local video, audio and streaming formats without extra codecs.",
+      "shortDescription": "Play almost any local video or audio file without extra codec packs."
+    },
+    "handbrake": {
+      "title": "HandBrake",
+      "description": "Free, open-source desktop video transcoder for converting formats, reducing file size and embedding subtitles.",
+      "shortDescription": "Convert videos to MP4 or MKV and shrink file sizes."
+    },
+    "blender": {
+      "title": "Blender",
+      "description": "Free, open-source 3D creation suite covering modeling, sculpting, rendering, animation and compositing.",
+      "shortDescription": "Build 3D models, render scenes and create animations."
+    },
+    "everything": {
+      "title": "Everything",
+      "description": "Ultra-fast local file and folder name search utility for Windows that returns matches instantaneously as you type.",
+      "shortDescription": "Search local Windows files by name instantaneously.",
+      "notice": "Windows only. Indexes NTFS drives for instant filename search."
+    },
+    "keepassxc": {
+      "title": "KeePassXC",
+      "description": "Free, open-source cross-platform password manager that keeps credentials in an encrypted local database.",
+      "shortDescription": "Store passwords and 2FA codes in an encrypted local vault.",
+      "notice": "Your vault is stored in a local encrypted file. Remember your master password and back up the database yourself."
+    },
+    "sumatrapdf": {
+      "title": "Sumatra PDF",
+      "description": "Lightweight, fast document viewer for Windows supporting PDF, EPUB, MOBI and comic archives.",
+      "shortDescription": "Open PDF, EPUB and comic files quickly on Windows."
+    },
+    "calibre": {
+      "title": "calibre",
+      "description": "Free, open-source e-book library manager for organizing books, editing metadata and converting between EPUB, PDF and AZW3.",
+      "shortDescription": "Organize e-books and convert between EPUB, PDF and other formats."
+    },
+    "ublockOriginLite": {
+      "title": "uBlock Origin Lite",
+      "description": "Lightweight Manifest V3 content blocker that filters common ads and trackers without requiring broad site permissions by default.",
+      "shortDescription": "Block ads and trackers with a lightweight Manifest V3 filter.",
+      "notice": "Uses declarative Manifest V3 filtering rules. Adjust the filtering mode or disable it per site from the popup."
+    },
+    "bitwarden": {
+      "title": "Bitwarden Password Manager",
+      "description": "Browser extension for the open-source password manager with autofill for logins, passkeys and password generation.",
+      "shortDescription": "Sync passwords across devices and autofill logins in your browser.",
+      "notice": "Requires an account or self-hosted server. Basic personal sync is free; advanced reports and file attachments are paid."
+    },
+    "vimium": {
+      "title": "Vimium",
+      "description": "Adds Vim-style keyboard shortcuts to your browser for scrolling, following links and switching tabs without a mouse.",
+      "shortDescription": "Navigate webpages, click links and switch tabs from your keyboard.",
+      "notice": "Requests page access to bind keyboard shortcuts. Specific websites can be excluded in settings."
+    },
+    "wiztree": {
+      "title": "WizTree",
+      "description": "Ultra-fast disk space analyzer for Windows that reads the NTFS file table directly to locate large files in seconds.",
+      "shortDescription": "Scan disk usage in seconds and find large files and folders.",
+      "notice": "Windows only. Free for personal use; commercial use requires a license."
+    },
+    "ventoy": {
+      "title": "Ventoy",
+      "description": "Free, open-source tool for creating multiboot USB drives—just copy ISO files directly onto the drive to boot them.",
+      "shortDescription": "Create a multiboot USB drive and boot directly from ISO files.",
+      "notice": "Initial installation formats the target USB drive. Back up important data first."
+    },
+    "copyq": {
+      "title": "CopyQ",
+      "description": "Free, open-source cross-platform clipboard manager that stores searchable text and image history with custom shortcuts.",
+      "shortDescription": "Save and search clipboard history for both text and images."
+    },
+    "coolors": {
+      "title": "Coolors",
+      "description": "Online color palette generator for quickly creating harmonious schemes, locking colors and exporting swatches.",
+      "shortDescription": "Generate and refine color palettes and export color codes.",
+      "notice": "Basic palette generation is free; unlimited palettes and some export options require a paid plan."
+    },
+    "googleFonts": {
+      "title": "Google Fonts",
+      "description": "Free, open-source library of web fonts and icon families to preview, download or embed.",
+      "shortDescription": "Preview and download free open-source fonts and Material icons."
+    },
+    "iconify": {
+      "title": "Iconify",
+      "description": "Unified search across 200,000+ open-source vector icons with one-click SVG and framework code copy.",
+      "shortDescription": "Search 200,000+ open-source vector icons and copy SVGs."
+    },
+    "figma": {
+      "title": "Figma",
+      "description": "Browser-based interface design and interactive prototyping tool with components, auto-layout and real-time collaboration.",
+      "shortDescription": "Design interfaces, build prototypes and collaborate online.",
+      "notice": "Account required. Starter tier is free; team features and additional projects are paid per seat."
+    },
+    "virustotal": {
+      "title": "VirusTotal",
+      "description": "Online security scanner that checks file hashes, uploaded files and URLs across dozens of antivirus engines.",
+      "shortDescription": "Scan suspicious files, hashes or URLs with multiple security engines.",
+      "notice": "Uploaded files are shared with the security community. Do not upload private or confidential files."
+    },
+    "enteAuth": {
+      "title": "Ente Auth",
+      "description": "Free, open-source end-to-end encrypted 2FA authenticator app with cross-platform sync across desktop and mobile.",
+      "shortDescription": "Manage 2FA codes across devices with end-to-end encrypted sync.",
+      "notice": "Also available on Android and iOS from the official site. Offline mode works without an account."
+    },
+    "veracrypt": {
+      "title": "VeraCrypt",
+      "description": "Free, open-source disk encryption software for creating encrypted file containers or encrypting entire drives.",
+      "shortDescription": "Create encrypted containers or encrypt external drives locally.",
+      "notice": "Lost passwords cannot be recovered. Keep your passphrase and recovery keys safe."
+    },
+    "anki": {
+      "title": "Anki",
+      "description": "Open-source spaced-repetition flashcard app for efficient vocabulary study, coursework and exam preparation.",
+      "shortDescription": "Study vocabulary and exams with spaced-repetition flashcards.",
+      "notice": "Desktop, web sync and Android are free; the official iOS app is a one-time paid purchase."
+    },
+    "zotero": {
+      "title": "Zotero",
+      "description": "Free, open-source reference manager for collecting papers, annotating PDFs and generating citations in Word or LibreOffice.",
+      "shortDescription": "Organize research papers, annotate PDFs and generate citations.",
+      "notice": "Local reference management is free. Cloud attachment storage has a free quota with optional paid upgrades or WebDAV."
+    },
+    "desmos": {
+      "title": "Desmos Graphing Calculator",
+      "description": "Free interactive online graphing calculator for plotting functions, sliders, inequalities and regressions.",
+      "shortDescription": "Plot interactive math functions and graphs in your browser."
+    },
+    "vscode": {
+      "title": "Visual Studio Code",
+      "description": "Free cross-platform code editor by Microsoft with built-in debugging, Git integration and a vast extension ecosystem.",
+      "shortDescription": "Lightweight, extensible cross-platform code editor."
+    },
+    "transformTools": {
+      "title": "Transform",
+      "description": "Online polyglot code and data converter for turning JSON into TypeScript, Go or Rust types, SVG into JSX and more.",
+      "shortDescription": "Convert between JSON, TypeScript, Go, SVG, JSX and other formats."
+    },
+    "caniuse": {
+      "title": "Can I use",
+      "description": "Up-to-date browser compatibility tables for HTML, CSS, SVG and JavaScript features across desktop and mobile browsers.",
+      "shortDescription": "Check web feature compatibility across major browsers."
+    },
+    "pomofocus": {
+      "title": "Pomofocus",
+      "description": "Clean online Pomodoro timer with customizable focus and break intervals alongside a daily task list.",
+      "shortDescription": "Stay focused with an online Pomodoro timer and task list."
+    },
+    "windy": {
+      "title": "Windy",
+      "description": "Interactive global weather map visualizing real-time wind, typhoons, rain radar, temperature and cloud forecasts.",
+      "shortDescription": "Explore global live wind, storm tracks and weather radar maps."
+    },
+    "timeanddate": {
+      "title": "timeanddate World Clock",
+      "description": "Look up current local times, daylight saving rules, cross-timezone meeting times and holidays worldwide.",
+      "shortDescription": "Check live times, time differences and time zones worldwide."
+    },
+    "asoftmurmur": {
+      "title": "A Soft Murmur",
+      "description": "Online ambient noise mixer for blending rain, thunder, waves, wind and coffee shop sounds for focus or sleep.",
+      "shortDescription": "Mix rain, waves and coffee shop ambient sounds for focus or sleep."
     }
   },
   "toolInfo": {

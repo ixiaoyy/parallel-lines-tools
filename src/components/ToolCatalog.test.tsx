@@ -32,6 +32,7 @@ import { mainSiteTools } from '../tools/mainSiteTools';
 import type { DefinedTool } from '../tools/defineTool';
 import zh from '../../public/locales/zh/translation.json';
 import en from '../../public/locales/en/translation.json';
+import localIcons from '../assets/local-icons.json';
 
 vi.mock('@iconify/react', () => ({ Icon: () => null }));
 
@@ -98,6 +99,24 @@ function mockClipboard(writeText: (value: string) => Promise<void>) {
 }
 
 afterEach(cleanup);
+
+it('uses only locally registered icons for the catalog cards and categories', () => {
+  const bundled = new Set(
+    localIcons.flatMap(({ prefix, icons, aliases }) =>
+      [...Object.keys(icons), ...Object.keys(aliases)].map(
+        (name) => prefix + ':' + name
+      )
+    )
+  );
+  const categories = getToolsByCategory(
+    [],
+    ((key: string) => text('zh', key)) as Parameters<typeof getToolsByCategory>[1]
+  );
+  const missing = [...externalApps, ...categories].flatMap(({ icon }) =>
+    typeof icon === 'string' && !bundled.has(icon) ? [icon] : []
+  );
+  expect(missing).toEqual([]);
+});
 
 it('keeps the hosted SingleFile package and required materials in the same public version directory', () => {
   const installation = externalApps.find(
@@ -271,14 +290,42 @@ describe.each(['zh', 'en'] as const)('tool catalog UI in %s', (language) => {
       'string/simple-translate': 'ibplnjkanclpjokhdolnendpplpjiace',
       'image-generic/gofullpage': 'fdpohaocaechififmbbbbbknoalclacl',
       'office/markdown-reader': 'medapdbncneneejhbgcjceippjlfkmkg',
-      'network/ghelper': 'nonmafimegllfoonjgplbabhmgfanaka'
+      'network/ghelper': 'nonmafimegllfoonjgplbabhmgfanaka',
+      'office/dark-reader': 'eimadpbcbfnmbkopoojfekhnkhdbieeh',
+      'office/tab-session-manager': 'iaiomicjabeggjcfkbimgmglanimpnae',
+      'network/ublock-origin-lite': 'ddkjiahejlhfcafbddmgiahcphecmpfh',
+      'office/bitwarden': 'nngceckbapebfimnlniiiahkandclblb',
+      'office/vimium': 'dbepggeogbaibhgnhhndojpepiihcmeb'
     };
     expect(
       filterToolsByFormat(externalApps, 'desktop').map(({ path }) => path)
     ).toEqual([
       'office/libreoffice',
       'image-generic/sharex',
-      'network/localsend'
+      'network/localsend',
+      'pdf/pdf24-creator',
+      'office/obsidian',
+      'office/7-zip',
+      'office/powertoys',
+      'image-generic/inkscape',
+      'video/kdenlive',
+      'audio/audacity',
+      'video/obs-studio',
+      'video/vlc',
+      'video/handbrake',
+      'image-generic/blender',
+      'office/everything',
+      'office/keepassxc',
+      'pdf/sumatrapdf',
+      'office/calibre',
+      'system/wiztree',
+      'system/ventoy',
+      'system/copyq',
+      'security/ente-auth',
+      'security/veracrypt',
+      'learning/anki',
+      'learning/zotero',
+      'developer/vscode'
     ]);
     expect(extensionTools).toHaveLength(Object.keys(storeIds).length);
     expect(new Set(externalApps.map((tool) => tool.path)).size).toBe(
@@ -352,13 +399,22 @@ describe.each(['zh', 'en'] as const)('tool catalog UI in %s', (language) => {
         path: 'ai-creative/adobe-enhance-speech',
         url: 'https://podcast.adobe.com/en/enhance',
         query: { zh: '录音降噪', en: 'speech enhancement' }
+      },
+      {
+        path: 'ai-creative/tingwu',
+        url: 'https://tingwu.aliyun.com/',
+        query: { zh: '录音转写', en: 'audio transcription' }
+      },
+      {
+        path: 'ai-creative/remove-bg',
+        url: 'https://www.remove.bg/zh',
+        query: { zh: '自动抠图', en: 'background removal' }
       }
     ];
     const translate = ((key: string) =>
       text(language, key)) as Parameters<typeof getToolsByCategory>[1];
-    const group = getToolsByCategory([], translate).find(
-      ({ type }) => type === 'ai-creative'
-    )!;
+    const categories = getToolsByCategory([], translate);
+    const group = categories.find(({ type }) => type === 'ai-creative')!;
     expect(group.rawTitle).toBe(language === 'zh' ? 'AI 创作' : 'AI Creation');
     expect(group.tools.map(({ path }) => path)).toEqual(
       expected.map(({ path }) => path)
@@ -366,6 +422,12 @@ describe.each(['zh', 'en'] as const)('tool catalog UI in %s', (language) => {
     expect(filterToolsByFormat(group.tools, 'online')).toEqual(group.tools);
     expect(filterToolsByFormat(group.tools, 'desktop')).toEqual([]);
     expect(filterToolsByFormat(group.tools, 'extension')).toEqual([]);
+    expect(categories.find(({ type }) => type === 'audio')!.tools).toContain(
+      group.tools.find(({ path }) => path === 'ai-creative/tingwu')
+    );
+    expect(
+      categories.find(({ type }) => type === 'image-generic')!.tools
+    ).toContain(group.tools.find(({ path }) => path === 'ai-creative/remove-bg'));
 
     for (const { path, url, query } of expected) {
       const tool = group.tools.find((entry) => entry.path === path)!;
@@ -398,7 +460,8 @@ describe.each(['zh', 'en'] as const)('tool catalog UI in %s', (language) => {
         format: 'online',
         action: 'online',
         url: 'https://excalidraw.com/',
-        query: { zh: '流程图', en: 'whiteboard' }
+        query: { zh: '流程图', en: 'whiteboard' },
+        hasNotice: true
       },
       {
         path: 'image-generic/photopea',
@@ -406,7 +469,8 @@ describe.each(['zh', 'en'] as const)('tool catalog UI in %s', (language) => {
         format: 'online',
         action: 'online',
         url: 'https://www.photopea.com/',
-        query: { zh: '蒙版', en: 'PSD editor' }
+        query: { zh: '蒙版', en: 'PSD editor' },
+        hasNotice: true
       },
       {
         path: 'network/localsend',
@@ -414,14 +478,436 @@ describe.each(['zh', 'en'] as const)('tool catalog UI in %s', (language) => {
         format: 'desktop',
         action: 'download',
         url: 'https://localsend.org/download',
-        query: { zh: '文件互传', en: 'file transfer' }
+        query: { zh: '文件互传', en: 'file transfer' },
+        hasNotice: true,
+        platforms: ['windows', 'macos', 'linux'],
+        pricing: 'free'
+      },
+      {
+        path: 'office/markmap',
+        category: 'office',
+        format: 'online',
+        action: 'online',
+        url: 'https://markmap.js.org/editor',
+        query: { zh: '思维导图', en: 'mind map' }
+      },
+      {
+        path: 'string/regex101',
+        category: 'string',
+        format: 'online',
+        action: 'online',
+        url: 'https://regex101.com/',
+        query: { zh: '正则测试', en: 'regex tester' },
+        hasNotice: true
+      },
+      {
+        path: 'image-generic/svgomg',
+        category: 'image-generic',
+        format: 'online',
+        action: 'online',
+        url: 'https://jakearchibald.github.io/svgomg/',
+        query: { zh: 'SVG压缩', en: 'SVG optimizer' },
+        hasNotice: true
+      },
+      {
+        path: 'image-generic/webaim-contrast-checker',
+        category: 'image-generic',
+        format: 'online',
+        action: 'online',
+        url: 'https://webaim.org/resources/contrastchecker/',
+        query: { zh: '文字对比度', en: 'contrast ratio' }
+      },
+      {
+        path: 'pdf/pdf24-creator',
+        category: 'pdf',
+        format: 'desktop',
+        action: 'download',
+        url: 'https://tools.pdf24.org/zh/creator',
+        query: { zh: '扫描件识字', en: 'PDF OCR' },
+        platforms: ['windows'],
+        pricing: 'free'
+      },
+      {
+        path: 'office/obsidian',
+        category: 'office',
+        format: 'desktop',
+        action: 'download',
+        url: 'https://obsidian.md/download',
+        query: { zh: '本地笔记', en: 'local notes' },
+        hasNotice: true,
+        platforms: ['windows', 'macos', 'linux'],
+        pricing: 'freemium'
+      },
+      {
+        path: 'office/7-zip',
+        category: 'office',
+        format: 'desktop',
+        action: 'download',
+        url: 'https://www.7-zip.org/download.html',
+        query: { zh: '解压缩', en: 'file archiver' },
+        hasNotice: true,
+        platforms: ['windows'],
+        pricing: 'free'
+      },
+      {
+        path: 'office/powertoys',
+        category: 'office',
+        format: 'desktop',
+        action: 'download',
+        url: 'https://learn.microsoft.com/windows/powertoys/install',
+        query: { zh: '批量改名', en: 'batch rename' },
+        platforms: ['windows'],
+        pricing: 'free'
+      },
+      {
+        path: 'image-generic/inkscape',
+        category: 'image-generic',
+        format: 'desktop',
+        action: 'download',
+        url: 'https://inkscape.org/release/',
+        query: { zh: '矢量绘图', en: 'vector graphics' },
+        platforms: ['windows', 'macos', 'linux'],
+        pricing: 'free'
+      },
+      {
+        path: 'video/kdenlive',
+        category: 'video',
+        format: 'desktop',
+        action: 'download',
+        url: 'https://kdenlive.org/download/',
+        query: { zh: '多轨剪辑', en: 'multitrack video' },
+        platforms: ['windows', 'macos', 'linux'],
+        pricing: 'free'
+      },
+      {
+        path: 'audio/audacity',
+        category: 'audio',
+        format: 'desktop',
+        action: 'download',
+        url: 'https://www.audacityteam.org/download/',
+        query: { zh: '声音录制', en: 'audio recording' },
+        platforms: ['windows', 'macos', 'linux'],
+        pricing: 'free'
+      },
+      {
+        path: 'office/drawio',
+        category: 'office',
+        format: 'online',
+        action: 'online',
+        url: 'https://app.diagrams.net/',
+        query: { zh: '架构图', en: 'architecture diagram' },
+        hasNotice: true
+      },
+      {
+        path: 'office/mermaid-live',
+        category: 'office',
+        format: 'online',
+        action: 'online',
+        url: 'https://mermaid.live/',
+        query: { zh: '时序图', en: 'sequence diagram' },
+        hasNotice: true
+      },
+      {
+        path: 'image-generic/squoosh',
+        category: 'image-generic',
+        format: 'online',
+        action: 'online',
+        url: 'https://squoosh.app/',
+        query: { zh: '图片压缩', en: 'image compression' },
+        hasNotice: true
+      },
+      {
+        path: 'network/hoppscotch',
+        category: 'network',
+        format: 'online',
+        action: 'online',
+        url: 'https://hoppscotch.io/',
+        query: { zh: '接口调试', en: 'API client' },
+        hasNotice: true
+      },
+      {
+        path: 'network/cloudflare-speed',
+        category: 'network',
+        format: 'online',
+        action: 'online',
+        url: 'https://speed.cloudflare.com/',
+        query: { zh: '网速测试', en: 'speed test' },
+        hasNotice: true
+      },
+      {
+        path: 'video/obs-studio',
+        category: 'video',
+        format: 'desktop',
+        action: 'download',
+        url: 'https://obsproject.com/download',
+        query: { zh: '直播推流', en: 'live streaming' },
+        platforms: ['windows', 'macos', 'linux'],
+        pricing: 'free'
+      },
+      {
+        path: 'video/vlc',
+        category: 'video',
+        format: 'desktop',
+        action: 'download',
+        url: 'https://www.videolan.org/vlc/',
+        query: { zh: '本地视频', en: 'media player' },
+        platforms: ['windows', 'macos', 'linux'],
+        pricing: 'free'
+      },
+      {
+        path: 'video/handbrake',
+        category: 'video',
+        format: 'desktop',
+        action: 'download',
+        url: 'https://handbrake.fr/downloads.php',
+        query: { zh: '视频转码', en: 'video transcoder' },
+        platforms: ['windows', 'macos', 'linux'],
+        pricing: 'free'
+      },
+      {
+        path: 'image-generic/blender',
+        category: 'image-generic',
+        format: 'desktop',
+        action: 'download',
+        url: 'https://www.blender.org/download/',
+        query: { zh: '3D建模', en: '3D modeling' },
+        platforms: ['windows', 'macos', 'linux'],
+        pricing: 'free'
+      },
+      {
+        path: 'office/everything',
+        category: 'office',
+        format: 'desktop',
+        action: 'download',
+        url: 'https://www.voidtools.com/downloads/',
+        query: { zh: '文件搜索', en: 'instant search' },
+        hasNotice: true,
+        platforms: ['windows'],
+        pricing: 'free'
+      },
+      {
+        path: 'office/keepassxc',
+        category: 'security',
+        format: 'desktop',
+        action: 'download',
+        url: 'https://keepassxc.org/download/',
+        query: { zh: '本地密码管理', en: 'offline vault' },
+        hasNotice: true,
+        platforms: ['windows', 'macos', 'linux'],
+        pricing: 'free'
+      },
+      {
+        path: 'pdf/sumatrapdf',
+        category: 'pdf',
+        format: 'desktop',
+        action: 'download',
+        url: 'https://www.sumatrapdfreader.org/download-free-pdf-viewer',
+        query: { zh: 'PDF阅读器', en: 'PDF reader' },
+        platforms: ['windows'],
+        pricing: 'free'
+      },
+      {
+        path: 'office/calibre',
+        category: 'learning',
+        format: 'desktop',
+        action: 'download',
+        url: 'https://calibre-ebook.com/download',
+        query: { zh: '电子书管理', en: 'ebook manager' },
+        platforms: ['windows', 'macos', 'linux'],
+        pricing: 'free'
+      },
+      {
+        path: 'system/wiztree',
+        category: 'system',
+        format: 'desktop',
+        action: 'download',
+        url: 'https://diskanalyzer.com/download',
+        query: { zh: '磁盘空间分析', en: 'disk space' },
+        hasNotice: true,
+        platforms: ['windows'],
+        pricing: 'freemium'
+      },
+      {
+        path: 'system/ventoy',
+        category: 'system',
+        format: 'desktop',
+        action: 'download',
+        url: 'https://www.ventoy.net/en/download.html',
+        query: { zh: '启动U盘', en: 'bootable USB' },
+        hasNotice: true,
+        platforms: ['windows', 'linux'],
+        pricing: 'free'
+      },
+      {
+        path: 'system/copyq',
+        category: 'system',
+        format: 'desktop',
+        action: 'download',
+        url: 'https://hluk.github.io/CopyQ/',
+        query: { zh: '剪贴板历史', en: 'clipboard history' },
+        platforms: ['windows', 'macos', 'linux'],
+        pricing: 'free'
+      },
+      {
+        path: 'design/coolors',
+        category: 'design',
+        format: 'online',
+        action: 'online',
+        url: 'https://coolors.co/',
+        query: { zh: '配色方案', en: 'color palette' },
+        hasNotice: true
+      },
+      {
+        path: 'design/google-fonts',
+        category: 'design',
+        format: 'online',
+        action: 'online',
+        url: 'https://fonts.google.com/',
+        query: { zh: '开源字体', en: 'typography' }
+      },
+      {
+        path: 'design/iconify',
+        category: 'design',
+        format: 'online',
+        action: 'online',
+        url: 'https://icon-sets.iconify.design/',
+        query: { zh: '矢量图标', en: 'SVG icons' }
+      },
+      {
+        path: 'design/figma',
+        category: 'design',
+        format: 'online',
+        action: 'online',
+        url: 'https://www.figma.com/',
+        query: { zh: '原型设计', en: 'prototyping' },
+        hasNotice: true
+      },
+      {
+        path: 'security/virustotal',
+        category: 'security',
+        format: 'online',
+        action: 'online',
+        url: 'https://www.virustotal.com/',
+        query: { zh: '文件查毒', en: 'malware scan' },
+        hasNotice: true
+      },
+      {
+        path: 'security/ente-auth',
+        category: 'security',
+        format: 'desktop',
+        action: 'download',
+        url: 'https://ente.io/auth/',
+        query: { zh: '两步验证', en: 'authenticator' },
+        hasNotice: true,
+        platforms: ['windows', 'macos', 'linux'],
+        pricing: 'free'
+      },
+      {
+        path: 'security/veracrypt',
+        category: 'security',
+        format: 'desktop',
+        action: 'download',
+        url: 'https://veracrypt.fr/en/Downloads.html',
+        query: { zh: '磁盘加密', en: 'disk encryption' },
+        hasNotice: true,
+        platforms: ['windows', 'macos', 'linux'],
+        pricing: 'free'
+      },
+      {
+        path: 'learning/anki',
+        category: 'learning',
+        format: 'desktop',
+        action: 'download',
+        url: 'https://apps.ankiweb.net/',
+        query: { zh: '记忆卡片', en: 'flashcards' },
+        hasNotice: true,
+        platforms: ['windows', 'macos', 'linux'],
+        pricing: 'free'
+      },
+      {
+        path: 'learning/zotero',
+        category: 'learning',
+        format: 'desktop',
+        action: 'download',
+        url: 'https://www.zotero.org/download/',
+        query: { zh: '文献管理', en: 'reference manager' },
+        hasNotice: true,
+        platforms: ['windows', 'macos', 'linux'],
+        pricing: 'freemium'
+      },
+      {
+        path: 'learning/desmos',
+        category: 'learning',
+        format: 'online',
+        action: 'online',
+        url: 'https://www.desmos.com/calculator',
+        query: { zh: '图形计算器', en: 'graphing calculator' }
+      },
+      {
+        path: 'developer/vscode',
+        category: 'developer',
+        format: 'desktop',
+        action: 'download',
+        url: 'https://code.visualstudio.com/download',
+        query: { zh: '代码编辑器', en: 'code editor' },
+        platforms: ['windows', 'macos', 'linux'],
+        pricing: 'free'
+      },
+      {
+        path: 'developer/transform-tools',
+        category: 'developer',
+        format: 'online',
+        action: 'online',
+        url: 'https://transform.tools/',
+        query: { zh: '代码互转', en: 'code converter' }
+      },
+      {
+        path: 'developer/caniuse',
+        category: 'developer',
+        format: 'online',
+        action: 'online',
+        url: 'https://caniuse.com/',
+        query: { zh: '浏览器兼容性', en: 'browser compatibility' }
+      },
+      {
+        path: 'life/pomofocus',
+        category: 'life',
+        format: 'online',
+        action: 'online',
+        url: 'https://pomofocus.io/',
+        query: { zh: '番茄钟', en: 'focus timer' }
+      },
+      {
+        path: 'life/windy',
+        category: 'life',
+        format: 'online',
+        action: 'online',
+        url: 'https://www.windy.com/',
+        query: { zh: '天气地图', en: 'weather map' }
+      },
+      {
+        path: 'life/timeanddate',
+        category: 'life',
+        format: 'online',
+        action: 'online',
+        url: 'https://www.timeanddate.com/worldclock/',
+        query: { zh: '世界时钟', en: 'world clock' }
+      },
+      {
+        path: 'life/asoftmurmur',
+        category: 'life',
+        format: 'online',
+        action: 'online',
+        url: 'https://asoftmurmur.com/',
+        query: { zh: '白噪音', en: 'ambient noise' }
       }
     ] as const;
     const translate = ((key: string) =>
       text(language, key)) as Parameters<typeof getToolsByCategory>[1];
     const categories = getToolsByCategory([], translate);
 
-    for (const { path, category, format, action, url, query } of entries) {
+    for (const entry of entries) {
+      const { path, category, format, action, url, query } = entry;
       const group = categories.find(({ type }) => type === category)!;
       const tool = group.tools.find((entry) => entry.path === path)!;
       const formatTools = filterToolsByFormat(group.tools, format);
@@ -445,11 +931,15 @@ describe.each(['zh', 'en'] as const)('tool catalog UI in %s', (language) => {
       expect(tool.offlineInstall).toBeUndefined();
       await renderUi(<CatalogToolCard tool={tool} />, language);
       expect(
-        screen.getByText(text(language, `catalog.formats.${format}`))
+        screen.getByText(text(language, tool.shortDescription))
       ).toBeInTheDocument();
       expect(
-        screen.getByText(text(language, tool.notice!))
+        screen.getByText(text(language, `catalog.formats.${format}`))
       ).toBeInTheDocument();
+      if ('hasNotice' in entry)
+        expect(
+          screen.getByText(text(language, tool.notice!))
+        ).toBeInTheDocument();
       for (const name of [
         text(language, tool.name),
         `${text(language, `catalog.actions.${action}`)} ↗`
@@ -460,19 +950,21 @@ describe.each(['zh', 'en'] as const)('tool catalog UI in %s', (language) => {
         expect(link).toHaveAttribute('rel', 'noopener noreferrer');
       }
       if (format === 'desktop') {
-        expect(tool.platforms).toEqual(['windows', 'macos', 'linux']);
-        expect(tool.pricing).toBe('free');
+        expect(tool.platforms).toEqual(entry.platforms);
+        expect(tool.pricing).toBe(entry.pricing);
       }
       cleanup();
     }
   });
 
-  it('does not advertise an offline package for the four newly listed extensions', async () => {
+  it('does not advertise an offline package for store-only extensions', async () => {
     for (const path of [
       'string/simple-translate',
       'image-generic/gofullpage',
       'office/markdown-reader',
-      'network/ghelper'
+      'network/ghelper',
+      'office/dark-reader',
+      'office/tab-session-manager'
     ]) {
       const tool = externalApps.find((entry) => entry.path === path)!;
       await renderUi(<CatalogToolCard tool={tool} />, language);

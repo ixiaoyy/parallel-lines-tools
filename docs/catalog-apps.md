@@ -53,6 +53,80 @@
 | `image-generic/photopea` | 图片 · 在线；打开和保存 PSD，支持图层、蒙版和混合模式。 | [在线编辑器](https://www.photopea.com/)（[官方文件读写说明](https://www.photopea.com/learn/opening-saving)） |
 | `network/localsend` | 网络 · 桌面；同一局域网内互传文件。收发设备都需安装；目录平台栏列 Windows、macOS、Linux，下载页另提供 Android、iOS 版。 | [官方下载](https://localsend.org/download) |
 
+### 2026-11-26 常用工具补充
+
+这 15 项补充录音转写、自动抠图、扫描件文字识别、桌面编辑与浏览器会话管理。只收录官方入口；通义听悟与 remove.bg 在第三方服务处理素材，扩展默认前往 Chrome 商店，不提供本站安装包。
+
+| 稳定 ID | 形式与用途 | 官方入口 |
+| --- | --- | --- |
+| `ai-creative/tingwu` | 在线；录音转写、会议纪要 | [通义听悟](https://tingwu.aliyun.com/) |
+| `ai-creative/remove-bg` | 在线；人像与商品图抠图 | [remove.bg](https://www.remove.bg/zh) |
+| `office/markmap` | 在线；Markdown 大纲转思维导图 | [Markmap 编辑器](https://markmap.js.org/editor) |
+| `string/regex101` | 在线；正则匹配、捕获组与语法解释 | [regex101](https://regex101.com/) |
+| `image-generic/svgomg` | 在线；SVG 压缩与预览 | [SVGOMG](https://jakearchibald.github.io/svgomg/) |
+| `image-generic/webaim-contrast-checker` | 在线；检查文字与背景对比度 | [WebAIM 对比度检查](https://webaim.org/resources/contrastchecker/) |
+| `pdf/pdf24-creator` | Windows；识别扫描件文字、整理 PDF 页序 | [PDF24 Creator](https://tools.pdf24.org/zh/creator) |
+| `office/obsidian` | 桌面；本地 Markdown 笔记，官方同步和发布另收费 | [Obsidian](https://obsidian.md/download) |
+| `office/7-zip` | 桌面；压缩解压，平台栏列 Windows 图形版 | [7-Zip](https://www.7-zip.org/download.html) |
+| `office/powertoys` | Windows；批量改名、窗口布局 | [PowerToys](https://learn.microsoft.com/windows/powertoys/install) |
+| `image-generic/inkscape` | 桌面；SVG 矢量绘图 | [Inkscape](https://inkscape.org/release/) |
+| `video/kdenlive` | 桌面；多轨视频剪辑 | [Kdenlive](https://kdenlive.org/download/) |
+| `audio/audacity` | 桌面；录音、混音与降噪 | [Audacity](https://www.audacityteam.org/download/) |
+| `office/dark-reader` | 扩展；网页深色模式，提示网站访问权限及 Safari 收费 | [Chrome 商店](https://chromewebstore.google.com/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh) |
+| `office/tab-session-manager` | 扩展；标签页恢复，提示开启云同步后将保存的链接写入 Google 云端硬盘 | [Chrome 商店](https://chromewebstore.google.com/detail/tab-session-manager/iaiomicjabeggjcfkbimgmglanimpnae) |
+
+### 2026-11-26 扩充收录
+
+核实日期：2026-11-26。覆盖流程图/图表、图片压缩、API 接口调试、网络测速、录屏与音视频处理、3D 建模、本地搜索、密码管理、PDF/电子书及三款 MV3/跨浏览器扩展；所有条目仅链接官网、官方下载页或 Chrome 商店，不提供本站安装包。
+
+| 稳定 ID | 分类与形式 | 官方入口 |
+| --- | --- | --- |
+| `office/drawio` | 办公 · 在线；流程图、架构图与 UML 框图 | [draw.io](https://app.diagrams.net/) |
+| `office/mermaid-live` | 办公 · 在线；文本语法绘制流程图、时序图与甘特图 | [Mermaid Live Editor](https://mermaid.live/) |
+| `image-generic/squoosh` | 图片 · 在线；浏览器本地图片压缩与画质对比 | [Squoosh](https://squoosh.app/) |
+| `network/hoppscotch` | 网络 · 在线；开源 REST / GraphQL / WebSocket 接口调试 | [Hoppscotch](https://hoppscotch.io/) |
+| `network/cloudflare-speed` | 网络 · 在线；下载/上传速度、延迟与抖动测试 | [Cloudflare 测速](https://speed.cloudflare.com/) |
+| `video/obs-studio` | 视频 · 桌面；免费开源录屏与直播推流（Win/macOS/Linux） | [官方下载](https://obsproject.com/download) |
+| `video/vlc` | 视频（兼音频）· 桌面；免费开源全格式本地播放器（Win/macOS/Linux） | [官方下载](https://www.videolan.org/vlc/) |
+| `video/handbrake` | 视频 · 桌面；免费开源视频转码与压缩（Win/macOS/Linux） | [官方下载](https://handbrake.fr/downloads.php) |
+| `image-generic/blender` | 图片 · 桌面；免费开源 3D 建模、渲染与动画（Win/macOS/Linux） | [官方下载](https://www.blender.org/download/) |
+| `office/everything` | 办公 · 桌面；Windows NTFS 极速本地文件名搜索 | [官方下载](https://www.voidtools.com/downloads/) |
+| `office/keepassxc` | 办公 · 桌面；免费开源本地加密密码库（Win/macOS/Linux） | [官方下载](https://keepassxc.org/download/) |
+| `pdf/sumatrapdf` | PDF · 桌面；Windows 轻量极速 PDF/EPUB/漫画阅读器 | [官方下载](https://www.sumatrapdfreader.org/download-free-pdf-viewer) |
+| `office/calibre` | 办公 · 桌面；免费开源电子书管理与格式转换（Win/macOS/Linux） | [官方下载](https://calibre-ebook.com/download) |
+| `network/ublock-origin-lite` | 网络 · 扩展；MV3 轻量广告与追踪器过滤；免费 | [Chrome 商店](https://chromewebstore.google.com/detail/ublock-origin-lite/ddkjiahejlhfcafbddmgiahcphecmpfh) |
+| `office/bitwarden` | 安全与隐私 · 扩展；开源密码管理器自动填充；部分收费 | [Chrome 商店](https://chromewebstore.google.com/detail/bitwarden-password-manage/nngceckbapebfimnlniiiahkandclblb) |
+| `office/vimium` | 开发与调试（兼办公）· 扩展；Vim 风格纯键盘浏览网页；免费 | [Chrome 商店](https://chromewebstore.google.com/detail/vimium/dbepggeogbaibhgnhhndojpepiihcmeb) |
+
+### 2026-11-26 新增六大用途分类与扩充收录
+
+核实日期：2026-11-26。新增「系统效率（`system`）」「设计与配色（`design`）」「安全与隐私（`security`）」「学习与阅读（`learning`）」「开发与调试（`developer`）」「生活与实用（`life`）」六个用途分类；已有相关条目保留原稳定 `path` 收藏 ID，仅调整主分类或补充兼属分类，并新收录 20 款工具：
+
+| 稳定 ID | 分类与形式 | 官方入口 |
+| --- | --- | --- |
+| `system/wiztree` | 系统效率 · 桌面；Windows NTFS 极速磁盘空间分析 | [官方下载](https://diskanalyzer.com/download) |
+| `system/ventoy` | 系统效率 · 桌面；免费开源多系统启动 U 盘制作（Win/Linux） | [官方下载](https://www.ventoy.net/en/download.html) |
+| `system/copyq` | 系统效率 · 桌面；免费开源跨平台剪贴板历史管理（Win/macOS/Linux） | [官方主页](https://hluk.github.io/CopyQ/) |
+| `design/coolors` | 设计与配色 · 在线；配色方案生成器与色板导出 | [Coolors](https://coolors.co/) |
+| `design/google-fonts` | 设计与配色 · 在线；免费开源字体与 Material 图标库 | [Google Fonts](https://fonts.google.com/) |
+| `design/iconify` | 设计与配色 · 在线；20 万+ 开源矢量图标搜索与 SVG 复制 | [Iconify](https://icon-sets.iconify.design/) |
+| `design/figma` | 设计与配色 · 在线；界面设计与交互原型协作 | [Figma](https://www.figma.com/) |
+| `security/virustotal` | 安全与隐私 · 在线；多引擎文件哈希与可疑链接安全检测 | [VirusTotal](https://www.virustotal.com/) |
+| `security/ente-auth` | 安全与隐私 · 桌面；免费开源端到端加密两步验证 2FA 应用 | [官方下载](https://ente.io/auth/) |
+| `security/veracrypt` | 安全与隐私 · 桌面；免费开源本地磁盘与加密容器软件 | [官方下载](https://veracrypt.fr/en/Downloads.html) |
+| `learning/anki` | 学习与阅读 · 桌面；开源间隔重复记忆卡片软件 | [官方下载](https://apps.ankiweb.net/) |
+| `learning/zotero` | 学习与阅读 · 桌面；免费开源学术文献与论文引用管理 | [官方下载](https://www.zotero.org/download/) |
+| `learning/desmos` | 学习与阅读 · 在线；免费交互式函数图形计算器 | [Desmos](https://www.desmos.com/calculator) |
+| `developer/vscode` | 开发与调试 · 桌面；微软免费跨平台代码编辑器 | [官方下载](https://code.visualstudio.com/download) |
+| `developer/transform-tools` | 开发与调试（兼转换）· 在线；JSON/TS/Go/SVG/JSX 等代码格式互转 | [Transform](https://transform.tools/) |
+| `developer/caniuse` | 开发与调试 · 在线；前端特性浏览器兼容性查询 | [Can I use](https://caniuse.com/) |
+| `life/pomofocus` | 生活与实用 · 在线；在线番茄工作法专注计时器 | [Pomofocus](https://pomofocus.io/) |
+| `life/windy` | 生活与实用 · 在线；全球实时风场、台风路径与气象雷达图 | [Windy](https://www.windy.com/) |
+| `life/timeanddate` | 生活与实用（兼时间）· 在线；全球城市实时世界时钟与时差查询 | [timeanddate](https://www.timeanddate.com/worldclock/) |
+| `life/asoftmurmur` | 生活与实用 · 在线；雨声、海浪与咖啡馆环境白噪音混音器 | [A Soft Murmur](https://asoftmurmur.com/) |
+
+合并后第三方目录为 68 项（31 个在线工具、26 个桌面应用、11 个浏览器扩展），按稳定 ID 去重，不把兼属分类计为新条目。首页按用途展示当前筛选的分类和每类数量；桌面应用和浏览器扩展可从精选或收藏切到该形式的全部匹配条目，再返回原视图。展开不修改网址筛选或收藏，图标继续从站内加载。
+
 ## 本站下载与许可
 
 当前仅 SingleFile 进入 `src/tools/extensionDownloads.json` 的本站分发清单：

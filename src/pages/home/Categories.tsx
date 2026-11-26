@@ -1,4 +1,5 @@
 import { Box, Button, Stack, Typography } from '@mui/material';
+import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import {
   catalogTools,
   filterToolsByFormat,
@@ -6,7 +7,7 @@ import {
 } from '@tools/index';
 import { Link } from 'react-router-dom';
 import { Icon, type IconifyIcon } from '@iconify/react';
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import UserTypeFilter from '@components/UserTypeFilter';
 import { useUserTypeFilter } from '../../providers/UserTypeFilterProvider';
@@ -162,7 +163,7 @@ function CategoryIcon({
   );
 }
 
-/** 首页只露出参考稿中的分类行；展开标题后仍可查看全部分类和使用原人群筛选。 */
+/** 按当前形式和人群显示分类与项目数；默认保留简短索引，可展开全部。 */
 export default function Categories() {
   const { selectedUserTypes, setSelectedUserTypes } = useUserTypeFilter();
   const { t } = useTranslation();
@@ -173,40 +174,55 @@ export default function Categories() {
     t,
     filterToolsByFormat(catalogTools, format)
   ).sort((a, b) => order(a.type) - order(b.type));
-  const firstRow = categories.filter(({ type }) => preferred.includes(type));
-  const visible = expanded
-    ? categories
-    : firstRow.length
-      ? firstRow
-      : categories.slice(0, preferred.length);
+  const canExpand = categories.length > preferred.length;
+  // 形式筛选后，常用分类不足六项时用该形式下的其他分类补足。
+  const visible = expanded ? categories : categories.slice(0, preferred.length);
 
   return (
-    <Box component="section">
-      <Typography component="h2" sx={{ m: 0, mb: 0.5 }}>
-        <Button
-          color="inherit"
-          onClick={() => setExpanded(!expanded)}
-          aria-expanded={expanded}
-          aria-controls="home-category-index"
-          sx={{
-            minHeight: 34,
-            minWidth: 0,
-            p: 0,
-            fontSize: { xs: 16, md: 17.5 },
-            fontWeight: 700,
-            lineHeight: 1.4,
-            color: 'var(--home-ink)',
-            '&:hover': {
-              bgcolor: 'transparent',
-              textDecoration: 'underline'
-            }
-          }}
+    <Box
+      component="section"
+      aria-labelledby="home-category-heading"
+      sx={{ mt: { xs: 2.25, md: 2.75 } }}
+    >
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        flexWrap="wrap"
+        useFlexGap
+        sx={{ gap: 1, mb: 0.75 }}
+      >
+        <Typography
+          id="home-category-heading"
+          component="h2"
+          fontWeight={700}
+          fontSize={{ xs: 16, md: 17.5 }}
+          color="var(--home-ink)"
         >
-          {t('hero.categoriesTitle')}
-        </Button>
-      </Typography>
-      {expanded && (
-        <Stack direction="row" sx={{ mt: 0.75, mb: 1 }}>
+          {t('catalog.browseByPurpose')}
+        </Typography>
+        {(canExpand || expanded) && (
+          <Button
+            variant="outlined"
+            size="small"
+            endIcon={
+              <KeyboardArrowDownRoundedIcon
+                sx={{ transform: expanded ? 'rotate(180deg)' : undefined }}
+              />
+            }
+            onClick={() => setExpanded((open) => !open)}
+            aria-expanded={expanded}
+            aria-controls="home-category-index"
+            sx={{ minHeight: 44, px: 1.5, fontWeight: 700 }}
+          >
+            {expanded
+              ? t('catalog.collapseCategories')
+              : t('catalog.viewAllCategories', { count: categories.length })}
+          </Button>
+        )}
+      </Stack>
+      {(expanded || !canExpand) && (
+        <Stack direction="row" sx={{ mb: 1 }}>
           <UserTypeFilter
             selectedUserTypes={selectedUserTypes}
             onUserTypesChange={setSelectedUserTypes}
@@ -218,53 +234,61 @@ export default function Categories() {
         component="nav"
         aria-label={t('hero.categoriesTitle')}
         sx={{
-          display: 'flex',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          rowGap: 0.5
+          display: 'grid',
+          gridTemplateColumns: {
+            xs: 'repeat(2, minmax(0, 1fr))',
+            sm: 'repeat(3, minmax(0, 1fr))',
+            lg: 'repeat(6, minmax(0, 1fr))'
+          },
+          columnGap: { xs: 1.75, md: 2.5 },
+          rowGap: 0.25
         }}
       >
-        {visible.map((category, index) => (
-          <Fragment key={category.type}>
-            {index > 0 && (
-              <Box
-                aria-hidden="true"
-                sx={{
-                  display: { xs: 'none', md: 'block' },
-                  width: '1px',
-                  height: 15,
-                  bgcolor: 'var(--home-pipe)',
-                  mx: { md: 2.25, lg: 3 }
-                }}
-              />
-            )}
-            <Box
-              component={Link}
-              to={
-                '/categories/' +
-                category.type +
-                (format === 'all' ? '' : '?format=' + format)
-              }
-              sx={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                minHeight: 38,
-                gap: 0.9,
-                pr: { xs: 2.5, md: 0 },
-                textDecoration: 'none',
-                color: 'var(--home-ink)',
-                fontWeight: 500,
-                fontSize: { xs: 14.5, md: 15.5 },
-                '&:hover': {
-                  color: 'primary.main',
-                  textDecoration: 'underline'
-                }
-              }}
-            >
-              <CategoryIcon type={category.type} fallback={category.icon} />
+        {visible.map((category) => (
+          <Box
+            key={category.type}
+            component={Link}
+            to={
+              '/categories/' +
+              category.type +
+              (format === 'all' ? '' : '?format=' + format)
+            }
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: '20px minmax(0, 1fr) auto',
+              alignItems: 'center',
+              minHeight: 44,
+              gap: 0.85,
+              py: 0.5,
+              borderBottom: '1px solid',
+              borderColor: 'divider',
+              color: 'var(--home-ink)',
+              textDecoration: 'none',
+              fontSize: { xs: 14, md: 15 },
+              fontWeight: 500,
+              '&:hover, &:focus-visible': {
+                color: 'primary.main',
+                borderColor: 'primary.main'
+              },
+              '&:focus-visible': { outline: '2px solid currentColor' }
+            }}
+          >
+            <CategoryIcon type={category.type} fallback={category.icon} />
+            <Box component="span" sx={{ overflowWrap: 'anywhere' }}>
               {category.rawTitle}
             </Box>
-          </Fragment>
+            <Box
+              component="span"
+              sx={{
+                fontSize: 12,
+                fontVariantNumeric: 'tabular-nums',
+                color: 'text.secondary',
+                pr: 0.25
+              }}
+            >
+              {category.tools.length}
+            </Box>
+          </Box>
         ))}
       </Box>
       {!categories.length && (

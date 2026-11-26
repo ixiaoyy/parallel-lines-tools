@@ -50,6 +50,12 @@ export type ToolCategory =
   | 'xml'
   | 'office'
   | 'ai-creative'
+  | 'system'
+  | 'design'
+  | 'security'
+  | 'learning'
+  | 'developer'
+  | 'life'
   | 'network'
   | 'converters';
 
