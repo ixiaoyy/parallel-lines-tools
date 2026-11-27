@@ -135,6 +135,25 @@ export default function ToolHeader({
                 icon={bookmarked ? 'mdi:bookmark' : 'mdi:bookmark-plus-outline'}
               />
             </IconButton>
+            <IconButton
+              component="a"
+              href={`https://pingxingxian.space/desk/?${new URLSearchParams({
+                pin_title: title.slice(0, 24),
+                pin_url: `${window.location.origin}${path.startsWith('/') ? path : `/${path}`}`,
+                pin_icon: title.slice(0, 1) || '工',
+                pin_color: '#d97706'
+              }).toString()}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="固定到平行线工作台"
+              aria-label="固定到平行线工作台"
+            >
+              <Icon
+                fontSize={26}
+                color={theme.palette.grey[600]}
+                icon="mdi:pin-outline"
+              />
+            </IconButton>
           </Stack>
           <Typography fontSize={20}>{description}</Typography>
           <ToolLinks />
